@@ -1,0 +1,60 @@
+package com.shojabon.man10shopv3.commands;
+
+import com.shojabon.man10shopv3.Man10ShopV3;
+import com.shojabon.man10shopv3.commands.subCommands.ItemGiveCommand;
+import com.shojabon.man10shopv3.commands.subCommands.ItemTakeCommand;
+import com.shojabon.man10shopv3.commands.subCommands.TestCommand;
+import com.shojabon.mcutils.Utils.SCommandRouter.SCommandArgument;
+import com.shojabon.mcutils.Utils.SCommandRouter.SCommandObject;
+import com.shojabon.mcutils.Utils.SCommandRouter.SCommandRouter;
+
+
+public class Man10ShopV3Command extends SCommandRouter {
+
+    Man10ShopV3 plugin;
+
+    public Man10ShopV3Command(Man10ShopV3 plugin){
+        this.plugin = plugin;
+        registerCommands();
+        registerEvents();
+        pluginPrefix = Man10ShopV3.prefix;
+    }
+
+    public void registerEvents(){
+        setNoPermissionEvent(e -> e.sender.sendMessage(Man10ShopV3.prefix + "§c§lあなたは権限がありません"));
+        setOnNoCommandFoundEvent(e -> e.sender.sendMessage(Man10ShopV3.prefix + "§c§lコマンドが存在しません"));
+    }
+
+    public void registerCommands(){
+        //shops command
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("test")).
+
+                        addRequiredPermission("man10shopv3.test").addExplanation("テスト").
+                        setExecutor(new TestCommand(plugin))
+        );
+
+        // console commands
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("itemGive"))
+                        .addArgument(new SCommandArgument().addAlias("uuid"))
+                        .addArgument(new SCommandArgument().addAlias("itemBase64"))
+                        .addArgument(new SCommandArgument().addAlias("amount"))
+                        .addRequiredPermission("man10shopv3.item.give").addExplanation("アイテムを付与する(内部用)").
+                        setExecutor(new ItemGiveCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("itemTake"))
+                        .addArgument(new SCommandArgument().addAlias("uuid"))
+                        .addArgument(new SCommandArgument().addAlias("itemBase64"))
+                        .addArgument(new SCommandArgument().addAlias("amount"))
+                        .addRequiredPermission("man10shopv3.item.take").addExplanation("アイテムを取る(内部用)").
+                        setExecutor(new ItemTakeCommand(plugin))
+        );
+    }
+
+}

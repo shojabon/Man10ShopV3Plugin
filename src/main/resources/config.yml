@@ -1,0 +1,4 @@
+api:
+  endpoint: "http://localhost:1234"
+  key: "testa"
+prefix: "§6[§eMan10Shop§dV3§6]"
