@@ -2,7 +2,9 @@ package com.shojabon.man10shopv3.commands.subCommands;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.commands.Man10ShopV3API;
+import com.shojabon.man10shopv3.menus.EditableShopSelectorMenu;
 import com.shojabon.mcutils.Utils.SItemStack;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,10 +22,11 @@ public class TestCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        JSONArray array =  Man10ShopV3.api.getPlayerShops((Player)sender);
-        for(int i = 0; i < array.length(); i++){
-            sender.sendMessage(array.getJSONObject(i).toString());
-        }
+        EditableShopSelectorMenu menu = new EditableShopSelectorMenu((Player) sender, "その他", plugin);
+        menu.setOnClick(e -> {
+            Bukkit.broadcastMessage(e);
+        });
+        menu.open((Player) sender);
         return true;
     }
 }
