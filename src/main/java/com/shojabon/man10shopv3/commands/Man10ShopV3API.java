@@ -1,4 +1,80 @@
 package com.shojabon.man10shopv3.commands;
 
+import com.shojabon.man10shopv3.Man10ShopV3;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Man10ShopV3API {
+
+    Man10ShopV3 plugin;
+
+    public Man10ShopV3API(Man10ShopV3 plugin){
+        this.plugin = plugin;
+    }
+
+    public static JSONObject httpRequest(String endpoint, String method, JSONObject jsonInput) {
+        try {
+            URL url = new URL(endpoint);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            // optional default is GET
+            con.setRequestMethod(method);
+            con.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            con.setRequestProperty("Accept", "application/json; charset=UTF-8");
+            con.setRequestProperty("x-api-key", Man10ShopV3.config.getString("api.key"));
+            con.setDoOutput(true);
+
+            try(OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInput.toString().getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+            int responseCode = con.getResponseCode();
+            if(responseCode != 200){
+                return null;
+            }
+
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            //print result
+            return new JSONObject(response.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static JSONObject getPlayerJSON(Player p){
+        Map<String, Object> result = new HashMap<>();
+        result.put("name", p.getName());
+        result.put("uuid", p.getUniqueId().toString());
+        return new JSONObject(result);
+    }
+
+    public JSONArray getPlayerShops(Player p){
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("player", getPlayerJSON(p));
+        JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/list", "POST", new JSONObject(payload));
+        if(result == null) return null;
+        return result.getJSONArray("data");
+    }
 }
