@@ -2,6 +2,7 @@ package com.shojabon.man10shopv3.dataClass;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.Man10ShopV3API;
+import com.shojabon.man10shopv3.shopFunctions.MoneyFunction;
 import com.shojabon.man10shopv3.shopFunctions.NameFunction;
 import com.shojabon.man10shopv3.shopFunctions.PermissionFunction;
 import com.shojabon.man10shopv3.shopFunctions.TargetItemFunction;
@@ -30,6 +31,7 @@ public class Man10Shop {
     public TargetItemFunction targetItemFunction;
     public NameFunction nameFunction;
     public PermissionFunction permissionFunction;
+    public MoneyFunction moneyFunction;
 
     public JSONObject shopData;
 
@@ -47,6 +49,14 @@ public class Man10Shop {
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean isAdmin(){
+        return shopData.getBoolean("admin");
+    }
+
+    public String getShopType(){
+        return shopData.getString("shopType");
     }
 
     public String getShopId(){
