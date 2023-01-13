@@ -3,6 +3,7 @@ package com.shojabon.man10shopv3.commands;
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.commands.subCommands.ItemGiveCommand;
 import com.shojabon.man10shopv3.commands.subCommands.ItemTakeCommand;
+import com.shojabon.man10shopv3.commands.subCommands.ShopsCommand;
 import com.shojabon.man10shopv3.commands.subCommands.TestCommand;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandArgument;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandObject;
@@ -33,6 +34,14 @@ public class Man10ShopV3Command extends SCommandRouter {
 
                         addRequiredPermission("man10shopv3.test").addExplanation("テスト").
                         setExecutor(new TestCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("shops")).
+
+                        addRequiredPermission("man10shopv3.shops").addExplanation("編集可能なショップを開く").
+                        setExecutor(new ShopsCommand(plugin))
         );
 
         // console commands

@@ -24,6 +24,7 @@ public class Man10ShopV3API {
         this.plugin = plugin;
     }
 
+    // global methods
     public static JSONObject httpRequest(String endpoint, String method, JSONObject jsonInput) {
         try {
             URL url = new URL(endpoint);
@@ -41,12 +42,15 @@ public class Man10ShopV3API {
                 os.write(input, 0, input.length);
             }
             int responseCode = con.getResponseCode();
-            if(responseCode != 200){
-                return null;
+            BufferedReader in = null;
+            if(responseCode == 200){
+                in = new BufferedReader(
+                        new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+            }else{
+                in = new BufferedReader(
+                        new InputStreamReader(con.getErrorStream(), StandardCharsets.UTF_8));
             }
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
             String inputLine;
             StringBuilder response = new StringBuilder();
 
@@ -63,6 +67,14 @@ public class Man10ShopV3API {
         }
     }
 
+    public static void warnMessage(Player p, String message){
+        p.sendMessage(Man10ShopV3.prefix + "§c§l" + message);
+    }
+
+    public static void successMessage(Player p, String message){
+        p.sendMessage(Man10ShopV3.prefix + "§a§l" + message);
+    }
+
     public static JSONObject getPlayerJSON(Player p){
         Map<String, Object> result = new HashMap<>();
         result.put("name", p.getName());
@@ -70,11 +82,20 @@ public class Man10ShopV3API {
         return new JSONObject(result);
     }
 
-    public JSONArray getPlayerShops(Player p){
+    public JSONObject getPlayerShops(Player p){
         Map<String, Object> payload = new HashMap<>();
         payload.put("player", getPlayerJSON(p));
         JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/list", "POST", new JSONObject(payload));
-        if(result == null) return null;
-        return result.getJSONArray("data");
+        return result;
+    }
+
+    public JSONObject getShopInformation(String shopId, Player requestingPlayer){
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("shopId", shopId);
+        if(requestingPlayer != null){
+            payload.put("player", getPlayerJSON(requestingPlayer));
+        }
+        JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/info", "POST", new JSONObject(payload));
+        return result;
     }
 }

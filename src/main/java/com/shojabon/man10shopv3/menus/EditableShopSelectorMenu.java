@@ -2,6 +2,7 @@ package com.shojabon.man10shopv3.menus;
 
 import ToolMenu.CategoricalSInventoryMenu;
 import com.shojabon.man10shopv3.Man10ShopV3;
+import com.shojabon.man10shopv3.commands.Man10ShopV3API;
 import com.shojabon.mcutils.Utils.BaseUtils;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
@@ -12,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
@@ -20,11 +22,15 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
     Player player;
     Consumer<String> onClick = null;
 
-    public EditableShopSelectorMenu(Player p, String startingCategory, Man10ShopV3 plugin){
+    JSONObject playerShopsRequest;
+
+    public EditableShopSelectorMenu(Player p, JSONObject playerShopsRequest, String startingCategory, Man10ShopV3 plugin){
         super(new SStringBuilder().aqua().bold().text("管理可能ショップ一覧").build(), startingCategory, plugin);
         this.player = p;
         this.plugin = plugin;
+        this.playerShopsRequest = playerShopsRequest;
         sort(true);
+
     }
 
     public void setOnClick(Consumer<String> event){
@@ -34,12 +40,11 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
     public void renderMenu(){
         addInitializedCategory("その他");
 
-
-        JSONArray shops = Man10ShopV3.api.getPlayerShops(player);
+        JSONArray shops = playerShopsRequest.getJSONArray("data");
         for(int i = 0; i < shops.length(); i++){
             JSONObject shopInfo = shops.getJSONObject(i);
 
-            SItemStack icon = new SItemStack(Material.DIAMOND);
+            SItemStack icon = SItemStack.fromBase64(shopInfo.getString("icon"));
             icon.setDisplayName(new SStringBuilder().green().bold().text(shopInfo.getString("name")).build());
             icon.addLore("§d§lショップタイプ: " + shopInfo.getString("shopType"));
             icon.addLore(new SStringBuilder().lightPurple().bold().text("権限: ").yellow().bold().text(shopInfo.getString("permission")).build());

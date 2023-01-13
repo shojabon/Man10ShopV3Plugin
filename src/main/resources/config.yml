@@ -1,3 +1,4 @@
+pluginEnabled: true
 api:
   endpoint: "http://localhost:1234"
   key: "testa"
