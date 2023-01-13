@@ -1,7 +1,8 @@
 package com.shojabon.man10shopv3.commands.subCommands;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
-import com.shojabon.man10shopv3.commands.Man10ShopV3API;
+import com.shojabon.man10shopv3.Man10ShopV3API;
+import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import com.shojabon.man10shopv3.menus.EditableShopSelectorMenu;
 import com.shojabon.man10shopv3.menus.ShopMainMenu;
 import org.bukkit.Bukkit;
@@ -41,12 +42,12 @@ public class ShopsCommand implements CommandExecutor {
             EditableShopSelectorMenu menu = new EditableShopSelectorMenu(player, Man10ShopV3.api.getPlayerShops(player), "その他", plugin);
 
             menu.setOnClick(shopId -> {
-                JSONObject shopInfo = Man10ShopV3.api.getShopInformation(shopId, player);
+                Man10Shop shopInfo = Man10ShopV3.api.getShopInformation(shopId, player);
                 if(!result.getString("status").equals("success")){
                     Man10ShopV3API.warnMessage(player, result.getString("message"));
                     return;
                 }
-                new ShopMainMenu(player, shopInfo.getJSONObject("data"), plugin).open(player);
+                new ShopMainMenu(player, shopInfo, plugin).open(player);
             });
             menu.open((Player) sender);
         });

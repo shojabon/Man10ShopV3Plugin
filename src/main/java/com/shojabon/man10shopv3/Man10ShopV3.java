@@ -1,6 +1,5 @@
 package com.shojabon.man10shopv3;
 
-import com.shojabon.man10shopv3.commands.Man10ShopV3API;
 import com.shojabon.man10shopv3.commands.Man10ShopV3Command;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;

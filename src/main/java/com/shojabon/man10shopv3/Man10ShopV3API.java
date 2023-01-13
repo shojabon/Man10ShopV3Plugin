@@ -1,6 +1,7 @@
-package com.shojabon.man10shopv3.commands;
+package com.shojabon.man10shopv3;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
+import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
@@ -89,13 +90,14 @@ public class Man10ShopV3API {
         return result;
     }
 
-    public JSONObject getShopInformation(String shopId, Player requestingPlayer){
+    public Man10Shop getShopInformation(String shopId, Player requestingPlayer){
         Map<String, Object> payload = new HashMap<>();
         payload.put("shopId", shopId);
         if(requestingPlayer != null){
             payload.put("player", getPlayerJSON(requestingPlayer));
         }
         JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/info", "POST", new JSONObject(payload));
-        return result;
+        if(result == null || !result.getString("status").equals("success")) return null;
+        return new Man10Shop(result.getJSONObject("data"));
     }
 }
