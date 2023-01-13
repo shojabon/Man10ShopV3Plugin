@@ -1,6 +1,7 @@
 package com.shojabon.man10shopv3.menus;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
+import com.shojabon.man10shopv3.Man10ShopV3API;
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import com.shojabon.mcutils.Utils.SInventory.SInventory;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
@@ -10,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+import org.json.JSONObject;
 
 public class TargetItemSelectorMenu extends SInventory{
 
@@ -43,12 +45,23 @@ public class TargetItemSelectorMenu extends SInventory{
             e.setCancelled(true);
             if(e.getCurrentItem() == null) return;
             if(e.getClickedInventory().getType() == InventoryType.CHEST) return;
-            ItemStack newTargetItem = new SItemStack(e.getCurrentItem()).getTypeItem(true);
+            SItemStack newTargetItem = new SItemStack(new SItemStack(e.getCurrentItem()).getTypeItem(true));
             if(newTargetItem == null) return;
 
             SInventory.threadPool.execute(()->{
                 // set target item variable if error return
                 // send message from response?
+                JSONObject request = shop.setVariable(player, "targetItem.item", newTargetItem.getItemTypeBase64());
+                if(!request.getString("status").equals("success")){
+                    Man10ShopV3API.warnMessage(player, request.getString("message"));
+                    return;
+                }
+                JSONObject request2 = shop.setVariable(player, "targetItem.itemHash", newTargetItem.getItemTypeMD5());
+                if(!request.getString("status").equals("success")){
+                    Man10ShopV3API.warnMessage(player, request2.getString("message"));
+                    return;
+                }
+                shop.updateData();
                 renderMenu();
             });
 

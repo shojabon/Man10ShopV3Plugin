@@ -100,4 +100,5 @@ public class Man10ShopV3API {
         if(result == null || !result.getString("status").equals("success")) return null;
         return new Man10Shop(result.getJSONObject("data"));
     }
+
 }

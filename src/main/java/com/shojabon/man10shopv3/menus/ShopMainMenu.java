@@ -68,8 +68,7 @@ public class ShopMainMenu extends AutoScaledMenu {
                 player.sendMessage(Man10ShopV3.prefix + "§c§lこの項目を開く権限がありません");
                 return;
             }
-            player.sendMessage("open");
-//            new Tare(player, shop, plugin).open(player);
+            new TargetItemSelectorMenu(player, shop, plugin).open(player);
         });
 
 
