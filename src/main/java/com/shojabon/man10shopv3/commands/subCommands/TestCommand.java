@@ -27,9 +27,8 @@ public class TestCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
-        Man10Shop shop = Man10ShopV3.api.getShopInformation("d8c6d387-92ec-11ed-a28d-803253476232", player);
-        ItemInOutMenu menu = new ItemInOutMenu(player, shop, plugin);
-        menu.open(player);
+        Man10Shop shop = Man10ShopV3.api.getShopInformation("eb2cab60-93b5-11ed-9a81-803253476232", player);
+        shop.openMenu(player);
         return true;
     }
 }

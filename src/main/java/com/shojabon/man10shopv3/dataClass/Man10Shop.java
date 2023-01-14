@@ -2,6 +2,7 @@ package com.shojabon.man10shopv3.dataClass;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.Man10ShopV3API;
+import com.shojabon.man10shopv3.menus.action.BuySellActionMenu;
 import com.shojabon.man10shopv3.shopFunctions.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.FallingBlock;
@@ -54,6 +55,10 @@ public class Man10Shop {
         return shopData.getBoolean("admin");
     }
 
+    public String getName(){
+        return shopData.getJSONObject("name").getString("name");
+    }
+
     public String getShopType(){
         return shopData.getString("shopType");
     }
@@ -90,6 +95,17 @@ public class Man10Shop {
         payload.put("data", data);
         JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/queue/add", "POST", new JSONObject(payload));
         return result;
+    }
+
+    public JSONObject getMenuInfo(){
+        return shopData.getJSONObject("menuInfo");
+    }
+
+    public void openMenu(Player p){
+        if(getShopType().equals("SELL") || getShopType().equals("BUY")){
+            new BuySellActionMenu(p, this, plugin).open(p);
+            return;
+        }
     }
 
 
