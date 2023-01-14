@@ -28,6 +28,8 @@ public class SettingsMainMenu extends CategoricalSInventoryMenu {
         this.player = p;
         this.shop = shop;
         this.plugin = plugin;
+
+        shop.updateData();
     }
 
     public ItemStack createNoPermissionItem(ItemStack item){

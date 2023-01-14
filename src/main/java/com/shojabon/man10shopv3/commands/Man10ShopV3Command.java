@@ -8,6 +8,8 @@ import com.shojabon.mcutils.Utils.SCommandRouter.SCommandArgument;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandObject;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandRouter;
 
+import java.security.Signature;
+
 
 public class Man10ShopV3Command extends SCommandRouter {
 
@@ -90,6 +92,14 @@ public class Man10ShopV3Command extends SCommandRouter {
                         .addArgument(new SCommandArgument().addAlias("amount"))
                         .addRequiredPermission("man10shopv3.money.give").addExplanation("お金をあげる(内部用)").
                         setExecutor(new MoneyGiveCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("signUpdate"))
+                        .addArgument(new SCommandArgument().addAlias("shopId"))
+                        .addRequiredPermission("man10shopv3.sign.update").addExplanation("看板アップデート(内部用)").
+                        setExecutor(new SignUpdateCommand(plugin))
         );
     }
 

@@ -1,4 +1,4 @@
-package com.shojabon.man10shopv3.shopFunctions;
+package com.shojabon.man10shopv3.shopFunctions.general;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.annotations.ShopFunctionDefinition;

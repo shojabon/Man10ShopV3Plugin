@@ -1,19 +1,18 @@
 package com.shojabon.man10shopv3.dataClass;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
-import com.shojabon.man10shopv3.Man10ShopV3API;
 import com.shojabon.man10shopv3.menus.action.BuySellActionMenu;
 import com.shojabon.man10shopv3.shopFunctions.*;
+import com.shojabon.man10shopv3.shopFunctions.general.NameFunction;
+import com.shojabon.man10shopv3.shopFunctions.general.PriceFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +31,9 @@ public class Man10Shop {
     public NameFunction nameFunction;
     public PermissionFunction permissionFunction;
     public MoneyFunction moneyFunction;
+
+    public PriceFunction priceFunction;
+    public SignFunction signFunction;
 
     public StorageFunction storageFunction;
 

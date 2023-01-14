@@ -213,7 +213,7 @@ public class SignListeners implements @NotNull Listener {
             sign.setLine(2, formatSignString(sign.getLine(1), shop));
 
             for(int i = 0; i < lineData.size(); i++){
-                if(lineData.get(i).equalsIgnoreCase("")) continue;
+                if(lineData.get(i) == null || lineData.get(i).equalsIgnoreCase("")) continue;
                 sign.setLine(i, lineData.get(i));
             }
 
