@@ -36,7 +36,7 @@ public class ItemTakeCommand implements CommandExecutor {
                 return false;
             }
             for(int i = 0; i < amount; i++){
-                p.getInventory().remove(completeItem);
+                p.getInventory().removeItemAnySlot(completeItem);
             }
             sender.sendMessage("success");
             return true;

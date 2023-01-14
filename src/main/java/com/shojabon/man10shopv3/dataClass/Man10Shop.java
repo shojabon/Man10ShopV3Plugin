@@ -2,10 +2,7 @@ package com.shojabon.man10shopv3.dataClass;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.Man10ShopV3API;
-import com.shojabon.man10shopv3.shopFunctions.MoneyFunction;
-import com.shojabon.man10shopv3.shopFunctions.NameFunction;
-import com.shojabon.man10shopv3.shopFunctions.PermissionFunction;
-import com.shojabon.man10shopv3.shopFunctions.TargetItemFunction;
+import com.shojabon.man10shopv3.shopFunctions.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
@@ -32,6 +29,8 @@ public class Man10Shop {
     public NameFunction nameFunction;
     public PermissionFunction permissionFunction;
     public MoneyFunction moneyFunction;
+
+    public StorageFunction storageFunction;
 
     public JSONObject shopData;
 

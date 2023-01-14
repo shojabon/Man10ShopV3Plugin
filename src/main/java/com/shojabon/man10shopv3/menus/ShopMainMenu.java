@@ -5,6 +5,7 @@ import ToolMenu.NumericInputMenu;
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.Man10ShopV3API;
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
+import com.shojabon.man10shopv3.menus.permission.PermissionSettingsMainMenu;
 import com.shojabon.man10shopv3.menus.settings.SettingsMainMenu;
 import com.shojabon.mcutils.Utils.BaseUtils;
 import com.shojabon.mcutils.Utils.SInventory.SInventory;
@@ -28,10 +29,14 @@ public class ShopMainMenu extends AutoScaledMenu {
         this.plugin = plugin;
         this.shop = shop;
 
+        shop.updateData();
+
         addItem(getShopInfoItem());
         addItem(getTargetItemSettingsItem());
         addItem(getShopSettingsItem());
         addItem(getMoneySelectorMenu());
+        addItem(getStorageSettingsItem());
+        addItem(getPermissionSettingsItem());
     }
 
 
@@ -118,7 +123,7 @@ public class ShopMainMenu extends AutoScaledMenu {
     public SInventoryItem getMoneySelectorMenu(){
         SStringBuilder iconName = new SStringBuilder();
         SItemStack icon = new SItemStack(Material.EMERALD);
-        if(!shop.permissionFunction.getPermission(player.getUniqueId()).equals("STORAGE_ACCESS") && shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT")){
+        if(shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT")){
             iconName.green().bold().text("現金出し入れ").build();
         }else{
             iconName.gray().bold().strike().text("現金出し入れ");
@@ -134,7 +139,7 @@ public class ShopMainMenu extends AutoScaledMenu {
         item.clickable(false);
 
         item.setEvent(e -> {
-            if(shop.permissionFunction.getPermission(player.getUniqueId()).equals("STORAGE_ACCESS") || !shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT")){
+            if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT")){
                 player.sendMessage(Man10ShopV3.prefix + "§c§lこの項目を開く権限がありません");
                 return;
             }
@@ -169,7 +174,7 @@ public class ShopMainMenu extends AutoScaledMenu {
         menu.setOnCancel(e -> new ShopMainMenu(player, shop, plugin).open(player));
         menu.setOnClose(e -> new ShopMainMenu(player, shop, plugin).open(player));
         menu.setOnConfirm(integer -> {
-            if(shop.permissionFunction.getPermission(player.getUniqueId()).equals("STORAGE_ACCESS") || !shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT")){
+            if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT")){
                 player.sendMessage(Man10ShopV3.prefix + "§c§lこの項目を開く権限がありません");
                 return;
             }
@@ -187,5 +192,75 @@ public class ShopMainMenu extends AutoScaledMenu {
         return menu;
     }
 
+    public SInventoryItem getStorageSettingsItem(){
+        SStringBuilder iconName = new SStringBuilder();
+
+        if(shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
+            iconName.gray().bold().text("アイテム倉庫").build();
+        }else{
+            iconName.gray().bold().strike().text("アイテム倉庫");
+        }
+
+        SItemStack icon = new SItemStack(Material.CHEST).setDisplayName(iconName.build());
+
+        if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
+            icon.addLore(new SStringBuilder().red().text("権限がありません").build());
+            icon.addLore("");
+        }
+        icon.addLore(new SStringBuilder().white().text("アイテムの出しいれをすることができます").build());
+        SInventoryItem item = new SInventoryItem(icon.build());
+
+        item.clickable(false);
+
+        item.setEvent(e -> {
+            if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
+                player.sendMessage(Man10ShopV3.prefix + "§c§lこの項目を開く権限がありません");
+                return;
+            }
+
+            ItemInOutMenu menu = new ItemInOutMenu(player, shop, plugin);
+            menu.setOnCloseEvent(ee -> {
+                new ShopMainMenu(player, shop, plugin).open(player);
+            });
+            menu.open(player);
+        });
+
+
+
+        return item;
+    }
+
+    public SInventoryItem getPermissionSettingsItem(){
+        SStringBuilder iconName = new SStringBuilder();
+
+        if(shop.permissionFunction.hasPermission(player.getUniqueId(), "MODERATOR")){
+            iconName.darkRed().bold().text("権限設定").build();
+        }else{
+            iconName.gray().bold().strike().text("権限設定");
+        }
+
+        SItemStack icon = new SItemStack(Material.BELL).setDisplayName(iconName.build());
+
+        if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "MODERATOR")){
+            icon.addLore(new SStringBuilder().red().text("権限がありません").build());
+            icon.addLore("");
+        }
+        icon.addLore(new SStringBuilder().white().text("ショップの設定をできる人などを設定することができます").build());
+        SInventoryItem item = new SInventoryItem(icon.build());
+
+        item.clickable(false);
+
+        item.setEvent(e -> {
+            if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "MODERATOR")){
+                player.sendMessage(Man10ShopV3.prefix + "§c§lこの項目を開く権限がありません");
+                return;
+            }
+            PermissionSettingsMainMenu menu = new PermissionSettingsMainMenu(player, shop, plugin);
+            menu.open(player);
+        });
+
+
+        return item;
+    }
 
 }
