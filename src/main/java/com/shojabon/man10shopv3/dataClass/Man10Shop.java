@@ -6,6 +6,7 @@ import com.shojabon.man10shopv3.shopFunctions.*;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.DisabledFromFunction;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.EnabledFromFunction;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.WeekDayToggleFunction;
+import com.shojabon.man10shopv3.shopFunctions.general.DeleteShopFunction;
 import com.shojabon.man10shopv3.shopFunctions.general.NameFunction;
 import com.shojabon.man10shopv3.shopFunctions.general.PriceFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
@@ -38,6 +39,8 @@ public class Man10Shop {
 
     public PriceFunction priceFunction;
     public SignFunction signFunction;
+
+    public DeleteShopFunction deleteShopFunction;
 
     public StorageFunction storageFunction;
 
@@ -118,6 +121,7 @@ public class Man10Shop {
     }
 
     public void openMenu(Player p){
+        if(deleteShopFunction.isDeleted()) return;
         if(getShopType().equals("SELL") || getShopType().equals("BUY")){
             new BuySellActionMenu(p, this, plugin).open(p);
             return;
