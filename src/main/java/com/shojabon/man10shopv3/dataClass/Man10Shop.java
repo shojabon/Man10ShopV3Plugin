@@ -3,8 +3,12 @@ package com.shojabon.man10shopv3.dataClass;
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.menus.action.BuySellActionMenu;
 import com.shojabon.man10shopv3.shopFunctions.*;
+import com.shojabon.man10shopv3.shopFunctions.allowedToUse.DisabledFromFunction;
+import com.shojabon.man10shopv3.shopFunctions.allowedToUse.EnabledFromFunction;
+import com.shojabon.man10shopv3.shopFunctions.allowedToUse.WeekDayToggleFunction;
 import com.shojabon.man10shopv3.shopFunctions.general.NameFunction;
 import com.shojabon.man10shopv3.shopFunctions.general.PriceFunction;
+import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -36,6 +40,15 @@ public class Man10Shop {
     public SignFunction signFunction;
 
     public StorageFunction storageFunction;
+
+
+
+
+    // allowed to use
+    public DisabledFromFunction disabledFromFunction;
+    public EnabledFromFunction enabledFromFunction;
+    public WeekDayToggleFunction weekDayToggleFunction;
+
 
     public JSONObject shopData;
 
@@ -85,8 +98,7 @@ public class Man10Shop {
         }
         payload.put("key", key);
         payload.put("value", value);
-        JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/variable/set", "POST", new JSONObject(payload));
-        return result;
+        return httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/variable/set", "POST", new JSONObject(payload));
     }
 
     public JSONObject requestQueueTask(Player p, String key, Object data){
