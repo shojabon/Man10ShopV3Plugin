@@ -14,6 +14,7 @@ import com.shojabon.mcutils.Utils.SItemStack;
 import com.shojabon.mcutils.Utils.SStringBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,8 @@ public class PermissionSettingsMainMenu extends LargeSInventoryMenu{
         this.shop = shop;
         this.plugin = plugin;
         addItems();
+
+        shop.updateData();
     }
 
     public void addItems(){
@@ -42,7 +45,7 @@ public class PermissionSettingsMainMenu extends LargeSInventoryMenu{
             SInventoryItem item = new SInventoryItem(icon.build());
             item.clickable(false);
             item.setEvent(e -> {
-//                new PermissionSettingsMenu(player, shop, mod, plugin).open(player);
+                new PermissionSettingsMenu(player, shop, mod, plugin).open(player);
             });
             items.add(item);
 
@@ -74,12 +77,13 @@ public class PermissionSettingsMainMenu extends LargeSInventoryMenu{
 
                 ConfirmationMenu menu = new ConfirmationMenu("§a" + targetPlayer.getName() + "を管理者にしますか？", plugin);
                 menu.setOnConfirm(ee -> {
-//                    if(!shop.permissionFunction.addModerator(new Man10ShopModerator(targetPlayer.getName(), targetPlayer.getUniqueId(), "STORAGE_ACCESS", true))){
-//                        player.sendMessage(Man10ShopV3.prefix + "§c§l内部エラーが発生しました");
-//                        return;
-//                    }
+                    JSONObject request = shop.permissionFunction.addModerator(new Man10ShopModerator(targetPlayer.getName(), targetPlayer.getUniqueId(), "STORAGE_ACCESS", true));
+                    if(!request.get("status").equals("success")){
+                        player.sendMessage(Man10ShopV3.prefix + "§c§l" + request.get("message"));
+                        return;
+                    }
                     player.sendMessage(Man10ShopV3.prefix + "§a§l管理者を追加しました");
-                    menu.close(player);
+                    new ShopMainMenu(player, shop, plugin).open(player);
                 });
 
                 menu.open(player);

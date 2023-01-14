@@ -9,11 +9,9 @@ import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 @ShopFunctionDefinition(
@@ -55,7 +53,7 @@ public class PermissionFunction extends ShopFunction {
         JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
         String userId = uuid.toString().replace("-", "");
         if(!permissionList.has(userId)) return "NONE";
-        return permissionList.getString(userId);
+        return permissionList.getJSONObject(userId).getString("permission");
     }
 
     public ArrayList<Man10ShopModerator> getModerators(){
@@ -69,10 +67,43 @@ public class PermissionFunction extends ShopFunction {
         return result;
     }
 
+    public Man10ShopModerator getModerator(UUID uuid){
+        ArrayList<Man10ShopModerator> moderators = getModerators();
+        for(Man10ShopModerator mod : moderators){
+            if(mod.uuid.equals(uuid)) return mod;
+        }
+        return null;
+    }
+
     public boolean isModerator(UUID uuid){
         JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
         String userId = uuid.toString().replace("-", "");
         return permissionList.has(userId);
+    }
+
+
+    public JSONObject addModerator(Man10ShopModerator moderator){
+        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+        String userId = moderator.uuid.toString().replace("-", "");
+        JSONObject moderatorObject = new JSONObject();
+        if(permissionList.has(userId)){
+            moderatorObject = permissionList.getJSONObject(userId);
+        }
+        moderatorObject.put("name", moderator.name);
+        moderatorObject.put("uuid", moderator.uuid);
+        moderatorObject.put("permission", moderator.permission);
+        moderatorObject.put("notify", moderator.notificationEnabled);
+
+        permissionList.put(userId, moderatorObject);
+        return shop.setVariable(null, "permission.users", permissionList);
+    }
+
+    public JSONObject removeModerator(Man10ShopModerator moderator){
+        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+        String userId = moderator.uuid.toString().replace("-", "");
+
+        permissionList.remove(userId);
+        return shop.setVariable(null, "permission.users", permissionList);
     }
 
     public String getPermissionString(String permission){
@@ -88,6 +119,15 @@ public class PermissionFunction extends ShopFunction {
                 return "倉庫編集権";
         }
         return "エラー";
+    }
+
+    public int totalOwnerCount(){
+        int result = 0;
+        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+        for(String key: permissionList.keySet()){
+            if(permissionList.getJSONObject(key).getString("permission").equals("OWNER")) result += 1;
+        }
+        return result;
     }
 
     @Override
