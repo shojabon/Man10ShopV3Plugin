@@ -9,6 +9,7 @@ import com.shojabon.man10shopv3.shopFunctions.allowedToUse.WeekDayToggleFunction
 import com.shojabon.man10shopv3.shopFunctions.general.DeleteShopFunction;
 import com.shojabon.man10shopv3.shopFunctions.general.NameFunction;
 import com.shojabon.man10shopv3.shopFunctions.general.PriceFunction;
+import com.shojabon.man10shopv3.shopFunctions.general.ShopEnabledFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,6 +42,8 @@ public class Man10Shop {
     public SignFunction signFunction;
 
     public DeleteShopFunction deleteShopFunction;
+
+    public ShopEnabledFunction shopEnabledFunction;
 
     public StorageFunction storageFunction;
 
@@ -88,9 +91,9 @@ public class Man10Shop {
     }
 
     public void updateData(){
-        Man10Shop shop = Man10ShopV3.api.getShopInformation(this.getShopId(), null);
+        JSONObject shop = Man10ShopV3.api.getShopInformation(this.getShopId(), null);
         if(shop == null) return;
-        shopData = shop.shopData;
+        shopData = shop.getJSONObject("data");
     }
 
     public JSONObject setVariable(Player p, String key, Object value){

@@ -1,11 +1,8 @@
 package com.shojabon.man10shopv3;
 
-import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -14,13 +11,14 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Man10ShopV3API {
 
     Man10ShopV3 plugin;
+
+    HashMap<String, Man10Shop> shopObjectCache = new HashMap<>();
 
     public Man10ShopV3API(Man10ShopV3 plugin){
         this.plugin = plugin;
@@ -116,7 +114,7 @@ public class Man10ShopV3API {
         return new Man10Shop(result.getJSONObject("data"));
     }
 
-    public Man10Shop getShopInformation(String shopId, Player requestingPlayer){
+    public JSONObject getShopInformation(String shopId, Player requestingPlayer){
         Map<String, Object> payload = new HashMap<>();
         payload.put("shopId", shopId);
         if(requestingPlayer != null){
@@ -124,7 +122,18 @@ public class Man10ShopV3API {
         }
         JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/info", "POST", new JSONObject(payload));
         if(result == null || !result.getString("status").equals("success")) return null;
-        return new Man10Shop(result.getJSONObject("data"));
+        return result;
+    }
+    public Man10Shop getShop(String shopId, Player requestingPlayer){
+        if(shopObjectCache.containsKey(shopId)){
+            Man10Shop shop =  shopObjectCache.get(shopId);
+            shop.updateData();
+            return shop;
+        }
+        JSONObject shopInformationRequest = getShopInformation(shopId, requestingPlayer);
+        if(shopInformationRequest == null) return null;
+        shopObjectCache.put(shopId, new Man10Shop(shopInformationRequest.getJSONObject("data")));
+        return shopObjectCache.get(shopId);
     }
 
 }

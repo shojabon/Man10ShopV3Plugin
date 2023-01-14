@@ -2,7 +2,6 @@ package com.shojabon.man10shopv3.listeners;
 
 import ToolMenu.ConfirmationMenu;
 import com.shojabon.man10shopv3.Man10ShopV3;
-import com.shojabon.man10shopv3.Man10ShopV3API;
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import com.shojabon.man10shopv3.menus.AdminShopSelectorMenu;
 import com.shojabon.man10shopv3.menus.EditableShopSelectorMenu;
@@ -62,7 +61,7 @@ public class SignListeners implements @NotNull Listener {
             UUID uuid = e.getPlayer().getUniqueId();
 
             menu.setOnClick(shopId -> {
-                Man10Shop shop = Man10ShopV3.api.getShopInformation(shopId, e.getPlayer());
+                Man10Shop shop = Man10ShopV3.api.getShop(shopId, e.getPlayer());
                 if(shop == null){
                     e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§lショップが存在しません");
                     return;
@@ -109,7 +108,7 @@ public class SignListeners implements @NotNull Listener {
 //                    return;
 //                }
 
-                Man10Shop shop = Man10ShopV3.api.getShopInformation(shopId, e.getPlayer());
+                Man10Shop shop = Man10ShopV3.api.getShop(shopId, e.getPlayer());
                 if(shop == null){
                     e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§lショップが存在しません");
                     return;

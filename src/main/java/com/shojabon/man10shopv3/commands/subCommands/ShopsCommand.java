@@ -42,7 +42,7 @@ public class ShopsCommand implements CommandExecutor {
             EditableShopSelectorMenu menu = new EditableShopSelectorMenu(player, "その他", plugin);
 
             menu.setOnClick(shopId -> {
-                Man10Shop shopInfo = Man10ShopV3.api.getShopInformation(shopId, player);
+                Man10Shop shopInfo = Man10ShopV3.api.getShop(shopId, player);
                 if(!result.getString("status").equals("success")){
                     Man10ShopV3API.warnMessage(player, result.getString("message"));
                     return;
