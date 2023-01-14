@@ -1,4 +1,5 @@
 pluginEnabled: true
+serverName: "man10"
 api:
   endpoint: "http://localhost:1234"
   key: "testa"

@@ -2,32 +2,30 @@ package com.shojabon.man10shopv3.menus;
 
 import ToolMenu.CategoricalSInventoryMenu;
 import com.shojabon.man10shopv3.Man10ShopV3;
-import com.shojabon.mcutils.Utils.BaseUtils;
+import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
 import com.shojabon.mcutils.Utils.SStringBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
+public class AdminShopSelectorMenu extends CategoricalSInventoryMenu {
 
     Man10ShopV3 plugin;
     Player player;
     Consumer<String> onClick = null;
+    JSONObject adminShopRequests;
 
-    JSONObject playerShopsRequest;
-
-    public EditableShopSelectorMenu(Player p, String startingCategory, Man10ShopV3 plugin){
+    public AdminShopSelectorMenu(Player p, String startingCategory, Man10ShopV3 plugin){
         super(new SStringBuilder().aqua().bold().text("管理可能ショップ一覧").build(), startingCategory, plugin);
         this.player = p;
         this.plugin = plugin;
-        this.playerShopsRequest = Man10ShopV3.api.getPlayerShops(player);
-        sort(true);
 
+        adminShopRequests = Man10ShopV3.api.getAdminShops(player);
     }
 
     public void setOnClick(Consumer<String> event){
@@ -36,20 +34,14 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
 
     public void renderMenu(){
         addInitializedCategory("その他");
-        if(playerShopsRequest == null) return;
-
-        JSONArray shops = playerShopsRequest.getJSONArray("data");
+        if(adminShopRequests == null) return;
+        JSONArray shops = adminShopRequests.getJSONArray("data");
         for(int i = 0; i < shops.length(); i++){
             JSONObject shopInfo = shops.getJSONObject(i);
-
 
             SItemStack icon = SItemStack.fromBase64(shopInfo.getString("icon"));
             icon.setDisplayName(new SStringBuilder().green().bold().text(shopInfo.getString("name")).build());
             icon.addLore("§d§lショップタイプ: " + shopInfo.getString("shopType"));
-            icon.addLore(new SStringBuilder().lightPurple().bold().text("権限: ").yellow().bold().text(shopInfo.getString("permission")).build());
-            icon.addLore("");
-            icon.addLore(new SStringBuilder().red().bold().text("在庫: ").yellow().bold().text(BaseUtils.priceString(shopInfo.getInt("itemCount"))).text("個").build());
-            icon.addLore(new SStringBuilder().red().bold().text("残金: ").yellow().bold().text(BaseUtils.priceString(shopInfo.getInt("money"))).text("円").build());
 
             SInventoryItem item = new SInventoryItem(icon.build());
             item.clickable(false);
@@ -59,7 +51,6 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
 
             addItem(shopInfo.getString("category"), item);
         }
-        //setItems(items);
     }
 
 }

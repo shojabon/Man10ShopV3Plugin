@@ -3,6 +3,7 @@ package com.shojabon.man10shopv3;
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -88,6 +89,31 @@ public class Man10ShopV3API {
         payload.put("player", getPlayerJSON(p));
         JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/list", "POST", new JSONObject(payload));
         return result;
+    }
+    public JSONObject getAdminShops(Player p){
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("player", getPlayerJSON(p));
+        payload.put("admin", true);
+        JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/list", "POST", new JSONObject(payload));
+        return result;
+    }
+
+    public Man10Shop getShopFromSign(Player p, Location loc){
+        JSONObject data = new JSONObject();
+        data.put("server", Man10ShopV3.config.getString("serverName"));
+        data.put("world", loc.getWorld().getName());
+        data.put("x", loc.getBlockX());
+        data.put("y", loc.getBlockY());
+        data.put("z", loc.getBlockZ());
+
+        JSONObject payload = new JSONObject();
+        if(p != null){
+            payload.put("player", getPlayerJSON(p));
+        }
+        payload.put("sign", data);
+        JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/info", "POST", payload);
+        if(result == null || !result.getString("status").equals("success")) return null;
+        return new Man10Shop(result.getJSONObject("data"));
     }
 
     public Man10Shop getShopInformation(String shopId, Player requestingPlayer){

@@ -1,13 +1,18 @@
 package com.shojabon.man10shopv3;
 
 import com.shojabon.man10shopv3.commands.Man10ShopV3Command;
+import com.shojabon.man10shopv3.listeners.SignListeners;
 import com.shojabon.mcutils.Utils.VaultAPI;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public final class Man10ShopV3 extends JavaPlugin {
     public static String prefix;
     public static FileConfiguration config;
+    public static ExecutorService threadPool = Executors.newCachedThreadPool();
     public static VaultAPI vault;
 
     public static Man10ShopV3API api = null;
@@ -20,6 +25,7 @@ public final class Man10ShopV3 extends JavaPlugin {
 
         vault = new VaultAPI();
 
+        getServer().getPluginManager().registerEvents(new SignListeners(this), this);
         Man10ShopV3Command command = new Man10ShopV3Command(this);
         getCommand("mshop").setExecutor(command);
         getCommand("mshop").setTabCompleter(command);

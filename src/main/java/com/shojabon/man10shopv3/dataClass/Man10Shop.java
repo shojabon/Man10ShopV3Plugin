@@ -5,8 +5,10 @@ import com.shojabon.man10shopv3.Man10ShopV3API;
 import com.shojabon.man10shopv3.menus.action.BuySellActionMenu;
 import com.shojabon.man10shopv3.shopFunctions.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
@@ -107,6 +109,38 @@ public class Man10Shop {
             return;
         }
     }
+
+    public JSONObject createSign(Player p, Location loc){
+        JSONObject data = new JSONObject();
+        data.put("server", Man10ShopV3.config.getString("serverName"));
+        data.put("world", loc.getWorld().getName());
+        data.put("x", loc.getBlockX());
+        data.put("y", loc.getBlockY());
+        data.put("z", loc.getBlockZ());
+
+        return requestQueueTask(p, "sign.register", data);
+    }
+
+    public JSONObject deleteSign(Player p, Location loc){
+        JSONObject data = new JSONObject();
+        data.put("server", Man10ShopV3.config.getString("serverName"));
+        data.put("world", loc.getWorld().getName());
+        data.put("x", loc.getBlockX());
+        data.put("y", loc.getBlockY());
+        data.put("z", loc.getBlockZ());
+
+        return requestQueueTask(p, "sign.unregister", data);
+    }
+
+    public ArrayList<String> getSignInfo(){
+        ArrayList<String> result = new ArrayList<>();
+        JSONArray array = shopData.getJSONArray("signInfo");
+        for(int i = 0; i < array.length(); i++){
+            result.add(array.getString(i));
+        }
+        return result;
+    }
+
 
 
 
