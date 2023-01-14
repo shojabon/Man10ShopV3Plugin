@@ -14,6 +14,7 @@ import com.shojabon.mcutils.Utils.SStringBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.json.JSONObject;
 
 public class ShopMainMenu extends AutoScaledMenu {
     Man10ShopV3 plugin;
@@ -30,6 +31,7 @@ public class ShopMainMenu extends AutoScaledMenu {
         addItem(getShopInfoItem());
         addItem(getTargetItemSettingsItem());
         addItem(getShopSettingsItem());
+        addItem(getMoneySelectorMenu());
     }
 
 
@@ -115,19 +117,16 @@ public class ShopMainMenu extends AutoScaledMenu {
 
     public SInventoryItem getMoneySelectorMenu(){
         SStringBuilder iconName = new SStringBuilder();
-
-        if(shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
+        SItemStack icon = new SItemStack(Material.EMERALD);
+        if(!shop.permissionFunction.getPermission(player.getUniqueId()).equals("STORAGE_ACCESS") && shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT")){
             iconName.green().bold().text("現金出し入れ").build();
         }else{
             iconName.gray().bold().strike().text("現金出し入れ");
-        }
-
-        SItemStack icon = new SItemStack(Material.EMERALD).setDisplayName(iconName.build());
-
-        if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT") || shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
             icon.addLore(new SStringBuilder().red().text("権限がありません").build());
             icon.addLore("");
         }
+        icon.setDisplayName(iconName.build());
+
         icon.addLore(new SStringBuilder().white().text("現金出し入れを行うことができます").build());
         icon.addLore(new SStringBuilder().white().text("取引は電子マネーが使われます").build());
         SInventoryItem item = new SInventoryItem(icon.build());
@@ -135,7 +134,7 @@ public class ShopMainMenu extends AutoScaledMenu {
         item.clickable(false);
 
         item.setEvent(e -> {
-            if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS") || shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
+            if(shop.permissionFunction.getPermission(player.getUniqueId()).equals("STORAGE_ACCESS") || !shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT")){
                 player.sendMessage(Man10ShopV3.prefix + "§c§lこの項目を開く権限がありません");
                 return;
             }
@@ -170,30 +169,19 @@ public class ShopMainMenu extends AutoScaledMenu {
         menu.setOnCancel(e -> new ShopMainMenu(player, shop, plugin).open(player));
         menu.setOnClose(e -> new ShopMainMenu(player, shop, plugin).open(player));
         menu.setOnConfirm(integer -> {
-            if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT") || shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
-                player.sendMessage(Man10ShopV3.prefix + "§c§l権限がありません");
+            if(shop.permissionFunction.getPermission(player.getUniqueId()).equals("STORAGE_ACCESS") || !shop.permissionFunction.hasPermission(player.getUniqueId(), "ACCOUNTANT")){
+                player.sendMessage(Man10ShopV3.prefix + "§c§lこの項目を開く権限がありません");
                 return;
             }
-            //  money request
 
+            JSONObject data = new JSONObject();
+            data.put("amount", integer);
+            if(deposit){
+                shop.requestQueueTask(player, "money.deposit", data);
+            }else{
+                shop.requestQueueTask(player, "money.withdraw", data);
+            }
 
-//            if (deposit) {
-//                if (Man10ShopV3.vault.getBalance(player.getUniqueId()) < integer) {
-//                    player.sendMessage(Man10ShopV3.prefix + "§c§l現金が不足しています");
-//                    return;
-//                }
-//                Man10ShopV3.vault.withdraw(player.getUniqueId(), integer);
-//                shop.money.addMoney(integer); // add money request
-//                player.sendMessage(Man10ShopV3.prefix + "§a§l" + BaseUtils.priceString(integer) + "円入金しました");
-//            } else {
-//                if (shop.moneyFunction.getMoney() < integer) {
-//                    player.sendMessage(Man10ShopV3.prefix + "§c§l現金が不足しています");
-//                    return;
-//                }
-//                Man10ShopV3.vault.deposit(player.getUniqueId(), integer);
-//                shop.money.removeMoney(integer);// remove money request
-//                player.sendMessage(Man10ShopV3.prefix + "§a§l" + BaseUtils.priceString(integer) + "円出金しました");
-//            }
             new ShopMainMenu(player, shop, plugin).open(player);
         });
         return menu;

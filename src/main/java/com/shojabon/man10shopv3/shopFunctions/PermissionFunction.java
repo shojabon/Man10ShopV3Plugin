@@ -48,6 +48,13 @@ public class PermissionFunction extends ShopFunction {
         return permissionLevel;
     }
 
+    public String getPermission(UUID uuid){
+        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+        String userId = uuid.toString().replace("-", "");
+        if(!permissionList.has(userId)) return "NONE";
+        return permissionList.getString(userId);
+    }
+
     @Override
     public SInventoryItem getSettingItem(Player player, SInventoryItem item) {
         return super.getSettingItem(player, item);

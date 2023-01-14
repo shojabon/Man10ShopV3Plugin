@@ -1,10 +1,12 @@
 package com.shojabon.man10shopv3.commands;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
-import com.shojabon.man10shopv3.commands.subCommands.ItemGiveCommand;
-import com.shojabon.man10shopv3.commands.subCommands.ItemTakeCommand;
+import com.shojabon.man10shopv3.commands.subCommands.internals.ItemGiveCommand;
+import com.shojabon.man10shopv3.commands.subCommands.internals.ItemTakeCommand;
 import com.shojabon.man10shopv3.commands.subCommands.ShopsCommand;
 import com.shojabon.man10shopv3.commands.subCommands.TestCommand;
+import com.shojabon.man10shopv3.commands.subCommands.internals.MoneyGiveCommand;
+import com.shojabon.man10shopv3.commands.subCommands.internals.MoneyTakeCommand;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandArgument;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandObject;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandRouter;
@@ -44,7 +46,7 @@ public class Man10ShopV3Command extends SCommandRouter {
                         setExecutor(new ShopsCommand(plugin))
         );
 
-        // console commands
+        // internals
         addCommand(
                 new SCommandObject()
                         .addArgument(new SCommandArgument().addAllowedString("itemGive"))
@@ -63,6 +65,24 @@ public class Man10ShopV3Command extends SCommandRouter {
                         .addArgument(new SCommandArgument().addAlias("amount"))
                         .addRequiredPermission("man10shopv3.item.take").addExplanation("アイテムを取る(内部用)").
                         setExecutor(new ItemTakeCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("moneyTake"))
+                        .addArgument(new SCommandArgument().addAlias("uuid"))
+                        .addArgument(new SCommandArgument().addAlias("amount"))
+                        .addRequiredPermission("man10shopv3.money.take").addExplanation("お金を取る(内部用)").
+                        setExecutor(new MoneyTakeCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("moneyGive"))
+                        .addArgument(new SCommandArgument().addAlias("uuid"))
+                        .addArgument(new SCommandArgument().addAlias("amount"))
+                        .addRequiredPermission("man10shopv3.money.give").addExplanation("お金をあげる(内部用)").
+                        setExecutor(new MoneyGiveCommand(plugin))
         );
     }
 

@@ -1,4 +1,4 @@
-package com.shojabon.man10shopv3.commands.subCommands;
+package com.shojabon.man10shopv3.commands.subCommands.internals;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.mcutils.Utils.SItemStack;
@@ -25,7 +25,7 @@ public class ItemTakeCommand implements CommandExecutor {
             SItemStack item = SItemStack.fromBase64(args[2]);
             Player p = Bukkit.getPlayer(UUID.fromString(args[1]));
             if(p == null){
-                sender.sendMessage("no_player");
+                sender.sendMessage("player_invalid");
                 return false;
             }
             int amount = Integer.parseInt(args[3]);

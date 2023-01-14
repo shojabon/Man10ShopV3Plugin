@@ -81,6 +81,18 @@ public class Man10Shop {
         return result;
     }
 
+    public JSONObject requestQueueTask(Player p, String key, Object data){
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("shopId", this.getShopId());
+        if(p != null){
+            payload.put("player", getPlayerJSON(p));
+        }
+        payload.put("key", key);
+        payload.put("data", data);
+        JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/queue/add", "POST", new JSONObject(payload));
+        return result;
+    }
+
 
 
 }
