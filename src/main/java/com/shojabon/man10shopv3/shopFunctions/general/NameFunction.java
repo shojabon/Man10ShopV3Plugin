@@ -10,6 +10,7 @@ import com.shojabon.mcutils.Utils.SLongTextInput;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.json.JSONObject;
 
 @ShopFunctionDefinition(
         name = "ショップ名設定",
@@ -40,8 +41,9 @@ public class NameFunction extends ShopFunction {
                     return;
                 }
                 if(categoryName.length() == 0) categoryName = "その他";
-                if(!shop.setVariable(player, "name.name", categoryName).getString("status").equals("success")){
-                    warn(player, "内部エラーが発生しました");
+                JSONObject request = shop.setVariable(player, "name.name", categoryName);
+                if(!request.getString("status").equals("success")){
+                    warn(player, request.getString("message"));
                     return;
                 }
                 success(player, "名前を変更しました");

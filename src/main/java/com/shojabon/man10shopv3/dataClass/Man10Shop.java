@@ -6,10 +6,7 @@ import com.shojabon.man10shopv3.shopFunctions.*;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.DisabledFromFunction;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.EnabledFromFunction;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.WeekDayToggleFunction;
-import com.shojabon.man10shopv3.shopFunctions.general.DeleteShopFunction;
-import com.shojabon.man10shopv3.shopFunctions.general.NameFunction;
-import com.shojabon.man10shopv3.shopFunctions.general.PriceFunction;
-import com.shojabon.man10shopv3.shopFunctions.general.ShopEnabledFunction;
+import com.shojabon.man10shopv3.shopFunctions.general.*;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -46,6 +43,8 @@ public class Man10Shop {
     public ShopEnabledFunction shopEnabledFunction;
 
     public StorageFunction storageFunction;
+
+    public ShopTypeFunction shopTypeFunction;
 
 
 
