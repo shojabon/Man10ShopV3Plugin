@@ -13,6 +13,7 @@ import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageRefillFunction;
 import com.shojabon.man10shopv3.shopFunctions.tradeAmount.CoolDownFunction;
 import com.shojabon.man10shopv3.shopFunctions.tradeAmount.PerMinuteCoolDownFunction;
+import com.shojabon.man10shopv3.shopFunctions.tradeAmount.TotalPerMinuteCoolDownFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -68,6 +69,7 @@ public class Man10Shop {
     public CoolDownFunction coolDownFunction;
     public LimitUseFunction limitUseFunction;
     public PerMinuteCoolDownFunction perMinuteCoolDownFunction;
+    public TotalPerMinuteCoolDownFunction totalPerMinuteCoolDownFunction;
 
 
 
