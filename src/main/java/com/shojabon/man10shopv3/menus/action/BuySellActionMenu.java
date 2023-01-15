@@ -76,6 +76,9 @@ public class BuySellActionMenu extends SInventory {
         }
         SItemStack item = new SItemStack(buttonMaterial).setDisplayName("§a§l確認");
         SStringBuilder lore = new SStringBuilder().yellow().text(itemCount).text("個を");
+        if(!shop.secretPriceModeFunction.isEnabled()){
+            lore.text(itemCount*shop.priceFunction.getPrice()).text("円で");
+        }
         if(shop.getShopType().equals("BUY")){
             lore.text("買う");
         }else{
@@ -122,6 +125,7 @@ public class BuySellActionMenu extends SInventory {
     }
 
     public void renderButtons(){
+        if(shop.singleTransactionModeFunction.isEnabled()) return;
         SInventoryItem increase = new SInventoryItem(new SItemStack(dictionary.getSymbol("plus").clone())
                 .addLore("§f左クリックで取引数1増加")
                 .addLore("§fシフト+左クリックで取引数を最大まで増加")

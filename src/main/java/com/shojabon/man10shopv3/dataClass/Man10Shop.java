@@ -13,6 +13,7 @@ import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageRefillFunction;
 import com.shojabon.man10shopv3.shopFunctions.tradeAmount.CoolDownFunction;
 import com.shojabon.man10shopv3.shopFunctions.tradeAmount.PerMinuteCoolDownFunction;
+import com.shojabon.man10shopv3.shopFunctions.tradeAmount.SingleTransactionModeFunction;
 import com.shojabon.man10shopv3.shopFunctions.tradeAmount.TotalPerMinuteCoolDownFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,15 +41,12 @@ public class Man10Shop {
     public NameFunction nameFunction;
     public PermissionFunction permissionFunction;
     public MoneyFunction moneyFunction;
-
     public PriceFunction priceFunction;
     public SignFunction signFunction;
-
     public DeleteShopFunction deleteShopFunction;
-
     public ShopEnabledFunction shopEnabledFunction;
-
     public ShopTypeFunction shopTypeFunction;
+    public SecretPriceModeFunction secretPriceModeFunction;
 
 
 
@@ -70,6 +68,7 @@ public class Man10Shop {
     public LimitUseFunction limitUseFunction;
     public PerMinuteCoolDownFunction perMinuteCoolDownFunction;
     public TotalPerMinuteCoolDownFunction totalPerMinuteCoolDownFunction;
+    public SingleTransactionModeFunction singleTransactionModeFunction;
 
 
 

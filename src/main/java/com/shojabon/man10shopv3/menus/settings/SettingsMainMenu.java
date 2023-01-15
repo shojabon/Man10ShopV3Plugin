@@ -50,9 +50,7 @@ public class SettingsMainMenu extends CategoricalSInventoryMenu {
 
             SInventoryItem item = func.getSettingItem(player, func.getSettingBaseItem()); //get setting item icon
             if(item == null)continue;
-
             if(shopFunctionDefinition.enabledShopType().length != 0 && !ArrayUtils.contains(shopFunctionDefinition.enabledShopType(), shop.getShopType())) continue; //shop type check
-
 
             if(!shop.permissionFunction.hasPermission(player.getUniqueId(), shopFunctionDefinition.allowedPermission())){
                 //if no permission to edit
