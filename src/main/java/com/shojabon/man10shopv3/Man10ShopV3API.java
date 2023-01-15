@@ -1,6 +1,7 @@
 package com.shojabon.man10shopv3;
 
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.json.JSONObject;
@@ -80,6 +81,7 @@ public class Man10ShopV3API {
         result.put("name", p.getName());
         result.put("uuid", p.getUniqueId().toString());
         result.put("server", Man10ShopV3.config.getString("serverName"));
+        if(p.getAddress() != null) result.put("ipAddress", p.getAddress().getAddress().getHostAddress());
         return new JSONObject(result);
     }
 
