@@ -5,6 +5,7 @@ import com.shojabon.man10shopv3.menus.action.BuySellActionMenu;
 import com.shojabon.man10shopv3.shopFunctions.*;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.DisabledFromFunction;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.EnabledFromFunction;
+import com.shojabon.man10shopv3.shopFunctions.allowedToUse.LimitUseFunction;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.WeekDayToggleFunction;
 import com.shojabon.man10shopv3.shopFunctions.general.*;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageCapFunction;
@@ -64,6 +65,7 @@ public class Man10Shop {
     // trade amount
 
     public CoolDownFunction coolDownFunction;
+    public LimitUseFunction limitUseFunction;
 
 
 
