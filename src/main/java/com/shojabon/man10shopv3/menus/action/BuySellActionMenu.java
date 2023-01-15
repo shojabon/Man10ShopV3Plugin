@@ -31,7 +31,7 @@ public class BuySellActionMenu extends SInventory {
         this.player = p;
         this.shop = shop;
         this.plugin = plugin;
-        shop.updateData();
+        shop.updateData(player);
         SStringBuilder builder = new SStringBuilder().darkGray().text(shop.targetItemFunction.getTargetItem().getDisplayName());
 
         int maxTradeItemCount = shop.getMenuInfo().getInt("tradeItemCount");

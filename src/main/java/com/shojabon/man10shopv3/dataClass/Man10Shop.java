@@ -12,6 +12,7 @@ import com.shojabon.man10shopv3.shopFunctions.storage.StorageCapFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageRefillFunction;
 import com.shojabon.man10shopv3.shopFunctions.tradeAmount.CoolDownFunction;
+import com.shojabon.man10shopv3.shopFunctions.tradeAmount.PerMinuteCoolDownFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -66,6 +67,7 @@ public class Man10Shop {
 
     public CoolDownFunction coolDownFunction;
     public LimitUseFunction limitUseFunction;
+    public PerMinuteCoolDownFunction perMinuteCoolDownFunction;
 
 
 
@@ -103,10 +105,14 @@ public class Man10Shop {
         return this.shopData.getString("shopId");
     }
 
-    public void updateData(){
-        JSONObject shop = Man10ShopV3.api.getShopInformation(this.getShopId(), null);
+    public void updateData(Player p){
+        JSONObject shop = Man10ShopV3.api.getShopInformation(this.getShopId(), p);
         if(shop == null) return;
         shopData = shop.getJSONObject("data");
+    }
+
+    public void updateData(){
+        updateData(null);
     }
 
     public JSONObject setVariable(Player p, String key, Object value){

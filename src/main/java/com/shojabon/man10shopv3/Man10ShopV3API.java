@@ -79,6 +79,7 @@ public class Man10ShopV3API {
         Map<String, Object> result = new HashMap<>();
         result.put("name", p.getName());
         result.put("uuid", p.getUniqueId().toString());
+        result.put("server", Man10ShopV3.config.getString("serverName"));
         return new JSONObject(result);
     }
 
@@ -125,11 +126,11 @@ public class Man10ShopV3API {
         return result;
     }
     public Man10Shop getShop(String shopId, Player requestingPlayer){
-        if(shopObjectCache.containsKey(shopId)){
-            Man10Shop shop =  shopObjectCache.get(shopId);
-            shop.updateData();
-            return shop;
-        }
+//        if(shopObjectCache.containsKey(shopId)){
+//            Man10Shop shop =  shopObjectCache.get(shopId);
+//            shop.updateData();
+//            return shop;
+//        }
         JSONObject shopInformationRequest = getShopInformation(shopId, requestingPlayer);
         if(shopInformationRequest == null) return null;
         shopObjectCache.put(shopId, new Man10Shop(shopInformationRequest.getJSONObject("data")));
