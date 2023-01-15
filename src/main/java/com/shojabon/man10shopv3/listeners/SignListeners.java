@@ -46,7 +46,7 @@ public class SignListeners implements @NotNull Listener {
         }
 
         //allowed world
-//        if(!Man10ShopV3.config.getStringList("enabledWorlds").contains(e.getBlock().getWorld().getName())) return;
+        if(!Man10ShopV3.config.getStringList("enabledWorlds").contains(e.getBlock().getWorld().getName())) return;
 
         //if plugin disabled
         if(!Man10ShopV3.config.getBoolean("pluginEnabled")){
@@ -92,7 +92,7 @@ public class SignListeners implements @NotNull Listener {
         }else{
 
             //permission to use
-            if(!e.getPlayer().hasPermission("man10shopv2.admin.sign.create")){
+            if(!e.getPlayer().hasPermission("man10shopv3.admin.sign.create")){
                 e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§lあなたには権限がありません");
                 return;
             }
@@ -102,11 +102,6 @@ public class SignListeners implements @NotNull Listener {
             UUID uuid = e.getPlayer().getUniqueId();
 
             menu.setOnClick(shopId -> {
-
-//                if(shop.signs.size() + 1 > Man10ShopV2.config.getInt("sign.maxSignsPerShop")){
-//                    e.getPlayer().sendMessage(Man10ShopV2.prefix + "§a§l設置できる看板の量を越しました");
-//                    return;
-//                }
 
                 Man10Shop shop = Man10ShopV3.api.getShop(shopId, e.getPlayer());
                 if(shop == null){
@@ -147,7 +142,7 @@ public class SignListeners implements @NotNull Listener {
         if(shop == null) {
             return;
         }
-        if(!shop.permissionFunction.hasPermission(e.getPlayer().getUniqueId(), "MODERATOR") && !e.getPlayer().hasPermission("man10shopv2.sign.break.bypass")){
+        if(!shop.permissionFunction.hasPermission(e.getPlayer().getUniqueId(), "MODERATOR") && !e.getPlayer().hasPermission("man10shopv3.sign.break.bypass")){
             e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l看板を破壊する権限を持っていません");
             e.setCancelled(true);
             return;
@@ -198,6 +193,7 @@ public class SignListeners implements @NotNull Listener {
 
         Man10ShopV3.threadPool.execute(()->{
             Man10Shop shop = Man10ShopV3.api.getShopFromSign(null, block.getLocation());
+            if(shop == null) return;
             JSONObject result = shop.deleteSign(null, block.getLocation());
         });
     }

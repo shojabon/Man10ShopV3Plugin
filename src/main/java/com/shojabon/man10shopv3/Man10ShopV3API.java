@@ -86,10 +86,17 @@ public class Man10ShopV3API {
     }
 
     public JSONObject getPlayerShops(Player p){
-        Map<String, Object> payload = new HashMap<>();
+        JSONObject payload = new JSONObject();
         payload.put("player", getPlayerJSON(p));
-        JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/list", "POST", new JSONObject(payload));
-        return result;
+        return httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/list", "POST", payload);
+    }
+
+    public JSONObject createShop(Player p,String name, boolean admin){
+        JSONObject payload = new JSONObject();
+        payload.put("player", getPlayerJSON(p));
+        payload.put("admin", admin);
+        payload.put("name", name);
+        return httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/create", "POST", payload);
     }
     public JSONObject getAdminShops(Player p){
         Map<String, Object> payload = new HashMap<>();

@@ -30,7 +30,6 @@ public class MoneyTakeCommand implements CommandExecutor {
                 sender.sendMessage("balance_lacking");
                 return false;
             }
-            Bukkit.broadcastMessage("withdrawing " + amount);
             if(!Man10ShopV3.vault.silentWithdraw(p.getUniqueId(), amount)){
                 sender.sendMessage("error_internal");
                 return false;

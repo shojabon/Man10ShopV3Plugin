@@ -1,10 +1,10 @@
 package com.shojabon.man10shopv3.commands;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
+import com.shojabon.man10shopv3.commands.subCommands.*;
 import com.shojabon.man10shopv3.commands.subCommands.internals.*;
-import com.shojabon.man10shopv3.commands.subCommands.ShopsCommand;
-import com.shojabon.man10shopv3.commands.subCommands.TestCommand;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandArgument;
+import com.shojabon.mcutils.Utils.SCommandRouter.SCommandArgumentType;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandObject;
 import com.shojabon.mcutils.Utils.SCommandRouter.SCommandRouter;
 
@@ -43,6 +43,54 @@ public class Man10ShopV3Command extends SCommandRouter {
 
                         addRequiredPermission("man10shopv3.shops").addExplanation("編集可能なショップを開く").
                         setExecutor(new ShopsCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("adminShops")).
+
+                        addRequiredPermission("man10shopv3.admin.shops").addExplanation("アドミンショップをショップを開く").
+                        setExecutor(new ShopsCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("toggleWorld")).
+
+                        addRequiredPermission("man10shopv3.toggleWorld")
+                        .addExplanation("看板が機能するワールド一覧を表示する")
+                        .setExecutor(new ToggleWorldCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("toggleWorld")).
+                        addArgument(new SCommandArgument().addAllowedType(SCommandArgumentType.WORLD).addAlias("ワールド名")).
+
+                        addRequiredPermission("man10shopv3.toggleWorld")
+                        .addExplanation("看板が機能するワールドの有効/無効を設定")
+                        .setExecutor(new ToggleWorldCommand(plugin))
+        );
+
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("create")).
+                        addArgument(new SCommandArgument().addAlias("ショップ名")).
+
+                        addRequiredPermission("man10shopv3.shop.create")
+                        .addExplanation("ショップを作成")
+                        .setExecutor(new CreateShopCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("createAdmin")).
+                        addArgument(new SCommandArgument().addAlias("ショップ名")).
+
+                        addRequiredPermission("man10shopv3.admin.shop.create")
+                        .addExplanation("管理者ショップを作成")
+                        .setExecutor(new CreateAdminShopCommand(plugin))
         );
 
         // internals

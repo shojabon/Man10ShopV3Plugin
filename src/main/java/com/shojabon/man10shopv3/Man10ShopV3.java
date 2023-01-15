@@ -19,6 +19,7 @@ public final class Man10ShopV3 extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        saveDefaultConfig();
         config = getConfig();
         prefix = getConfig().getString("prefix");
         api = new Man10ShopV3API(this);
