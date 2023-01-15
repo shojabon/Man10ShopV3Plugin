@@ -7,7 +7,10 @@ import com.shojabon.man10shopv3.shopFunctions.allowedToUse.DisabledFromFunction;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.EnabledFromFunction;
 import com.shojabon.man10shopv3.shopFunctions.allowedToUse.WeekDayToggleFunction;
 import com.shojabon.man10shopv3.shopFunctions.general.*;
+import com.shojabon.man10shopv3.shopFunctions.storage.StorageCapFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
+import com.shojabon.man10shopv3.shopFunctions.storage.StorageRefillFunction;
+import com.shojabon.man10shopv3.shopFunctions.tradeAmount.CoolDownFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -42,8 +45,6 @@ public class Man10Shop {
 
     public ShopEnabledFunction shopEnabledFunction;
 
-    public StorageFunction storageFunction;
-
     public ShopTypeFunction shopTypeFunction;
 
 
@@ -53,6 +54,17 @@ public class Man10Shop {
     public DisabledFromFunction disabledFromFunction;
     public EnabledFromFunction enabledFromFunction;
     public WeekDayToggleFunction weekDayToggleFunction;
+
+    // storage
+
+    public StorageFunction storageFunction;
+    public StorageCapFunction storageCapFunction;
+    public StorageRefillFunction storageRefillFunction;
+
+    // trade amount
+
+    public CoolDownFunction coolDownFunction;
+
 
 
     public JSONObject shopData;
