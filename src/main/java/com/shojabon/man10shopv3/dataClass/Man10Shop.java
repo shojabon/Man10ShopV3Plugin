@@ -48,6 +48,7 @@ public class Man10Shop {
     public ShopTypeFunction shopTypeFunction;
     public SecretPriceModeFunction secretPriceModeFunction;
     public IpLimitFunction ipLimitFunction;
+    public RandomPriceFunction randomPriceFunction;
 
 
 
