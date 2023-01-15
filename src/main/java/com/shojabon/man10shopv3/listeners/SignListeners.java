@@ -7,6 +7,7 @@ import com.shojabon.man10shopv3.menus.AdminShopSelectorMenu;
 import com.shojabon.man10shopv3.menus.EditableShopSelectorMenu;
 import com.shojabon.mcutils.Utils.BaseUtils;
 import com.shojabon.mcutils.Utils.SInventory.SInventory;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,6 +20,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -138,6 +140,9 @@ public class SignListeners implements @NotNull Listener {
         if(!(e.getBlock().getState() instanceof Sign)){
             return;
         }
+        if(!e.getBlock().getState().hasMetadata("isMan10ShopV3Sign")){
+            return;
+        }
         Man10Shop shop = Man10ShopV3.api.getShopFromSign(null, e.getBlock().getLocation());
         if(shop == null) {
             return;
@@ -147,6 +152,8 @@ public class SignListeners implements @NotNull Listener {
             e.setCancelled(true);
             return;
         }
+
+        e.getBlock().getState().removeMetadata("isMan10ShopV3Sign", plugin);
         SInventory.threadPool.execute(()-> {
             JSONObject result = shop.deleteSign(null, e.getBlock().getLocation());
             if(!result.getString("status").equals("success")){
@@ -160,6 +167,7 @@ public class SignListeners implements @NotNull Listener {
         if(e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if(e.getClickedBlock() == null) return;
         if(!(e.getClickedBlock().getState() instanceof Sign)) return;
+        if(!e.getClickedBlock().getState().hasMetadata("isMan10ShopV3Sign")) return;
 
         Man10ShopV3.threadPool.execute(()->{
             Man10Shop shop = Man10ShopV3.api.getShopFromSign(e.getPlayer(), e.getClickedBlock().getLocation());
@@ -189,6 +197,9 @@ public class SignListeners implements @NotNull Listener {
         }else if(block.getState().getBlockData() instanceof org.bukkit.block.data.type.Sign){
             if(!block.getRelative(BlockFace.DOWN).equals(source)) return;
         }
+
+
+        if(block.getState().hasMetadata("isMan10ShopV3Sign")) block.getState().removeMetadata("isMan10ShopV3Sign", plugin);
 
 
         Man10ShopV3.threadPool.execute(()->{
@@ -221,6 +232,16 @@ public class SignListeners implements @NotNull Listener {
                     e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l" + result.getString("message"));
                     return;
                 }
+
+                // set block meta
+                Bukkit.getServer().getScheduler().runTask(plugin, () ->{
+                    if(!(e.getBlock().getState() instanceof Sign)){
+                        return;
+                    }
+                    e.getBlock().setMetadata("isMan10ShopV3Sign", new FixedMetadataValue(plugin, true));
+                });
+
+
             });
             e.getPlayer().closeInventory();
         });
