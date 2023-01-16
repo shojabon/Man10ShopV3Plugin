@@ -52,15 +52,7 @@ public class TargetItemSelectorMenu extends SInventory{
                 // set target item variable if error return
                 // send message from response?
                 JSONObject request = shop.setVariable(player, "targetItem.item", newTargetItem.getItemTypeBase64());
-                if(!request.getString("status").equals("success")){
-                    Man10ShopV3API.warnMessage(player, request.getString("message"));
-                    return;
-                }
                 JSONObject request2 = shop.setVariable(player, "targetItem.itemHash", newTargetItem.getItemTypeMD5());
-                if(!request.getString("status").equals("success")){
-                    Man10ShopV3API.warnMessage(player, request2.getString("message"));
-                    return;
-                }
                 shop.updateData();
                 renderMenu();
             });
