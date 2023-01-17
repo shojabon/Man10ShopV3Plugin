@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "randomPrice",
         name = "ランダム価格設定",
         explanation = {"設定した分間毎に値段を設定する", "どちらかが0の場合設定は無効化"},
         enabledShopType = {"BUY", "SELL"},
@@ -41,7 +42,7 @@ public class RandomPriceFunction extends ShopFunction {
 
     public List<Integer> getPrices(){
         List<Integer> result = new ArrayList<>();
-        JSONArray array = shop.shopData.getJSONObject("randomPrice").getJSONArray("prices");
+        JSONArray array = getFunctionData().getJSONArray("prices");
         for(int i = 0; i < array.length(); i++){
             result.add(array.getInt(i));
         }
@@ -49,11 +50,11 @@ public class RandomPriceFunction extends ShopFunction {
     }
 
     public int getTime(){
-        return shop.shopData.getJSONObject("randomPrice").getInt("time");
+        return getFunctionData().getInt("time");
     }
 
     public int getLastRefillTime(){
-        return shop.shopData.getJSONObject("randomPrice").getInt("lastRefillTime");
+        return getFunctionData().getInt("lastRefillTime");
     }
 
     @Override
@@ -85,9 +86,7 @@ public class RandomPriceFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("時間を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                JSONObject request = shop.setVariable(player, "randomPrice.time", number);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "time", number)){
                     return;
                 }
                 success(player, "時間を設定しました");
@@ -117,9 +116,7 @@ public class RandomPriceFunction extends ShopFunction {
         setRefillStartingTime.setEvent(e -> {
             TimeSelectorMenu menu = new TimeSelectorMenu(System.currentTimeMillis()/1000L, "最終値段選択時間を設定してくださ", plugin);
             menu.setOnConfirm(lastRefillTimeLocal -> {
-                JSONObject request = shop.setVariable(player, "ipLimit.lastRefillTime", lastRefillTimeLocal);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "lastRefillTime", lastRefillTimeLocal)){
                     return;
                 }
                 success(player, "最新の補充開始時間を現在に設定しました");

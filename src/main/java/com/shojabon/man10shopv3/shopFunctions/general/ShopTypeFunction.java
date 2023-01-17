@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.util.UUID;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "",
         name = "ショップタイプ設定",
         explanation = {},
         enabledShopType = {},
@@ -35,13 +36,9 @@ public class ShopTypeFunction extends ShopFunction {
         super(shop, plugin);
     }
 
-    public String getShopType() {
-        return shop.shopData.getString("shopType");
-    }
-
     @Override
     public String currentSettingString() {
-        return Man10ShopType.valueOf(getShopType()).displayName;
+        return Man10ShopType.valueOf(shop.getShopType()).displayName;
     }
 
     @Override
@@ -63,9 +60,9 @@ public class ShopTypeFunction extends ShopFunction {
             SInventoryItem mode = new SInventoryItem(new SItemStack(type.settingItem).setDisplayName("§a§l" + type.displayName).build());
             mode.clickable(false);
             mode.setAsyncEvent(e -> {
-                JSONObject request = shop.setVariable(player, "shopType", type.name());
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                JSONObject object = shop.setVariable(player, "shopType", type.name());
+                if(!object.getString("status").equals("success")){
+                    warn(player, object.getString("message"));
                     return;
                 }
                 player.sendMessage(Man10ShopV3.prefix + "§a§lショップタイプが設定されました");

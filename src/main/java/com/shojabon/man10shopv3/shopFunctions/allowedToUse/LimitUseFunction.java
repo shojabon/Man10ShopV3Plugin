@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "limitUse",
         name = "使用回数制限",
         explanation = {},
         enabledShopType = {},
@@ -26,11 +27,11 @@ public class LimitUseFunction extends ShopFunction {
     }
 
     public boolean isEnabled(){
-        return shop.shopData.getJSONObject("limitUse").get("count") != JSONObject.NULL;
+        return getFunctionData().get("count") != JSONObject.NULL;
     }
 
     public int getCount(){
-        return shop.shopData.getJSONObject("limitUse").getInt("count");
+        return getFunctionData().getInt("count");
     }
 
     @Override
@@ -49,9 +50,7 @@ public class LimitUseFunction extends ShopFunction {
                 if(number != 0){
                     data = number;
                 }
-                JSONObject request = shop.setVariable(player, "limitUse.count", data);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "count", data)){
                     return;
                 }
                 success(player, "回数を設定しました");

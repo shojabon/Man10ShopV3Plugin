@@ -6,6 +6,7 @@ import com.shojabon.man10shopv3.annotations.ShopFunctionDefinition;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
 import org.bukkit.entity.Player;
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 
@@ -58,6 +59,28 @@ public abstract class ShopFunction {
 
     public String currentSettingString(){
         return null;
+    }
+
+    public boolean setVariable(Player p, String key, Object value){
+        JSONObject request = shop.setVariable(p, getDefinition().internalFunctionName() + "." + key, value);
+        if(!request.getString("status").equals("success")){
+            warn(p, request.getString("message"));
+            return false;
+        }
+        return true;
+    }
+
+    public boolean requestQueueTask(Player p, String key, Object value){
+        JSONObject request = shop.requestQueueTask(p, getDefinition().internalFunctionName() + "." + key, value);
+        if(!request.getString("status").equals("success")){
+            warn(p, request.getString("message"));
+            return false;
+        }
+        return true;
+    }
+
+    public JSONObject getFunctionData(){
+        return shop.shopData.getJSONObject(getDefinition().internalFunctionName());
     }
 
 

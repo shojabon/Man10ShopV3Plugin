@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "targetItem",
         name = "ターゲットアイテム設定",
         explanation = {},
         enabledShopType = {},
@@ -27,7 +28,7 @@ public class TargetItemFunction extends ShopFunction {
 
 
     public SItemStack getTargetItem(){
-        return SItemStack.fromBase64(shop.shopData.getJSONObject("targetItem").getString("item"));
+        return SItemStack.fromBase64(getFunctionData().getString("item"));
     }
 
     @Override

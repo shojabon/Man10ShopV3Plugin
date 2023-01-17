@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "delete",
         name = "§e§l§k00§4§lショップを削除§e§l§k00",
         explanation = {},
         enabledShopType = {},
@@ -26,7 +27,7 @@ public class DeleteShopFunction extends ShopFunction {
     }
 
     public boolean isDeleted(){
-        return shop.shopData.getJSONObject("delete").getBoolean("deleted");
+        return getFunctionData().getBoolean("deleted");
     }
     @Override
     public SInventoryItem getSettingItem(Player player, SInventoryItem item) {
@@ -35,12 +36,9 @@ public class DeleteShopFunction extends ShopFunction {
             ConfirmationMenu menu = new ConfirmationMenu("確認", plugin);
             menu.setOnCloseEvent(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(ee -> {
-                JSONObject requestValueUpdate = shop.setVariable(player, "delete.deleted", true);
-                if(!requestValueUpdate.getString("status").equals("success")){
-                    warn(player, requestValueUpdate.getString("message"));
+                if(!setVariable(player, "deleted", true)){
                     return;
                 }
-//                plugin.getServer().getScheduler().runTask(plugin, () -> shop.signFunction.updateSigns());
                 menu.close(player);
             });
             menu.open(player);

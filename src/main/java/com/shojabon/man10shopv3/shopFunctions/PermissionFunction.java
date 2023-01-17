@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "permission",
         name = "権限機能",
         explanation = {},
         enabledShopType = {},
@@ -32,7 +33,8 @@ public class PermissionFunction extends ShopFunction {
 
 
     public boolean hasPermission(UUID uuid, String permission){
-        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+        if(Bukkit.getOfflinePlayer(uuid).isOp()) return true;
+        JSONObject permissionList = getFunctionData().getJSONObject("users");
         String userId = uuid.toString().replace("-", "");
         if(!permissionList.has(userId)) return false;
         return calculatePermissionLevel(permissionList.getJSONObject(userId).getString("permission")) >= calculatePermissionLevel(permission);
@@ -50,7 +52,7 @@ public class PermissionFunction extends ShopFunction {
     }
 
     public String getPermission(UUID uuid){
-        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+        JSONObject permissionList = getFunctionData().getJSONObject("users");
         String userId = uuid.toString().replace("-", "");
         if(!permissionList.has(userId)) return "NONE";
         return permissionList.getJSONObject(userId).getString("permission");
@@ -58,7 +60,7 @@ public class PermissionFunction extends ShopFunction {
 
     public ArrayList<Man10ShopModerator> getModerators(){
         ArrayList<Man10ShopModerator> result = new ArrayList<>();
-        JSONObject array = this.shop.shopData.getJSONObject("permission").getJSONObject("users");
+        JSONObject array = this.getFunctionData().getJSONObject("users");
         for(String key: array.keySet()){
             JSONObject userObject = array.getJSONObject(key);
             Man10ShopModerator moderator = new Man10ShopModerator(userObject.getString("name"), UUID.fromString(userObject.getString("uuid")), userObject.getString("permission"), userObject.getBoolean("notify"));
@@ -76,14 +78,14 @@ public class PermissionFunction extends ShopFunction {
     }
 
     public boolean isModerator(UUID uuid){
-        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+        JSONObject permissionList = getFunctionData().getJSONObject("users");
         String userId = uuid.toString().replace("-", "");
         return permissionList.has(userId);
     }
 
 
-    public JSONObject addModerator(Man10ShopModerator moderator){
-        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+    public boolean addModerator(Man10ShopModerator moderator){
+        JSONObject permissionList = getFunctionData().getJSONObject("users");
         String userId = moderator.uuid.toString().replace("-", "");
         JSONObject moderatorObject = new JSONObject();
         if(permissionList.has(userId)){
@@ -95,15 +97,15 @@ public class PermissionFunction extends ShopFunction {
         moderatorObject.put("notify", moderator.notificationEnabled);
 
         permissionList.put(userId, moderatorObject);
-        return shop.setVariable(null, "permission.users", permissionList);
+        return setVariable(null, "users", permissionList);
     }
 
-    public JSONObject removeModerator(Man10ShopModerator moderator){
-        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+    public boolean removeModerator(Man10ShopModerator moderator){
+        JSONObject permissionList = getFunctionData().getJSONObject("users");
         String userId = moderator.uuid.toString().replace("-", "");
 
         permissionList.remove(userId);
-        return shop.setVariable(null, "permission.users", permissionList);
+        return setVariable(null, "users", permissionList);
     }
 
     public String getPermissionString(String permission){
@@ -123,7 +125,7 @@ public class PermissionFunction extends ShopFunction {
 
     public int totalOwnerCount(){
         int result = 0;
-        JSONObject permissionList = shop.shopData.getJSONObject("permission").getJSONObject("users");
+        JSONObject permissionList = getFunctionData().getJSONObject("users");
         for(String key: permissionList.keySet()){
             if(permissionList.getJSONObject(key).getString("permission").equals("OWNER")) result += 1;
         }

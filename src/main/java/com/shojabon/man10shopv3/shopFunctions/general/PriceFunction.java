@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "price",
         name = "取引価格設定",
         explanation = {},
         enabledShopType = {"BUY", "SELL"},
@@ -32,7 +33,7 @@ public class PriceFunction extends ShopFunction {
     }
 
     public int getPrice(){
-        return shop.shopData.getJSONObject("price").getInt("price");
+        return getFunctionData().getInt("price");
     }
 
     //====================
@@ -51,9 +52,7 @@ public class PriceFunction extends ShopFunction {
             menu.setOnClose(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnCancel(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(newValue -> {
-                JSONObject request = shop.setVariable(player, "price.price", newValue);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "price", newValue)){
                     return;
                 }
                 new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);

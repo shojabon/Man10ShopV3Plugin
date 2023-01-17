@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "storageRefill",
         name = "分間ごとの補充設定",
         explanation = {"取引を制限します", "分間毎の取引を設定した個数までとします", "どちらかが0の場合設定は無効化"}, 
         enabledShopType = {},
@@ -35,19 +36,19 @@ public class StorageRefillFunction extends ShopFunction {
     }
 
     public int getMinutes(){
-        return shop.shopData.getJSONObject("storageRefill").getInt("minutes");
+        return getFunctionData().getInt("minutes");
     }
 
     public int getAmount(){
-        return shop.shopData.getJSONObject("storageRefill").getInt("amount");
+        return getFunctionData().getInt("amount");
     }
 
     public Long getLastRefillTime(){
-        return shop.shopData.getJSONObject("storageRefill").getLong("lastRefillTime");
+        return getFunctionData().getLong("lastRefillTime");
     }
 
     public int getItemLeft(){
-        return shop.shopData.getJSONObject("storageRefill").getInt("itemLeft");
+        return getFunctionData().getInt("itemLeft");
     }
 
     @Override
@@ -76,9 +77,7 @@ public class StorageRefillFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("時間を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                JSONObject request = shop.setVariable(player, "storageRefill.minutes", number);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "minutes", number)){
                     return;
                 }
                 success(player, "時間を設定しました");
@@ -99,9 +98,7 @@ public class StorageRefillFunction extends ShopFunction {
         setRefillStartingTime.setEvent(e -> {
             TimeSelectorMenu menu = new TimeSelectorMenu(getLastRefillTime(), "最終補充時間を設定してくださ", plugin);
             menu.setOnConfirm(lastRefillTimeLocal -> {
-                JSONObject request = shop.setVariable(player, "storageRefill.lastRefillTime", lastRefillTimeLocal);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "lastRefillTime", lastRefillTimeLocal)){
                     return;
                 }
                 success(player, "最新の補充開始時間を現在に設定しました");
@@ -116,9 +113,7 @@ public class StorageRefillFunction extends ShopFunction {
                 .addLore("§f補充スケジュールは保持したままアイテムを補充する").build());
         forceRefill.clickable(false);
         forceRefill.setEvent(e -> {
-            JSONObject request = shop.setVariable(player, "storageRefill.itemLeft", getAmount());
-            if(!request.getString("status").equals("success")){
-                warn(player, request.getString("message"));
+            if(!setVariable(player, "itemLeft", getAmount())){
                 return;
             }
             success(player, "在庫を補充しました");
@@ -131,9 +126,7 @@ public class StorageRefillFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("個数を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                JSONObject request = shop.setVariable(player, "storageRefill.amount", number);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "amount", number)){
                     return;
                 }
                 success(player, "個数を設定しました");

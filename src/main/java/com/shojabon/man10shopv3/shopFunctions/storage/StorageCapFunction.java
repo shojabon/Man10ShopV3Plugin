@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "storageCap",
         name = "買取制限",
         explanation = {"※買取ショップの場合のみ有効", "買取数の上限を設定する", "買取数上限を0にすると倉庫があるだけ買い取ります"},
         enabledShopType = {"SELL"},
@@ -44,9 +45,7 @@ public class StorageCapFunction extends ShopFunction {
                     return;
                 }
 
-                JSONObject request = shop.setVariable(player, "storageCap.size", newValue);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "size", newValue)){
                     return;
                 }
                 success(player, "上限を設定しました");

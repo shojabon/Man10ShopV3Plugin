@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class AdminShopSelectorMenu extends CategoricalSInventoryMenu {

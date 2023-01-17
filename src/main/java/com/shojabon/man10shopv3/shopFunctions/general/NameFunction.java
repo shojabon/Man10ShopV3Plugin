@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "name",
         name = "ショップ名設定",
         explanation = {},
         enabledShopType = {},
@@ -28,7 +29,7 @@ public class NameFunction extends ShopFunction {
 
 
     public String getName(){
-        return this.shop.shopData.getJSONObject("name").getString("name");
+        return getFunctionData().getString("name");
     }
 
     @Override
@@ -41,9 +42,7 @@ public class NameFunction extends ShopFunction {
                     return;
                 }
                 if(categoryName.length() == 0) categoryName = "その他";
-                JSONObject request = shop.setVariable(player, "name.name", categoryName);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "name", categoryName)){
                     return;
                 }
                 success(player, "名前を変更しました");

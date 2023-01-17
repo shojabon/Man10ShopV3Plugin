@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "coolDown",
         name = "取引クールダウン設定",
         explanation = {"取引を制限する", "設定秒に1回のみしか取引できなくなります", "0の場合はクールダウンなし"},
         enabledShopType = {},
@@ -30,7 +31,7 @@ public class CoolDownFunction extends ShopFunction {
     }
 
     public int getTime(){
-        return shop.shopData.getJSONObject("coolDown").getInt("seconds");
+        return getFunctionData().getInt("seconds");
     }
 
     @Override
@@ -51,9 +52,7 @@ public class CoolDownFunction extends ShopFunction {
                     return;
                 }
 
-                JSONObject request = shop.setVariable(player, "coolDown.seconds", newValue);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "seconds", newValue)){
                     return;
                 }
                 success(player, "クールダウンを設定しました");

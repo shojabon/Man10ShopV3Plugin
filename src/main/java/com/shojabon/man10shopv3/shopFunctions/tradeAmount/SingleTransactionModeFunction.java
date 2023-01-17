@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "singleTransactionMode",
         name = "単品取引モード",
         explanation = {"まとめて取引ができなくなります", "1個ずつのみの取引になります", "イベントなど盛り上げたいときに使います"},
         enabledShopType = {"BUY", "SELL"},
@@ -25,7 +26,7 @@ public class SingleTransactionModeFunction extends ShopFunction {
         super(shop, plugin);
     }
     public boolean isEnabled(){
-        return shop.shopData.getJSONObject("singleTransactionMode").getBoolean("enabled");
+        return getFunctionData().getBoolean("enabled");
     }
 
     @Override
@@ -36,9 +37,7 @@ public class SingleTransactionModeFunction extends ShopFunction {
             menu.setOnClose(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnCancel(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(bool -> {
-                JSONObject request = shop.setVariable(player, "singleTransactionMode.enabled", bool);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "enabled", bool)){
                     return;
                 }
                 success(player, "取引モードを設定しました");

@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "money",
         name = "お金",
         explanation = {},
         enabledShopType = {},
@@ -26,7 +27,7 @@ public class MoneyFunction extends ShopFunction {
 
 
     public int getMoney(){
-        return this.shop.shopData.getJSONObject("money").getInt("money");
+        return getFunctionData().getInt("money");
     }
 
 }

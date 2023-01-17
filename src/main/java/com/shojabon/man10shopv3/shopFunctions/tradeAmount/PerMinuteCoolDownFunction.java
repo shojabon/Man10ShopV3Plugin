@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "perMinuteCoolDown",
         name = "分間毎ごとのクールダウン設定",
         explanation = {"取引を制限します", "分間毎の取引を設定した個数までとします", "どちらかが0の場合設定は無効化"},
         enabledShopType = {},
@@ -29,10 +30,10 @@ public class PerMinuteCoolDownFunction extends ShopFunction {
     }
 
     public int getTime(){
-        return shop.shopData.getJSONObject("perMinuteCoolDown").getInt("time");
+        return getFunctionData().getInt("time");
     }
     public int getAmount(){
-        return shop.shopData.getJSONObject("perMinuteCoolDown").getInt("amount");
+        return getFunctionData().getInt("amount");
     }
 
     @Override
@@ -59,9 +60,7 @@ public class PerMinuteCoolDownFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("時間を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                JSONObject request = shop.setVariable(player, "perMinuteCoolDown.time", number);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "time", number)){
                     return;
                 }
                 success(player , "時間を設定しました");
@@ -79,9 +78,7 @@ public class PerMinuteCoolDownFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("個数を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                JSONObject request = shop.setVariable(player, "perMinuteCoolDown.amount", number);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "amount", number)){
                     return;
                 }
                 success(player , "個数を設定しました");

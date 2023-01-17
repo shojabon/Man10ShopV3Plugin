@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "setBarter",
         name = "トレード設定",
         explanation = {"トレード対象のアイテムなどを設定します"},
         enabledShopType = {"BARTER"},
@@ -38,7 +39,7 @@ public class SetBarterFunction extends ShopFunction {
     public List<ItemStack> getRequiredItems(){
         List<ItemStack> result = new ArrayList<>();
 
-        JSONArray requiredItemsData = shop.shopData.getJSONObject("setBarter").getJSONArray("requiredItems");
+        JSONArray requiredItemsData = getFunctionData().getJSONArray("requiredItems");
         for(int i = 0; i < requiredItemsData.length(); i++){
             if(requiredItemsData.isNull(i)) {
                 result.add(null);
@@ -54,7 +55,7 @@ public class SetBarterFunction extends ShopFunction {
     public List<ItemStack> getResultItems(){
         List<ItemStack> result = new ArrayList<>();
 
-        JSONArray requiredItemsData = shop.shopData.getJSONObject("setBarter").getJSONArray("resultItems");
+        JSONArray requiredItemsData = getFunctionData().getJSONArray("resultItems");
         for(int i = 0; i < requiredItemsData.length(); i++){
             if(requiredItemsData.isNull(i)) {
                 result.add(null);
@@ -78,8 +79,9 @@ public class SetBarterFunction extends ShopFunction {
             }
             SItemStack sItemStack = new SItemStack(item);
             JSONObject itemData = new JSONObject();
-            itemData.put("type_base64", sItemStack.getItemTypeBase64());
-            itemData.put("type_md5", sItemStack.getItemTypeMD5());
+            itemData.put("typeBase64", sItemStack.getItemTypeBase64());
+            itemData.put("typeMd5", sItemStack.getItemTypeMD5());
+            itemData.put("displayName", sItemStack.getDisplayName());
             itemData.put("amount", sItemStack.getAmount());
             result.put(itemData);
         }
@@ -102,14 +104,10 @@ public class SetBarterFunction extends ShopFunction {
             menu.setOnCloseEvent(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
 
             menu.setOnConfirm(items -> {
-                JSONObject request = shop.setVariable(player, "setBarter.requiredItems", itemStackListToJSONArray(items.subList(0, 12)));
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "requiredItems", itemStackListToJSONArray(items.subList(0, 12)))){
                     return;
                 }
-                JSONObject request2 = shop.setVariable(player, "setBarter.resultItems", itemStackListToJSONArray(items.subList(12, 13)));
-                if(!request2.getString("status").equals("success")){
-                    warn(player, request2.getString("message"));
+                if(!setVariable(player, "setBarter.resultItems", itemStackListToJSONArray(items.subList(12, 13)))){
                     warn(player, "ターゲットアイテム設定中に保存が失敗しました、部分的に保存されている可能性があるのでご確認ください。");
                     return;
                 }

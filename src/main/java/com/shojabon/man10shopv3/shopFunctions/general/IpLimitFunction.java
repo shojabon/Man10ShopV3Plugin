@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "ipLimit",
         name = "サブ垢制限",
         explanation = {"設定個までアカウント数を制限", "0の場合は制限なし"},
         enabledShopType = {},
@@ -29,10 +30,10 @@ public class IpLimitFunction extends ShopFunction {
     }
 
     public int getTime(){
-        return shop.shopData.getJSONObject("ipLimit").getInt("time");
+        return getFunctionData().getInt("time");
     }
     public int getCount(){
-        return shop.shopData.getJSONObject("ipLimit").getInt("count");
+        return getFunctionData().getInt("count");
     }
 
     @Override
@@ -59,9 +60,7 @@ public class IpLimitFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("時間を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                JSONObject request = shop.setVariable(player, "ipLimit.time", number);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "time", number)){
                     return;
                 }
                 success(player , "時間を設定しました");
@@ -79,9 +78,7 @@ public class IpLimitFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("アカウント数を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                JSONObject request = shop.setVariable(player, "ipLimit.count", number);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "count", number)){
                     return;
                 }
                 success(player , "個数を設定しました");

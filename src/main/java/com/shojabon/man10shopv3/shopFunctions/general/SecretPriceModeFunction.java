@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "secretPriceMode",
         name = "値段非表示モード",
         explanation = {"設定した分間毎に値段を設定する", "どちらかが0の場合設定は無効化"},
         enabledShopType = {"BUY", "SELL"},
@@ -25,7 +26,7 @@ public class SecretPriceModeFunction extends ShopFunction {
         super(shop, plugin);
     }
     public boolean isEnabled(){
-        return shop.shopData.getJSONObject("secretPriceMode").getBoolean("enabled");
+        return getFunctionData().getBoolean("enabled");
     }
 
     @Override
@@ -36,9 +37,7 @@ public class SecretPriceModeFunction extends ShopFunction {
             menu.setOnClose(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnCancel(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(bool -> {
-                JSONObject request = shop.setVariable(player, "secretPriceMode.enabled", bool);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!setVariable(player, "enabled", bool)){
                     return;
                 }
                 success(player, "値段モードを設定しました");

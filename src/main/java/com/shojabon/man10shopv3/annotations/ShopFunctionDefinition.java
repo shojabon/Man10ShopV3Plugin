@@ -17,5 +17,6 @@ public @interface ShopFunctionDefinition {
     String category() default "一般設定";
     String[] enabledShopType() default {};
     String allowedPermission() default "MODERATOR";
+    String internalFunctionName() default "";
     boolean enabled() default true;
 }

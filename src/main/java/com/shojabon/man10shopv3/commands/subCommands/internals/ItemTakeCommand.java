@@ -41,6 +41,7 @@ public class ItemTakeCommand implements CommandExecutor {
             sender.sendMessage("success");
             return true;
         }catch (Exception e){
+            e.printStackTrace();
             sender.sendMessage("error_internal");
         }
         return true;

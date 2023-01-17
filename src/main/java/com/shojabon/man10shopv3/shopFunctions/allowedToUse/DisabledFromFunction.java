@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "disabledFrom",
         name = "無効化開始時間設定",
         explanation = {},
         enabledShopType = {},
@@ -28,7 +29,7 @@ public class DisabledFromFunction extends ShopFunction {
     }
 
     public long getTime(){
-        return this.shop.shopData.getJSONObject("disabledFrom").getLong("time");
+        return getFunctionData().getLong("time");
     }
 
     @Override
@@ -46,9 +47,7 @@ public class DisabledFromFunction extends ShopFunction {
             TimeSelectorMenu menu = new TimeSelectorMenu(getTime(), "無効化開始時間を設定してください", plugin);
             menu.setOnCloseEvent(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(time -> {
-                JSONObject requestValueUpdate = shop.setVariable(player, "disabledFrom.time", time);
-                if(!requestValueUpdate.getString("status").equals("success")){
-                    warn(player, requestValueUpdate.getString("message"));
+                if(!setVariable(player, "time", time)){
                     return;
                 }
                 success(player,"時間を設定しました");

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "shopEnabled",
         name = "ショップ有効化設定",
         explanation = {},
         enabledShopType = {},
@@ -28,7 +29,7 @@ public class ShopEnabledFunction extends ShopFunction {
     }
 
     public boolean isEnabled(){
-        return shop.shopData.getJSONObject("shopEnabled").getBoolean("enabled");
+        return getFunctionData().getBoolean("enabled");
     }
 
     @Override
@@ -44,9 +45,7 @@ public class ShopEnabledFunction extends ShopFunction {
             menu.setOnClose(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnCancel(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(bool -> {
-                JSONObject requestValueUpdate = shop.setVariable(player, "shopEnabled.enabled", bool);
-                if(!requestValueUpdate.getString("status").equals("success")){
-                    warn(player, requestValueUpdate.getString("message"));
+                if(!setVariable(player, "enabled", bool)){
                     return;
                 }
                 new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);

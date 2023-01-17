@@ -50,7 +50,7 @@ public class Man10ShopV3Command extends SCommandRouter {
                         .addArgument(new SCommandArgument().addAllowedString("adminShops")).
 
                         addRequiredPermission("man10shopv3.admin.shops").addExplanation("アドミンショップをショップを開く").
-                        setExecutor(new ShopsCommand(plugin))
+                        setExecutor(new AdminShopsCommand(plugin))
         );
 
         addCommand(
@@ -91,6 +91,18 @@ public class Man10ShopV3Command extends SCommandRouter {
                         addRequiredPermission("man10shopv3.admin.shop.create")
                         .addExplanation("管理者ショップを作成")
                         .setExecutor(new CreateAdminShopCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("reload")).
+
+                        addRequiredPermission("man10shopv3.reload")
+                        .addExplanation("プラグインをリロードする")
+                        .addExplanation("")
+                        .addExplanation("設定を変更したときに使用する")
+                        .addExplanation("コマンドを使用するとサーバー起動時状態に戻る")
+                        .setExecutor(new ReloadConfigCommand(plugin))
         );
 
         // internals

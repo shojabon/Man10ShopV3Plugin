@@ -23,12 +23,22 @@ public class ItemInOutMenu extends SInventory{
     Player player;
 
     public ItemInOutMenu(Player p, Man10Shop shop, Man10ShopV3 plugin){
-        super(new SStringBuilder().darkGray().text("アイテムを操作してください").build(), 6, plugin);
+        super("", 6, plugin);
         this.player = p;
         this.shop = shop;
         this.plugin = plugin;
 
         shop.updateData();
+
+        int itemCount = shop.storageFunction.getItemCount();
+        if(itemCount > 999999999){
+            itemCount = 999999999;
+        }
+        if(itemCount < 0){
+            itemCount = 0;
+        }
+
+        setTitle("§7§lアイテムを操作してください 現在:" + itemCount + "個");
 
 
     }
@@ -42,23 +52,23 @@ public class ItemInOutMenu extends SInventory{
         display.clickable(false);
         setItem(13, display);
 
-        int itemCount = shop.storageFunction.getItemCount();
-        if(itemCount > 999999999){
-            itemCount = 999999999;
-        }
-        if(itemCount < 0){
-            itemCount = 0;
-        }
+//        int itemCount = shop.storageFunction.getItemCount();
+//        if(itemCount > 999999999){
+//            itemCount = 999999999;
+//        }
+//        if(itemCount < 0){
+//            itemCount = 0;
+//        }
 
-        String itemCountString = String.valueOf(itemCount);
+//        String itemCountString = String.valueOf(itemCount);
 
 
-        for(int i = 0; i < itemCountString.length(); i++){
-            char currentChar = itemCountString.charAt(i);
-            SInventoryItem numberDisplay = new SInventoryItem(new BannerDictionary().getItem(Integer.parseInt(currentChar + "")));
-            numberDisplay.clickable(false);
-            setItem(27 + i + (9 - itemCountString.length()), numberDisplay);
-        }
+//        for(int i = 0; i < itemCountString.length(); i++){
+//            char currentChar = itemCountString.charAt(i);
+//            SInventoryItem numberDisplay = new SInventoryItem(new BannerDictionary().getItem(Integer.parseInt(currentChar + "")));
+//            numberDisplay.clickable(false);
+//            setItem(27 + i + (9 - itemCountString.length()), numberDisplay);
+//        }
 
         SInventoryItem takeOutButton = new SInventoryItem(new SItemStack(Material.DROPPER).setDisplayName("§7§lお引き出し").addLore("§e§lクリックで1個お引き出し").addLore("§e§lシフトクリックで" + shop.targetItemFunction.getTargetItem().getMaxStackSize() +  "個お引き出し").build());
         takeOutButton.clickable(false);

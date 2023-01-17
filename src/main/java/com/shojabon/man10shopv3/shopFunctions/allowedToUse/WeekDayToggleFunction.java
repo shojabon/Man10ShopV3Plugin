@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "weekdayToggle",
         name = "曜日有効化設定",
         explanation = {"特定の曜日にショップを有効かするかを設定する"},
         enabledShopType = {},
@@ -35,7 +36,7 @@ public class WeekDayToggleFunction extends ShopFunction {
     }
 
     public boolean[] getEnabledDays(){
-        JSONArray array = shop.shopData.getJSONObject("weekdayToggle").getJSONArray("dates");
+        JSONArray array = getFunctionData().getJSONArray("dates");
         boolean[] result = new boolean[]{true,true,true,true,true,true,true};
         for(int i = 0; i < 7; i++){
             result[i] = array.getBoolean(i);
@@ -76,9 +77,7 @@ public class WeekDayToggleFunction extends ShopFunction {
             WeekdayShopToggleMenu menu = new WeekdayShopToggleMenu(player, shop, plugin);
 
             menu.setAsyncOnCloseEvent(ee -> {
-                JSONObject requestValueUpdate = shop.setVariable(player, "weekdayToggle.dates", menu.states);
-                if(!requestValueUpdate.getString("status").equals("success")){
-                    warn(player, requestValueUpdate.getString("message"));
+                if(!setVariable(player, "dates", menu.states)){
                     return;
                 }
                 success(player, "曜日設定をしました");

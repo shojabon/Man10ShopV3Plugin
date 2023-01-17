@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.json.JSONObject;
 
 @ShopFunctionDefinition(
+        internalFunctionName = "storage",
         name = "ストレージを購入する",
         explanation = {},
         enabledShopType = {"BUY", "SELL"},
@@ -33,17 +34,17 @@ public class StorageFunction extends ShopFunction {
 
 
     public int getItemCount(){
-        return shop.shopData.getJSONObject("storage").getInt("itemCount");
+        return getFunctionData().getInt("itemCount");
     }
 
     public int getStorageSize(){
-        return shop.shopData.getJSONObject("storage").getInt("storageSize");
+        return getFunctionData().getInt("storageSize");
     }
     public int getStorageSizeMax(){
-        return shop.shopData.getJSONObject("storage").getInt("storageSizeMax");
+        return getFunctionData().getInt("storageSizeMax");
     }
     public int getStorageSlotPrice(){
-        return shop.shopData.getJSONObject("storage").getInt("storageSlotPrice");
+        return getFunctionData().getInt("storageSlotPrice");
     }
 
     @Override
@@ -82,9 +83,7 @@ public class StorageFunction extends ShopFunction {
             menu.setOnConfirm(ee -> {
                 JSONObject payload = new JSONObject();
                 payload.put("amount", finalBuyingUnits);
-                JSONObject request = shop.requestQueueTask(player, "storage.buy", payload);
-                if(!request.getString("status").equals("success")){
-                    warn(player, request.getString("message"));
+                if(!requestQueueTask(player, "buy", payload)){
                     return;
                 }
                 player.sendMessage(Man10ShopV3.prefix + "§a§lストレージを購入しました");

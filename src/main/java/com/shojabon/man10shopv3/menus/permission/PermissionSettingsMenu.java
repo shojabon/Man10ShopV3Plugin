@@ -58,9 +58,7 @@ public class PermissionSettingsMenu extends SInventory{
                         return;
                     }
                     target.permission = permissions[finalI];
-                    JSONObject request = shop.permissionFunction.addModerator(target);
-                    if(!request.getString("status").equals("success")){
-                        player.sendMessage(Man10ShopV3.prefix + "§c§l" + request.getString("message"));
+                    if(!shop.permissionFunction.addModerator(target)){
                         return;
                     }
 
@@ -142,9 +140,7 @@ public class PermissionSettingsMenu extends SInventory{
             //confirmation
             ConfirmationMenu menu = new ConfirmationMenu("確認", plugin);
             menu.setOnConfirm(ee -> {
-                JSONObject request = shop.permissionFunction.removeModerator(target);
-                if(!request.getString("status").equals("success")){
-                    player.sendMessage(Man10ShopV3.prefix + "§c§l" + request.getString("message"));
+                if(!shop.permissionFunction.removeModerator(target)){
                     return;
                 }
                 new PermissionSettingsMainMenu(player, shop, plugin).open(player);
@@ -201,9 +197,7 @@ public class PermissionSettingsMenu extends SInventory{
                     return;
                 }
                 moderator.notificationEnabled = bool;
-                JSONObject request = shop.permissionFunction.addModerator(moderator);
-                if(!request.getString("status").equals("success")){
-                    player.sendMessage(Man10ShopV3.prefix + "§c§l" + request.getString("message"));
+                if(!shop.permissionFunction.addModerator(moderator)){
                     return;
                 }
                 player.sendMessage(Man10ShopV3.prefix + "§a§l通知設定を設定しました");
