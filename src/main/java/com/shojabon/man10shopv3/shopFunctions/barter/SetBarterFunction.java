@@ -1,6 +1,7 @@
 package com.shojabon.man10shopv3.shopFunctions.barter;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
+import com.shojabon.man10shopv3.Man10ShopV3API;
 import com.shojabon.man10shopv3.annotations.ShopFunctionDefinition;
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import com.shojabon.man10shopv3.dataClass.ShopFunction;
@@ -77,13 +78,7 @@ public class SetBarterFunction extends ShopFunction {
                 result.put(JSONObject.NULL);
                 continue;
             }
-            SItemStack sItemStack = new SItemStack(item);
-            JSONObject itemData = new JSONObject();
-            itemData.put("typeBase64", sItemStack.getItemTypeBase64());
-            itemData.put("typeMd5", sItemStack.getItemTypeMD5());
-            itemData.put("displayName", sItemStack.getDisplayName());
-            itemData.put("amount", sItemStack.getAmount());
-            result.put(itemData);
+            result.put(Man10ShopV3API.itemStackToJSON(item));
         }
         return result;
     }

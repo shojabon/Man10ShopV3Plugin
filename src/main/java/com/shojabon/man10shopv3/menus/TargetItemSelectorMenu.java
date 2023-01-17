@@ -51,8 +51,7 @@ public class TargetItemSelectorMenu extends SInventory{
             SInventory.threadPool.execute(()->{
                 // set target item variable if error return
                 // send message from response?
-                JSONObject request = shop.setVariable(player, "targetItem.item", newTargetItem.getItemTypeBase64());
-                JSONObject request2 = shop.setVariable(player, "targetItem.itemHash", newTargetItem.getItemTypeMD5());
+                JSONObject request = shop.setVariable(player, "targetItem.item", Man10ShopV3API.itemStackToJSON(newTargetItem.build()));
                 shop.updateData();
                 renderMenu();
             });

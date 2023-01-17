@@ -1,9 +1,11 @@
 package com.shojabon.man10shopv3;
 
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
+import com.shojabon.mcutils.Utils.SItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -122,6 +124,16 @@ public class Man10ShopV3API {
         JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/info", "POST", payload);
         if(result == null || !result.getString("status").equals("success")) return null;
         return new Man10Shop(result.getJSONObject("data"));
+    }
+
+    public static JSONObject itemStackToJSON(ItemStack item){
+        SItemStack sItemStack = new SItemStack(item);
+        JSONObject itemData = new JSONObject();
+        itemData.put("typeBase64", sItemStack.getItemTypeBase64());
+        itemData.put("typeMd5", sItemStack.getItemTypeMD5());
+        itemData.put("displayName", sItemStack.getDisplayName());
+        itemData.put("amount", sItemStack.getAmount());
+        return itemData;
     }
 
     public JSONObject getShopInformation(String shopId, Player requestingPlayer){
