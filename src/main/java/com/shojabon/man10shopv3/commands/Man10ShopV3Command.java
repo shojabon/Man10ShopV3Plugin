@@ -161,6 +161,16 @@ public class Man10ShopV3Command extends SCommandRouter {
                         .addRequiredPermission("man10shopv3.sign.update").addExplanation("看板アップデート(内部用)").
                         setExecutor(new SignUpdateCommand(plugin))
         );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("lootBoxPlay"))
+                        .addArgument(new SCommandArgument().addAlias("shopId"))
+                        .addArgument(new SCommandArgument().addAlias("uuid"))
+                        .addArgument(new SCommandArgument().addAlias("logId"))
+                        .addRequiredPermission("man10shopv3.lootbox.play").addExplanation("ガチャをプレーする(内部用)").
+                        setExecutor(new LootBoxPlayCommand(plugin))
+        );
     }
 
 }

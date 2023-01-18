@@ -63,6 +63,7 @@ public abstract class ShopFunction {
 
     public boolean setVariable(Player p, String key, Object value){
         JSONObject request = shop.setVariable(p, getDefinition().internalFunctionName() + "." + key, value);
+        shop.updateData();
         if(!request.getString("status").equals("success")){
             warn(p, request.getString("message"));
             return false;

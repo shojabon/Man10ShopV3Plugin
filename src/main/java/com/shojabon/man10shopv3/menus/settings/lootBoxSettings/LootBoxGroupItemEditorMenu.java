@@ -65,9 +65,8 @@ public class LootBoxGroupItemEditorMenu extends LargeSInventoryMenu {
                 ConfirmationMenu menu = new ConfirmationMenu("グループを消去しますか？", plugin);
                 menu.setOnConfirm(ee -> {
                     groupData.itemStacks.remove(finalI);
-                    JSONObject requestUpdate = shop.setVariable(player, "lootBoxGroup", lootBox.getJSON());
-                    if(!requestUpdate.getString("status").equals("success")){
-                        shop.lootBoxGroupFunction.warn(player, requestUpdate.getString("message"));
+                    groupData.counts.remove(finalI);
+                    if(!shop.lootBoxGroupFunction.saveLootBox(player, lootBox)){
                         return;
                     }
                     new LootBoxGroupItemEditorMenu(player, shop, lootBox, groupId, plugin).open(player);
@@ -88,9 +87,7 @@ public class LootBoxGroupItemEditorMenu extends LargeSInventoryMenu {
 
                 numberMenu.setOnConfirm(ee -> {
                     groupData.counts.set(finalI2, ee);
-                    JSONObject requestUpdate = shop.setVariable(player, "lootBoxGroup", lootBox.getJSON());
-                    if(!requestUpdate.getString("status").equals("success")){
-                        shop.lootBoxGroupFunction.warn(player, requestUpdate.getString("message"));
+                    if(!shop.lootBoxGroupFunction.saveLootBox(player, lootBox)){
                         return;
                     }
                     new LootBoxGroupItemEditorMenu(player, shop, lootBox, groupId, plugin).open(player);
@@ -133,9 +130,7 @@ public class LootBoxGroupItemEditorMenu extends LargeSInventoryMenu {
                 groupData.counts.add(1);
 
                 //update database here
-                JSONObject requestUpdate = shop.setVariable(player, "lootBoxGroup", lootBox.getJSON());
-                if(!requestUpdate.getString("status").equals("success")){
-                    shop.lootBoxGroupFunction.warn(player, requestUpdate.getString("message"));
+                if(!shop.lootBoxGroupFunction.saveLootBox(player, lootBox)){
                     return;
                 }
                 new LootBoxGroupItemEditorMenu(player, shop, lootBox, groupId, plugin).open(player);

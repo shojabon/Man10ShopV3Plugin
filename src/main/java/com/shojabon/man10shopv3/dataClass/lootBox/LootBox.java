@@ -47,7 +47,8 @@ public class LootBox {
         JSONArray groups = jsonObject.getJSONArray("groups");
         for(int i = 0; i < groups.length(); i++){
             JSONObject groupData = groups.getJSONObject(i);
-            LootBoxGroupData data = new LootBoxGroupData(Material.getMaterial(groupData.getString("icon")), groupData.getInt("weight"));
+            LootBoxGroupData data = new LootBoxGroupData();
+            data.loadFromJSON(groupData);
             this.groupData.add(data);
         }
     }

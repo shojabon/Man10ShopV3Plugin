@@ -4,6 +4,7 @@ import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import com.shojabon.mcutils.Utils.SItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.json.JSONObject;
@@ -134,6 +135,11 @@ public class Man10ShopV3API {
         itemData.put("displayName", sItemStack.getDisplayName());
         itemData.put("amount", sItemStack.getAmount());
         return itemData;
+    }
+    public static ItemStack JSONToItemStack(JSONObject data){
+        SItemStack sItemStack = SItemStack.fromBase64(data.getString("typeBase64"));
+        sItemStack.setAmount(data.getInt("amount"));
+        return sItemStack.build();
     }
 
     public JSONObject getShopInformation(String shopId, Player requestingPlayer){

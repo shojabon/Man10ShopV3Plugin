@@ -86,9 +86,7 @@ public class LootBoxGroupSelectorMenu extends LargeSInventoryMenu {
                 menu.setOnConfirm(ee -> {
                     newData.remove(finalI);
 
-                    JSONObject requestUpdate = shop.setVariable(player, "lootBoxGroup", lootBox.getJSON());
-                    if(!requestUpdate.getString("status").equals("success")){
-                        shop.lootBoxGroupFunction.warn(player, requestUpdate.getString("message"));
+                    if(!shop.lootBoxGroupFunction.saveLootBox(player, lootBox)){
                         return;
                     }
                     new LootBoxGroupSelectorMenu(player, shop, lootBox, plugin).open(player);
@@ -115,9 +113,7 @@ public class LootBoxGroupSelectorMenu extends LargeSInventoryMenu {
 
                 numberMenu.setOnConfirm(ee -> {
                     newData.get(finalI).percentageWeight = ee;
-                    JSONObject requestUpdate = shop.setVariable(player, "lootBoxGroup", lootBox.getJSON());
-                    if(!requestUpdate.getString("status").equals("success")){
-                        shop.lootBoxGroupFunction.warn(player, requestUpdate.getString("message"));
+                    if(!shop.lootBoxGroupFunction.saveLootBox(player, lootBox)){
                         return;
                     }
                      new LootBoxGroupSelectorMenu(player, shop, lootBox, plugin).open(player);
@@ -168,11 +164,11 @@ public class LootBoxGroupSelectorMenu extends LargeSInventoryMenu {
                 addingMaterial = defaultItemGroups[newItemGroups.size()];
             }
             if(addingMaterial == null) return;
-            newItemGroups.add(new LootBoxGroupData(addingMaterial, 0));
+            LootBoxGroupData newData = new LootBoxGroupData();
+            newData.icon = addingMaterial;
+            newItemGroups.add(newData);
 
-            JSONObject requestUpdate = shop.setVariable(player, "lootBoxGroup", lootBox.getJSON());
-            if(!requestUpdate.getString("status").equals("success")){
-                shop.lootBoxGroupFunction.warn(player, requestUpdate.getString("message"));
+            if(!shop.lootBoxGroupFunction.saveLootBox(player, lootBox)){
                 return;
             }
 
