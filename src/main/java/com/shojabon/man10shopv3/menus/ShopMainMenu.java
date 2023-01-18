@@ -29,7 +29,7 @@ public class ShopMainMenu extends AutoScaledMenu {
         this.plugin = plugin;
         this.shop = shop;
 
-//        shop.updateData();
+        shop.updateData();
 
         addItem(getShopInfoItem());
         addItem(getTargetItemSettingsItem());

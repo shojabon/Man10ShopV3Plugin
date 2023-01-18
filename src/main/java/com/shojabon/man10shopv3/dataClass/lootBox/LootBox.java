@@ -1,5 +1,6 @@
 package com.shojabon.man10shopv3.dataClass.lootBox;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,9 +22,6 @@ public class LootBox {
 
     public boolean canPlay(){
         if(getLackingWeight() != 0) return false;
-        for(LootBoxGroupData data: groupData){
-            if(data.getTotalItemCount() == 0) return false;
-        }
         return true;
     }
 
@@ -32,13 +30,12 @@ public class LootBox {
         Random rand = new Random();
         int result = rand.nextInt(100000000)+1;
         int currentCompound = 0;
-        int index = 0;
-        for(LootBoxGroupData data: groupData){
-            currentCompound += data.percentageWeight;
+        for(int i = 0; i < groupData.size(); i++){
+            if(groupData.get(i).percentageWeight == 0) continue;
+            currentCompound += groupData.get(i).percentageWeight;
             if(result <= currentCompound){
-                return new LootBoxItem(data.pickRandomItem().clone(), index);
+                return new LootBoxItem(groupData.get(i).pickRandomItem().clone(), i);
             }
-            index += 1;
         }
         return null;
     }

@@ -29,7 +29,7 @@ public class SettingsMainMenu extends CategoricalSInventoryMenu {
         this.shop = shop;
         this.plugin = plugin;
 
-//        shop.updateData();
+        shop.updateData();
     }
 
     public ItemStack createNoPermissionItem(ItemStack item){
