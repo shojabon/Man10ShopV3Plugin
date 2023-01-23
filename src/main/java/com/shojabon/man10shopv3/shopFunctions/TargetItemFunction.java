@@ -1,6 +1,7 @@
 package com.shojabon.man10shopv3.shopFunctions;
 
 import com.shojabon.man10shopv3.Man10ShopV3;
+import com.shojabon.man10shopv3.Man10ShopV3API;
 import com.shojabon.man10shopv3.annotations.ShopFunctionDefinition;
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import com.shojabon.man10shopv3.dataClass.ShopFunction;
@@ -28,7 +29,7 @@ public class TargetItemFunction extends ShopFunction {
 
 
     public SItemStack getTargetItem(){
-        return SItemStack.fromBase64(getFunctionData().getString("item"));
+        return new SItemStack(Man10ShopV3API.JSONToItemStack(getFunctionData().getJSONObject("item")));
     }
 
     @Override

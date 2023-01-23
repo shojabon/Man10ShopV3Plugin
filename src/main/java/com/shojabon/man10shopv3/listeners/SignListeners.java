@@ -140,9 +140,9 @@ public class SignListeners implements @NotNull Listener {
         if(!(e.getBlock().getState() instanceof Sign)){
             return;
         }
-        if(!e.getBlock().getState().hasMetadata("isMan10ShopV3Sign")){
-            return;
-        }
+//        if(!e.getBlock().getState().hasMetadata("isMan10ShopV3Sign")){
+//            return;
+//        }
         Man10Shop shop = Man10ShopV3.api.getShopFromSign(null, e.getBlock().getLocation());
         if(shop == null) {
             return;
@@ -153,7 +153,7 @@ public class SignListeners implements @NotNull Listener {
             return;
         }
 
-        e.getBlock().getState().removeMetadata("isMan10ShopV3Sign", plugin);
+//        e.getBlock().getState().removeMetadata("isMan10ShopV3Sign", plugin);
         SInventory.threadPool.execute(()-> {
             JSONObject result = shop.deleteSign(null, e.getBlock().getLocation());
             if(!result.getString("status").equals("success")){
@@ -167,7 +167,11 @@ public class SignListeners implements @NotNull Listener {
         if(e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if(e.getClickedBlock() == null) return;
         if(!(e.getClickedBlock().getState() instanceof Sign)) return;
-        if(!e.getClickedBlock().getState().hasMetadata("isMan10ShopV3Sign")) return;
+        if(!Man10ShopV3.config.getBoolean("pluginEnabled")){
+            e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l現在このプラグインは停止中です");
+            return;
+        }
+//        if(!e.getClickedBlock().getState().hasMetadata("isMan10ShopV3Sign")) return;
 
         Man10ShopV3.threadPool.execute(()->{
             Man10Shop shop = Man10ShopV3.api.getShopFromSign(e.getPlayer(), e.getClickedBlock().getLocation());
@@ -199,7 +203,7 @@ public class SignListeners implements @NotNull Listener {
         }
 
 
-        if(block.getState().hasMetadata("isMan10ShopV3Sign")) block.getState().removeMetadata("isMan10ShopV3Sign", plugin);
+//        if(block.getState().hasMetadata("isMan10ShopV3Sign")) block.getState().removeMetadata("isMan10ShopV3Sign", plugin);
 
 
         Man10ShopV3.threadPool.execute(()->{
@@ -234,12 +238,12 @@ public class SignListeners implements @NotNull Listener {
                 }
 
                 // set block meta
-                Bukkit.getServer().getScheduler().runTask(plugin, () ->{
-                    if(!(e.getBlock().getState() instanceof Sign)){
-                        return;
-                    }
-                    e.getBlock().setMetadata("isMan10ShopV3Sign", new FixedMetadataValue(plugin, true));
-                });
+//                Bukkit.getServer().getScheduler().runTask(plugin, () ->{
+//                    if(!(e.getBlock().getState() instanceof Sign)){
+//                        return;
+//                    }
+//                    e.getBlock().setMetadata("isMan10ShopV3Sign", new FixedMetadataValue(plugin, true));
+//                });
 
 
             });

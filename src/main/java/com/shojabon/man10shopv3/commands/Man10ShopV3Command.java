@@ -105,6 +105,25 @@ public class Man10ShopV3Command extends SCommandRouter {
                         .setExecutor(new ReloadConfigCommand(plugin))
         );
 
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("togglePlugin")).
+
+                        addRequiredPermission("man10shopv3.togglePlugin")
+                        .addExplanation("プラグインが有効かどうかを表示する")
+                        .setExecutor(new TogglePluginCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("togglePlugin")).
+                        addArgument(new SCommandArgument().addAlias("有効/無効").addAllowedType(SCommandArgumentType.BOOLEAN)).
+
+                        addRequiredPermission("man10shopv3.togglePlugin")
+                        .addExplanation("プラグインの有効/無効を設定")
+                        .setExecutor(new TogglePluginCommand(plugin))
+        );
+
         // internals
         addCommand(
                 new SCommandObject()

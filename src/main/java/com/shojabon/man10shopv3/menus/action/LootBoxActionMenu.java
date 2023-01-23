@@ -88,7 +88,6 @@ public class LootBoxActionMenu extends SInventory {
             shop.requestQueueTask(player, "shop.order", data);
 
             orderRequested = true;
-            close(player);
         });
 
         setItem(new int[]{30, 31, 32}, confirm);

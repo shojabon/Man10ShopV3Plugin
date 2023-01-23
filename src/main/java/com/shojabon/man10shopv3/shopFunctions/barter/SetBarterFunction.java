@@ -102,7 +102,7 @@ public class SetBarterFunction extends ShopFunction {
                 if(!setVariable(player, "requiredItems", itemStackListToJSONArray(items.subList(0, 12)))){
                     return;
                 }
-                if(!setVariable(player, "setBarter.resultItems", itemStackListToJSONArray(items.subList(12, 13)))){
+                if(!setVariable(player, "resultItems", itemStackListToJSONArray(items.subList(12, 13)))){
                     warn(player, "ターゲットアイテム設定中に保存が失敗しました、部分的に保存されている可能性があるのでご確認ください。");
                     return;
                 }

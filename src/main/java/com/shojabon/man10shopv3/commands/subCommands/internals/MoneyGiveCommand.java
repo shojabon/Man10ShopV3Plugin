@@ -26,7 +26,7 @@ public class MoneyGiveCommand implements CommandExecutor {
                 sender.sendMessage("player_invalid");
                 return false;
             }
-            if(!Man10ShopV3.vault.silentDeposit(p.getUniqueId(), amount)){
+            if(!Man10ShopV3.vault.deposit(p.getUniqueId(), amount)){
                 sender.sendMessage("error_internal");
                 return false;
             }

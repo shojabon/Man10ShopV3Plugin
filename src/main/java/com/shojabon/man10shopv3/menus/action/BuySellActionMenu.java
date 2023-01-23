@@ -46,6 +46,10 @@ public class BuySellActionMenu extends SInventory {
         if(maxTradeItemCount != 0){
             builder.text(" 残り " + maxTradeItemCount + "個");
         }
+        if(!shop.isAdmin() && maxTradeItemCount == 0){
+            builder = new SStringBuilder();
+            builder.text("§c§l品切れ");
+        }
         setTitle(builder.build());
 
     }
@@ -93,7 +97,6 @@ public class BuySellActionMenu extends SInventory {
             JSONObject data = new JSONObject();
             data.put("amount", itemCount);
             shop.requestQueueTask(player, "shop.order", data);
-            close(player);
         });
 
         setItem(new int[]{30,31,32,39,40,41,48,49,50}, confirm);

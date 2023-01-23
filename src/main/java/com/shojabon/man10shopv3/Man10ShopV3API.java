@@ -67,7 +67,10 @@ public class Man10ShopV3API {
             return new JSONObject(response.toString());
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            JSONObject failResponse = new JSONObject();
+            failResponse.put("status", "endpoint_error");
+            failResponse.put("message", "エンドポイントに接続することがで来ませんでした");
+            return failResponse;
         }
     }
 
@@ -123,15 +126,18 @@ public class Man10ShopV3API {
         }
         payload.put("sign", data);
         JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/info", "POST", payload);
-        if(result == null || !result.getString("status").equals("success")) return null;
+        if(!result.getString("status").equals("success")){
+//            if(p != null) p.sendMessage(Man10ShopV3.prefix + "§c§l" + result.getString("message"));
+            return null;
+        }
         return new Man10Shop(result.getJSONObject("data"));
     }
 
     public static JSONObject itemStackToJSON(ItemStack item){
         SItemStack sItemStack = new SItemStack(item);
         JSONObject itemData = new JSONObject();
-        itemData.put("typeBase64", sItemStack.getItemTypeBase64());
-        itemData.put("typeMd5", sItemStack.getItemTypeMD5());
+        itemData.put("typeBase64", sItemStack.getItemTypeBase64(true));
+        itemData.put("typeMd5", sItemStack.getItemTypeMD5(true));
         itemData.put("displayName", sItemStack.getDisplayName());
         itemData.put("amount", sItemStack.getAmount());
         return itemData;

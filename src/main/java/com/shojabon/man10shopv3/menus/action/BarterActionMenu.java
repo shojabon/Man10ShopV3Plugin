@@ -79,7 +79,6 @@ public class BarterActionMenu extends SInventory {
             JSONObject data = new JSONObject();
             data.put("amount", 1);
             shop.requestQueueTask(player, "shop.order", data);
-            close(player);
         });
         setItem(new int[]{48, 49, 50}, confirm);
 

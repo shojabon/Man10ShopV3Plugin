@@ -31,12 +31,31 @@ public class ShopMainMenu extends AutoScaledMenu {
 
         shop.updateData();
 
-        addItem(getShopInfoItem());
-        addItem(getTargetItemSettingsItem());
-        addItem(getShopSettingsItem());
-        addItem(getMoneySelectorMenu());
-        addItem(getStorageSettingsItem());
-        addItem(getPermissionSettingsItem());
+        if(shop.getShopType().equals("BUY") || shop.getShopType().equals("SELL")){
+            addItem(getShopSettingsItem());
+            addItem(getShopInfoItem());
+            addItem(getStorageSettingsItem());
+            addItem(getTargetItemSettingsItem());
+            addItem(getMoneySelectorMenu());
+            addItem(getPermissionSettingsItem());
+        }else if(shop.getShopType().equals("BARTER")){
+            addItem(getShopSettingsItem());
+            addItem(getShopInfoItem());
+            addItem(getTargetItemSettingsItem());
+            addItem(getPermissionSettingsItem());
+        }else if(shop.getShopType().equals("LOOT_BOX")){
+            addItem(getShopSettingsItem());
+            addItem(getShopInfoItem());
+            addItem(getTargetItemSettingsItem());
+            addItem(getPermissionSettingsItem());
+        } else{
+            addItem(getShopSettingsItem());
+            addItem(getShopInfoItem());
+            addItem(getStorageSettingsItem());
+            addItem(getTargetItemSettingsItem());
+            addItem(getMoneySelectorMenu());
+            addItem(getPermissionSettingsItem());
+        }
     }
 
 

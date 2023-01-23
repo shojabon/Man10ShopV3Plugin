@@ -7,9 +7,9 @@ public enum Man10ShopType {
     SELL("買取ショップ", false, Material.HOPPER),
     BARTER("トレードショップ", true, Material.VILLAGER_SPAWN_EGG),
     LOOT_BOX("ガチャ", true, Material.CHEST),
-    QUEST("クエストショップ", true, Material.OAK_SIGN),
-    COMMAND("コマンドショップ", true, Material.COMMAND_BLOCK),
-    AI("AIショップ", true, Material.OBSERVER);
+    QUEST("クエストショップ", true, Material.OAK_SIGN);
+//    COMMAND("コマンドショップ", true, Material.COMMAND_BLOCK),
+//    AI("AIショップ", true, Material.OBSERVER);
 
     public String displayName;
     public boolean admin;
