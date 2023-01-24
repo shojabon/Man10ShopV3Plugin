@@ -62,7 +62,7 @@ public class CreateShopCommand implements CommandExecutor {
                 return;
             }
 
-            JSONObject request = Man10ShopV3.api.createShop(((Player) sender), args[1], true);
+            JSONObject request = Man10ShopV3.api.createShop(((Player) sender), args[1],false);
             if(!request.getString("status").equals("success")){
                 sender.sendMessage(Man10ShopV3.prefix + "§c§l" + request.getString("message"));
                 return;

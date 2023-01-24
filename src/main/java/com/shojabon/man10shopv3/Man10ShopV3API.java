@@ -140,6 +140,9 @@ public class Man10ShopV3API {
         itemData.put("typeMd5", sItemStack.getItemTypeMD5(true));
         itemData.put("displayName", sItemStack.getDisplayName());
         itemData.put("amount", sItemStack.getAmount());
+        itemData.put("lore", sItemStack.getLore());
+        itemData.put("material", sItemStack.getType().name());
+        itemData.put("customModelData", sItemStack.getCustomModelData());
         return itemData;
     }
     public static ItemStack JSONToItemStack(JSONObject data){

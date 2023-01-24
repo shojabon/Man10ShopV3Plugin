@@ -7,6 +7,7 @@ import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
 import com.shojabon.mcutils.Utils.SStringBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,8 +43,9 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
         for(int i = 0; i < shops.length(); i++){
             JSONObject shopInfo = shops.getJSONObject(i);
 
-
-            SItemStack icon = SItemStack.fromBase64(shopInfo.getString("icon"));
+            JSONObject iconData = shopInfo.getJSONObject("icon");
+            SItemStack icon = new SItemStack(Material.valueOf(iconData.getString("material")));
+            icon.setCustomModelData(iconData.getInt("customModelData"));
             icon.setDisplayName(new SStringBuilder().green().bold().text(shopInfo.getString("name")).build());
             icon.addLore("§d§lショップタイプ: " + shopInfo.getString("shopType"));
             icon.addLore(new SStringBuilder().lightPurple().bold().text("権限: ").yellow().bold().text(shopInfo.getString("permission")).build());

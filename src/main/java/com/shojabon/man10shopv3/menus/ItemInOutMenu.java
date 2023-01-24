@@ -39,6 +39,7 @@ public class ItemInOutMenu extends SInventory{
         }
 
         setTitle("§7§lアイテムを操作してください 現在:" + itemCount + "個");
+        setOnClickEvent(e -> e.setCancelled(true));
 
 
     }

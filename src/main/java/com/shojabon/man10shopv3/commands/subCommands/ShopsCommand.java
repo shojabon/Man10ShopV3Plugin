@@ -43,8 +43,7 @@ public class ShopsCommand implements CommandExecutor {
 
             menu.setOnClick(shopId -> {
                 Man10Shop shopInfo = Man10ShopV3.api.getShop(shopId, player);
-                if(!result.getString("status").equals("success")){
-                    Man10ShopV3API.warnMessage(player, result.getString("message"));
+                if(shopInfo == null){
                     return;
                 }
                 new ShopMainMenu(player, shopInfo, plugin).open(player);

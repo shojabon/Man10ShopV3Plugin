@@ -157,6 +157,14 @@ public class Man10ShopV3Command extends SCommandRouter {
 
         addCommand(
                 new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("inventoryHasSpace"))
+                        .addArgument(new SCommandArgument().addAlias("uuid"))
+                        .addRequiredPermission("man10shopv3.inventory.space").addExplanation("イベントリのスペースがあるかを確認(内部用)").
+                        setExecutor(new InventoryHasSpace(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
                         .addArgument(new SCommandArgument().addAllowedString("moneyTake"))
                         .addArgument(new SCommandArgument().addAlias("uuid"))
                         .addArgument(new SCommandArgument().addAlias("amount"))
@@ -190,6 +198,7 @@ public class Man10ShopV3Command extends SCommandRouter {
                         .addRequiredPermission("man10shopv3.lootbox.play").addExplanation("ガチャをプレーする(内部用)").
                         setExecutor(new LootBoxPlayCommand(plugin))
         );
+
     }
 
 }
