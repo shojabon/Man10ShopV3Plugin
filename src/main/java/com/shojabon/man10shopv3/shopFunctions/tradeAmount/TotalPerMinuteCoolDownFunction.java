@@ -60,7 +60,7 @@ public class TotalPerMinuteCoolDownFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("時間を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                if(!setVariable(player, "time", "number")){
+                if(!setVariable(player, "time", number)){
                     return;
                 }
                 success(player , "時間を設定しました");

@@ -74,13 +74,17 @@ public class ItemInOutMenu extends SInventory{
         SInventoryItem takeOutButton = new SInventoryItem(new SItemStack(Material.DROPPER).setDisplayName("§7§lお引き出し").addLore("§e§lクリックで1個お引き出し").addLore("§e§lシフトクリックで" + shop.targetItemFunction.getTargetItem().getMaxStackSize() +  "個お引き出し").build());
         takeOutButton.clickable(false);
         takeOutButton.setAsyncEvent(e -> {
-            int amount = 1;
+            int amount;
             if(e.isShiftClick()){
                 amount = shop.targetItemFunction.getTargetItem().getMaxStackSize();
+            } else {
+                amount = 1;
             }
-            JSONObject data = new JSONObject();
-            data.put("amount", amount);
-            shop.requestQueueTask(player, "storage.item.withdraw",data);
+            new Thread(() -> {
+                JSONObject data = new JSONObject();
+                data.put("amount", amount);
+                shop.requestQueueTask(player, "storage.item.withdraw",data);
+            }).start();
         });
 
         setItem(new int[]{50, 51, 52}, takeOutButton);
@@ -88,13 +92,17 @@ public class ItemInOutMenu extends SInventory{
         SInventoryItem putInButton = new SInventoryItem(new SItemStack(Material.HOPPER).setDisplayName("§7§lお預入れ").addLore("§e§lクリックで1個お預け入れ").addLore("§e§lシフトクリックで" + shop.targetItemFunction.getTargetItem().getMaxStackSize() +  "個お預け入れ").build());
         putInButton.clickable(false);
         putInButton.setAsyncEvent(e -> {
-            int amount = 1;
+            int amount;
             if(e.isShiftClick()){
                 amount = shop.targetItemFunction.getTargetItem().getMaxStackSize();
+            } else {
+                amount = 1;
             }
-            JSONObject data = new JSONObject();
-            data.put("amount", amount);
-            shop.requestQueueTask(player, "storage.item.deposit",data);
+            new Thread(() -> {
+                JSONObject data = new JSONObject();
+                data.put("amount", amount);
+                shop.requestQueueTask(player, "storage.item.deposit",data);
+            }).start();
         });
 
         setItem(new int[]{46, 47, 48}, putInButton);

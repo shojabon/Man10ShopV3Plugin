@@ -23,6 +23,8 @@ public class ShopMainMenu extends AutoScaledMenu {
 
     Man10Shop shop;
 
+    boolean actionHappened = false;
+
     public ShopMainMenu(Player p, Man10Shop shop, Man10ShopV3 plugin) {
         super(new SStringBuilder().green().text(shop.nameFunction.getName() + "設定").build(), plugin);
         this.player = p;
@@ -234,7 +236,6 @@ public class ShopMainMenu extends AutoScaledMenu {
         });
         return menu;
     }
-
     public SInventoryItem getStorageSettingsItem(){
         SStringBuilder iconName = new SStringBuilder();
 
@@ -261,10 +262,27 @@ public class ShopMainMenu extends AutoScaledMenu {
                 return;
             }
 
-            ItemInOutMenu menu = new ItemInOutMenu(player, shop, plugin);
-            menu.setOnCloseEvent(ee -> {
-                new ShopMainMenu(player, shop, plugin).open(player);
+            InOutSelectorMenu menu = new InOutSelectorMenu(player, shop, plugin);
+            menu.setOnClose(ee -> new ShopMainMenu(player, shop, plugin).open(player));
+            menu.setOnInClicked(ee -> {
+                //editing storage
+                if(actionHappened) return;
+                JSONObject data = new JSONObject();
+                data.put("withdraw", false);
+                shop.requestQueueTask(player, "storage.menu.open", data);
+                actionHappened = true;
             });
+            menu.setOnOutClicked(ee -> {
+                //editing storage
+                if(actionHappened) return;
+                JSONObject data = new JSONObject();
+                data.put("withdraw", true);
+                shop.requestQueueTask(player, "storage.menu.open", data);
+                actionHappened = true;
+            });
+            menu.setInText("倉庫にアイテムを入れる");
+            menu.setOutText("倉庫からアイテムを出す");
+
             menu.open(player);
         });
 
@@ -272,6 +290,43 @@ public class ShopMainMenu extends AutoScaledMenu {
 
         return item;
     }
+//    public SInventoryItem getStorageSettingsItem(){
+//        SStringBuilder iconName = new SStringBuilder();
+//
+//        if(shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
+//            iconName.gray().bold().text("アイテム倉庫").build();
+//        }else{
+//            iconName.gray().bold().strike().text("アイテム倉庫");
+//        }
+//
+//        SItemStack icon = new SItemStack(Material.CHEST).setDisplayName(iconName.build());
+//
+//        if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
+//            icon.addLore(new SStringBuilder().red().text("権限がありません").build());
+//            icon.addLore("");
+//        }
+//        icon.addLore(new SStringBuilder().white().text("アイテムの出しいれをすることができます").build());
+//        SInventoryItem item = new SInventoryItem(icon.build());
+//
+//        item.clickable(false);
+//
+//        item.setEvent(e -> {
+//            if(!shop.permissionFunction.hasPermission(player.getUniqueId(), "STORAGE_ACCESS")){
+//                player.sendMessage(Man10ShopV3.prefix + "§c§lこの項目を開く権限がありません");
+//                return;
+//            }
+//
+//            ItemInOutMenu menu = new ItemInOutMenu(player, shop, plugin);
+//            menu.setOnCloseEvent(ee -> {
+//                new ShopMainMenu(player, shop, plugin).open(player);
+//            });
+//            menu.open(player);
+//        });
+
+
+
+//        return item;
+//    }
 
     public SInventoryItem getPermissionSettingsItem(){
         SStringBuilder iconName = new SStringBuilder();

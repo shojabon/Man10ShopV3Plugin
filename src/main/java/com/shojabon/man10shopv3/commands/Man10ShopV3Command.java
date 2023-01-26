@@ -191,6 +191,16 @@ public class Man10ShopV3Command extends SCommandRouter {
 
         addCommand(
                 new SCommandObject()
+                        .addArgument(new SCommandArgument().addAllowedString("storageOpen"))
+                        .addArgument(new SCommandArgument().addAlias("shopId"))
+                        .addArgument(new SCommandArgument().addAlias("uuid"))
+                        .addArgument(new SCommandArgument().addAlias("displayAmount"))
+                        .addRequiredPermission("man10shopv3.storage.menu").addExplanation("倉庫メニュー表示(内部用)").
+                        setExecutor(new StorageMenuOpenCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
                         .addArgument(new SCommandArgument().addAllowedString("lootBoxPlay"))
                         .addArgument(new SCommandArgument().addAlias("shopId"))
                         .addArgument(new SCommandArgument().addAlias("uuid"))

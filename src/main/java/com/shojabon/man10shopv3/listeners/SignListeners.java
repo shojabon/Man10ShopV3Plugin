@@ -168,7 +168,7 @@ public class SignListeners implements @NotNull Listener {
         if(e.getClickedBlock() == null) return;
         if(!(e.getClickedBlock().getState() instanceof Sign)) return;
         if(!Man10ShopV3.config.getBoolean("pluginEnabled")){
-            e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l現在このプラグインは停止中です");
+//            e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l現在このプラグインは停止中です");
             return;
         }
 //        if(!e.getClickedBlock().getState().hasMetadata("isMan10ShopV3Sign")) return;
