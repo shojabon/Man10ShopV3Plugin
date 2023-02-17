@@ -272,6 +272,7 @@ public class ShopMainMenu extends AutoScaledMenu {
                 shop.requestQueueTask(player, "storage.menu.open", data);
                 actionHappened = true;
             });
+
             menu.setOnOutClicked(ee -> {
                 //editing storage
                 if(actionHappened) return;

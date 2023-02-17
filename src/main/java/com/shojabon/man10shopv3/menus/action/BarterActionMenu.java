@@ -72,15 +72,22 @@ public class BarterActionMenu extends SInventory {
             setItem(slots[i], item);
         }
 
-        SInventoryItem confirm = new SInventoryItem(new SItemStack(Material.LIME_STAINED_GLASS_PANE).setDisplayName("§a§l決定").build());
-        confirm.clickable(false);
-        confirm.setAsyncEvent(e -> {
-            if(orderRequested) return;
-            JSONObject data = new JSONObject();
-            data.put("amount", 1);
-            shop.requestQueueTask(player, "shop.order", data);
-        });
-        setItem(new int[]{48, 49, 50}, confirm);
+
+        for(int slot : new int[]{48, 49, 50}){
+            SInventoryItem confirm = new SInventoryItem(new SItemStack(Material
+                    .LIME_STAINED_GLASS_PANE)
+                    .setDisplayName("§a§l決定")
+                    .setCustomData(plugin, "slot", String.valueOf(slot))
+                    .build().clone());
+            confirm.clickable(false);
+            confirm.setAsyncEvent(e -> {
+                if(orderRequested) return;
+                JSONObject data = new JSONObject();
+                data.put("amount", 1);
+                shop.requestQueueTask(player, "shop.order", data);
+            });
+            setItem(slot, confirm);
+        }
 
         renderInventory();
     }

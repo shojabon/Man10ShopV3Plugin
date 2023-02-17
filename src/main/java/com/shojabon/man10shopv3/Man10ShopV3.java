@@ -27,9 +27,7 @@ public final class Man10ShopV3 extends JavaPlugin {
         vault = new VaultAPI();
 
         getServer().getPluginManager().registerEvents(new SignListeners(this), this);
-        Man10ShopV3Command command = new Man10ShopV3Command(this);
-        getCommand("mshop").setExecutor(command);
-        getCommand("mshop").setTabCompleter(command);
+        new Man10ShopV3Command(this);
 
     }
 

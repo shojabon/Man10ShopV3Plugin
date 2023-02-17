@@ -3,10 +3,9 @@ package com.shojabon.man10shopv3.commands;
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.commands.subCommands.*;
 import com.shojabon.man10shopv3.commands.subCommands.internals.*;
-import com.shojabon.mcutils.Utils.SCommandRouter.SCommandArgument;
-import com.shojabon.mcutils.Utils.SCommandRouter.SCommandArgumentType;
-import com.shojabon.mcutils.Utils.SCommandRouter.SCommandObject;
-import com.shojabon.mcutils.Utils.SCommandRouter.SCommandRouter;
+import com.shojabon.mcutils.Utils.SCommandRouterV2.SCommandArgumentType;
+import com.shojabon.mcutils.Utils.SCommandRouterV2.SCommandObject;
+import com.shojabon.mcutils.Utils.SCommandRouterV2.SCommandRouter;
 
 import java.security.Signature;
 
@@ -16,6 +15,7 @@ public class Man10ShopV3Command extends SCommandRouter {
     Man10ShopV3 plugin;
 
     public Man10ShopV3Command(Man10ShopV3 plugin){
+        super(plugin, "mshop");
         this.plugin = plugin;
         registerCommands();
         registerEvents();
@@ -31,182 +31,190 @@ public class Man10ShopV3Command extends SCommandRouter {
         //shops command
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("test")).
-
-                        addRequiredPermission("man10shopv3.test").addExplanation("テスト").
-                        setExecutor(new TestCommand(plugin))
+                        .prefix("test")
+                        .permission("man10shopv3.test")
+                        .explanation("テスト")
+                        .executor(new TestCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("shops")).
+                        .prefix("shops")
 
-                        addRequiredPermission("man10shopv3.shops").addExplanation("編集可能なショップを開く").
-                        setExecutor(new ShopsCommand(plugin))
+                        .permission("man10shopv3.shops")
+                        .explanation("編集可能なショップを開く")
+                        .executor(new ShopsCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("adminShops")).
-
-                        addRequiredPermission("man10shopv3.admin.shops").addExplanation("アドミンショップをショップを開く").
-                        setExecutor(new AdminShopsCommand(plugin))
+                        .prefix("adminShops")
+                        .permission("man10shopv3.admin.shops")
+                        .explanation("アドミンショップをショップを開く")
+                        .executor(new AdminShopsCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("toggleWorld")).
-
-                        addRequiredPermission("man10shopv3.toggleWorld")
-                        .addExplanation("看板が機能するワールド一覧を表示する")
-                        .setExecutor(new ToggleWorldCommand(plugin))
+                        .prefix("toggleWorld")
+                        .permission("man10shopv3.toggleWorld")
+                        .explanation("看板が機能するワールド一覧を表示する")
+                        .executor(new ToggleWorldCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("toggleWorld")).
-                        addArgument(new SCommandArgument().addAllowedType(SCommandArgumentType.WORLD).addAlias("ワールド名")).
+                        .prefix("toggleWorld")
+                        .argument("ワールド名", SCommandArgumentType.WORLD)
 
-                        addRequiredPermission("man10shopv3.toggleWorld")
-                        .addExplanation("看板が機能するワールドの有効/無効を設定")
-                        .setExecutor(new ToggleWorldCommand(plugin))
+                        .permission("man10shopv3.toggleWorld")
+                        .explanation("看板が機能するワールドの有効/無効を設定")
+                        .executor(new ToggleWorldCommand(plugin))
         );
 
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("create")).
-                        addArgument(new SCommandArgument().addAlias("ショップ名")).
+                        .prefix("create")
+                        .argument("ショップ名")
 
-                        addRequiredPermission("man10shopv3.shop.create")
-                        .addExplanation("ショップを作成")
-                        .setExecutor(new CreateShopCommand(plugin))
+                        .permission("man10shopv3.shop.create")
+                        .explanation("ショップを作成")
+                        .executor(new CreateShopCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("createAdmin")).
-                        addArgument(new SCommandArgument().addAlias("ショップ名")).
+                        .prefix("createAdmin")
+                        .argument("ショップ名")
 
-                        addRequiredPermission("man10shopv3.admin.shop.create")
-                        .addExplanation("管理者ショップを作成")
-                        .setExecutor(new CreateAdminShopCommand(plugin))
+                        .permission("man10shopv3.admin.shop.create")
+                        .explanation("管理者ショップを作成")
+                        .executor(new CreateAdminShopCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("reload")).
+                        .prefix("reload")
 
-                        addRequiredPermission("man10shopv3.reload")
-                        .addExplanation("プラグインをリロードする")
-                        .addExplanation("")
-                        .addExplanation("設定を変更したときに使用する")
-                        .addExplanation("コマンドを使用するとサーバー起動時状態に戻る")
-                        .setExecutor(new ReloadConfigCommand(plugin))
+                        .permission("man10shopv3.reload")
+                        .explanation("プラグインをリロードする")
+                        .explanation("")
+                        .explanation("設定を変更したときに使用する")
+                        .explanation("コマンドを使用するとサーバー起動時状態に戻る")
+                        .executor(new ReloadConfigCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("togglePlugin")).
+                        .prefix("togglePlugin")
 
-                        addRequiredPermission("man10shopv3.togglePlugin")
-                        .addExplanation("プラグインが有効かどうかを表示する")
-                        .setExecutor(new TogglePluginCommand(plugin))
+                        .permission("man10shopv3.togglePlugin")
+                        .explanation("プラグインが有効かどうかを表示する")
+                        .executor(new TogglePluginCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("togglePlugin")).
-                        addArgument(new SCommandArgument().addAlias("有効/無効").addAllowedType(SCommandArgumentType.BOOLEAN)).
-
-                        addRequiredPermission("man10shopv3.togglePlugin")
-                        .addExplanation("プラグインの有効/無効を設定")
-                        .setExecutor(new TogglePluginCommand(plugin))
+                        .prefix("togglePlugin")
+                        .argument("有効/無効", SCommandArgumentType.BOOLEAN)
+                        .permission("man10shopv3.togglePlugin")
+                        .explanation("プラグインの有効/無効を設定")
+                        .executor(new TogglePluginCommand(plugin))
         );
 
         // internals
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("itemGive"))
-                        .addArgument(new SCommandArgument().addAlias("uuid"))
-                        .addArgument(new SCommandArgument().addAlias("itemBase64"))
-                        .addArgument(new SCommandArgument().addAlias("amount"))
-                        .addRequiredPermission("man10shopv3.item.give").addExplanation("アイテムを付与する(内部用)").
-                        setExecutor(new ItemGiveCommand(plugin))
+                        .prefix("itemGive")
+                        .argument("uuid")
+                        .argument("itemBase64")
+                        .argument("amount")
+                        .permission("man10shopv3.item.give").explanation("アイテムを付与する(内部用)").
+                        executor(new ItemGiveCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("itemTake"))
-                        .addArgument(new SCommandArgument().addAlias("uuid"))
-                        .addArgument(new SCommandArgument().addAlias("itemBase64"))
-                        .addArgument(new SCommandArgument().addAlias("amount"))
-                        .addRequiredPermission("man10shopv3.item.take").addExplanation("アイテムを取る(内部用)").
-                        setExecutor(new ItemTakeCommand(plugin))
+                        .prefix("itemTake")
+                        .argument("uuid")
+                        .argument("itemBase64")
+                        .argument("amount")
+                        .permission("man10shopv3.item.take").explanation("アイテムを取る(内部用)").
+                        executor(new ItemTakeCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("itemCheck"))
-                        .addArgument(new SCommandArgument().addAlias("uuid"))
-                        .addArgument(new SCommandArgument().addAlias("itemBase64"))
-                        .addArgument(new SCommandArgument().addAlias("amount"))
-                        .addRequiredPermission("man10shopv3.item.check").addExplanation("アイテムを取る(内部用)").
-                        setExecutor(new ItemCheckCommand(plugin))
+                        .prefix("itemCheck")
+                        .argument("uuid")
+                        .argument("itemBase64")
+                        .argument("amount")
+                        .permission("man10shopv3.item.check").explanation("アイテムを取る(内部用)").
+                        executor(new ItemCheckCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("inventoryHasSpace"))
-                        .addArgument(new SCommandArgument().addAlias("uuid"))
-                        .addRequiredPermission("man10shopv3.inventory.space").addExplanation("イベントリのスペースがあるかを確認(内部用)").
-                        setExecutor(new InventoryHasSpace(plugin))
+                        .prefix("inventoryHasSpace")
+                        .argument("uuid")
+                        .permission("man10shopv3.inventory.space").explanation("イベントリのスペースがあるかを確認(内部用)").
+                        executor(new InventoryHasSpace(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("moneyTake"))
-                        .addArgument(new SCommandArgument().addAlias("uuid"))
-                        .addArgument(new SCommandArgument().addAlias("amount"))
-                        .addRequiredPermission("man10shopv3.money.take").addExplanation("お金を取る(内部用)").
-                        setExecutor(new MoneyTakeCommand(plugin))
+                        .prefix("moneyTake")
+                        .argument("uuid")
+                        .argument("amount")
+                        .permission("man10shopv3.money.take").explanation("お金を取る(内部用)").
+                        executor(new MoneyTakeCommand(plugin))
+        );
+        addCommand(
+                new SCommandObject()
+                        .prefix("moneyGet")
+                        .argument("uuid")
+                        .permission("man10shopv3.money.get")
+                        .explanation("お金を見る(内部用)").
+                        executor(new MoneyGetCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("moneyGive"))
-                        .addArgument(new SCommandArgument().addAlias("uuid"))
-                        .addArgument(new SCommandArgument().addAlias("amount"))
-                        .addRequiredPermission("man10shopv3.money.give").addExplanation("お金をあげる(内部用)").
-                        setExecutor(new MoneyGiveCommand(plugin))
+                        .prefix("moneyGive")
+                        .argument("uuid")
+                        .argument("amount")
+                        .permission("man10shopv3.money.give").explanation("お金をあげる(内部用)").
+                        executor(new MoneyGiveCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("signUpdate"))
-                        .addArgument(new SCommandArgument().addAlias("shopId"))
-                        .addRequiredPermission("man10shopv3.sign.update").addExplanation("看板アップデート(内部用)").
-                        setExecutor(new SignUpdateCommand(plugin))
+                        .prefix("signUpdate")
+                        .argument("shopId")
+                        .permission("man10shopv3.sign.update")
+                        .explanation("看板アップデート(内部用)").
+                        executor(new SignUpdateCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("storageOpen"))
-                        .addArgument(new SCommandArgument().addAlias("shopId"))
-                        .addArgument(new SCommandArgument().addAlias("uuid"))
-                        .addArgument(new SCommandArgument().addAlias("displayAmount"))
-                        .addRequiredPermission("man10shopv3.storage.menu").addExplanation("倉庫メニュー表示(内部用)").
-                        setExecutor(new StorageMenuOpenCommand(plugin))
+                        .prefix("storageOpen")
+                        .argument("shopId")
+                        .argument("uuid")
+                        .argument("displayAmount")
+                        .permission("man10shopv3.storage.menu").explanation("倉庫メニュー表示(内部用)").
+                        executor(new StorageMenuOpenCommand(plugin))
         );
 
         addCommand(
                 new SCommandObject()
-                        .addArgument(new SCommandArgument().addAllowedString("lootBoxPlay"))
-                        .addArgument(new SCommandArgument().addAlias("shopId"))
-                        .addArgument(new SCommandArgument().addAlias("uuid"))
-                        .addArgument(new SCommandArgument().addAlias("logId"))
-                        .addRequiredPermission("man10shopv3.lootbox.play").addExplanation("ガチャをプレーする(内部用)").
-                        setExecutor(new LootBoxPlayCommand(plugin))
+                        .prefix("lootBoxPlay")
+                        .argument("shopId")
+                        .argument("uuid")
+                        .argument("logId")
+                        .permission("man10shopv3.lootbox.play").explanation("ガチャをプレーする(内部用)").
+                        executor(new LootBoxPlayCommand(plugin))
         );
 
     }

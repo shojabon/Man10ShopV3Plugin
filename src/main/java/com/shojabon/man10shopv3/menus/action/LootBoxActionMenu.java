@@ -73,24 +73,30 @@ public class LootBoxActionMenu extends SInventory {
             }
         }
 
-        SInventoryItem confirm = new SInventoryItem(new SItemStack(Material.LIME_STAINED_GLASS_PANE).setDisplayName("§a§l確認").build());
-        confirm.clickable(false);
-        confirm.setEvent(e -> {
-            if(LootBoxPlayMenu.playerInGame.contains(player.getUniqueId())){
-                player.sendMessage(Man10ShopV3.prefix+ "§c§lガチャは同時には回せません");
-                close(player);
-                return;
-            }
-            if(orderRequested) return;
+        for(int slot : new int[]{30, 31, 32}){
+            SInventoryItem confirm = new SInventoryItem(new SItemStack(Material.LIME_STAINED_GLASS_PANE)
+                    .setDisplayName("§a§l確認")
+                    .setCustomData(plugin, "slot", String.valueOf(slot))
+                    .build()
+                    .clone()
+            );
+            confirm.clickable(false);
+            confirm.setEvent(e -> {
+                if(LootBoxPlayMenu.playerInGame.contains(player.getUniqueId())){
+                    player.sendMessage(Man10ShopV3.prefix+ "§c§lガチャは同時には回せません");
+                    close(player);
+                    return;
+                }
+                if(orderRequested) return;
 
-            JSONObject data = new JSONObject();
-            data.put("amount", 1);
-            shop.requestQueueTask(player, "shop.order", data);
+                JSONObject data = new JSONObject();
+                data.put("amount", 1);
+                shop.requestQueueTask(player, "shop.order", data);
 
-            orderRequested = true;
-        });
-
-        setItem(new int[]{30, 31, 32}, confirm);
+                orderRequested = true;
+            });
+            setItem(slot, confirm);
+        }
 
         renderInventory();
     }

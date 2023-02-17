@@ -14,6 +14,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemStorageMenu extends SInventory{
     
     Man10Shop shop;
@@ -28,8 +31,14 @@ public class ItemStorageMenu extends SInventory{
         this.shop = shop;
         this.plugin = plugin;
 
-        this.itemCount = itemCount;
         shop.updateData();
+
+        this.itemCount = itemCount;
+        ItemStack targetItemSingle = shop.targetItemFunction.getTargetItem().build().clone();
+        int maxStackSize = targetItemSingle.getMaxStackSize();
+        if(this.itemCount > maxStackSize*54){
+            this.itemCount = maxStackSize*54;
+        }
     }
 
     public void renderMenu(){
@@ -93,6 +102,10 @@ public class ItemStorageMenu extends SInventory{
                 return;
             }
         });
+
+        List<String> test = new ArrayList<>();
+
+        ItemStack item = new ItemStack(Material.DIAMOND);
 
         setAsyncOnForcedCloseEvent(e -> {
             int diff = countItems() - itemCount;

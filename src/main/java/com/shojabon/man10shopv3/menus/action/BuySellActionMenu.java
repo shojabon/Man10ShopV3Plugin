@@ -89,17 +89,20 @@ public class BuySellActionMenu extends SInventory {
             lore.text("売る");
         }
         item.addLore(lore.build());
-        SInventoryItem confirm = new SInventoryItem(item.build());
-        confirm.clickable(false);
 
-        confirm.setAsyncEvent(e -> {
+        for(int slot : new int[]{30,31,32,39,40,41,48,49,50}){
+            item.setCustomData(plugin, "slot", String.valueOf(slot));
+            SInventoryItem confirm = new SInventoryItem(item.build().clone());
+            confirm.clickable(false);
+
+            confirm.setAsyncEvent(e -> {
 //            if(orderRequested) return;
-            JSONObject data = new JSONObject();
-            data.put("amount", itemCount);
-            shop.requestQueueTask(player, "shop.order", data);
-        });
-
-        setItem(new int[]{30,31,32,39,40,41,48,49,50}, confirm);
+                JSONObject data = new JSONObject();
+                data.put("amount", itemCount);
+                shop.requestQueueTask(player, "shop.order", data);
+            });
+            setItem(slot, confirm);
+        }
     }
 
     public Consumer<InventoryClickEvent> createEvent(boolean add){
