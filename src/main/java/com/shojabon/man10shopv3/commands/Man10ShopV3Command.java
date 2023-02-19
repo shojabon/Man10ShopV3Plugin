@@ -3,9 +3,10 @@ package com.shojabon.man10shopv3.commands;
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.commands.subCommands.*;
 import com.shojabon.man10shopv3.commands.subCommands.internals.*;
-import com.shojabon.mcutils.Utils.SCommandRouterV2.SCommandArgumentType;
-import com.shojabon.mcutils.Utils.SCommandRouterV2.SCommandObject;
-import com.shojabon.mcutils.Utils.SCommandRouterV2.SCommandRouter;
+import com.shojabon.scommandrouter.SCommandRouter.SCommandArgumentType;
+import com.shojabon.scommandrouter.SCommandRouter.SCommandObject;
+import com.shojabon.scommandrouter.SCommandRouter.SCommandRouter;
+import org.apache.logging.log4j.message.Message;
 
 import java.security.Signature;
 
@@ -124,6 +125,14 @@ public class Man10ShopV3Command extends SCommandRouter {
         );
 
         // internals
+        addCommand(
+                new SCommandObject()
+                        .prefix("message")
+                        .argument("uuid")
+                        .infinity()
+                        .permission("man10shopv3.message").explanation("send message to player").
+                        executor(new MessageCommand(plugin))
+        );
         addCommand(
                 new SCommandObject()
                         .prefix("itemGive")
