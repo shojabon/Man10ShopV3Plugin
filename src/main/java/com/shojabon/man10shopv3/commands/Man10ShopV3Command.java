@@ -6,9 +6,7 @@ import com.shojabon.man10shopv3.commands.subCommands.internals.*;
 import com.shojabon.scommandrouter.SCommandRouter.SCommandArgumentType;
 import com.shojabon.scommandrouter.SCommandRouter.SCommandObject;
 import com.shojabon.scommandrouter.SCommandRouter.SCommandRouter;
-import org.apache.logging.log4j.message.Message;
-
-import java.security.Signature;
+import org.bukkit.Bukkit;
 
 
 public class Man10ShopV3Command extends SCommandRouter {
@@ -225,7 +223,6 @@ public class Man10ShopV3Command extends SCommandRouter {
                         .permission("man10shopv3.lootbox.play").explanation("ガチャをプレーする(内部用)").
                         executor(new LootBoxPlayCommand(plugin))
         );
-
     }
 
 }

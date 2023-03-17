@@ -9,12 +9,12 @@ import com.shojabon.man10shopv3.menus.ShopMainMenu;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
 import com.shojabon.mcutils.Utils.SStringBuilder;
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SettingsMainMenu extends CategoricalSInventoryMenu {
     Man10Shop shop;
@@ -50,7 +50,7 @@ public class SettingsMainMenu extends CategoricalSInventoryMenu {
 
             SInventoryItem item = func.getSettingItem(player, func.getSettingBaseItem()); //get setting item icon
             if(item == null)continue;
-            if(shopFunctionDefinition.enabledShopType().length != 0 && !ArrayUtils.contains(shopFunctionDefinition.enabledShopType(), shop.getShopType())) continue; //shop type check
+            if(shopFunctionDefinition.enabledShopType().length != 0 && !Arrays.asList(shopFunctionDefinition.enabledShopType()).contains(shop.getShopType())) continue; //shop type check
 
             if(!shop.permissionFunction.hasPermission(player.getUniqueId(), shopFunctionDefinition.allowedPermission())){
                 //if no permission to edit

@@ -6,14 +6,18 @@ import com.shojabon.mcutils.Utils.BannerDictionary;
 import com.shojabon.mcutils.Utils.SInventory.SInventory;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
-import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class BarterSettingMenu extends SInventory{
 
@@ -39,7 +43,7 @@ public class BarterSettingMenu extends SInventory{
             if(e.getClickedInventory().getType() != InventoryType.PLAYER) return;
             if(e.getCurrentItem() == null) return;
             e.setCancelled(true);
-            current.set(ArrayUtils.indexOf(slots, currentSelecting), e.getCurrentItem().clone());
+            current.set(Arrays.stream(slots).boxed().collect(Collectors.toList()).indexOf(currentSelecting), e.getCurrentItem().clone());
             renderMenu();
         });
     }
@@ -61,7 +65,7 @@ public class BarterSettingMenu extends SInventory{
         SInventoryItem clearSlot = new SInventoryItem(new SItemStack(Material.BARRIER).setDisplayName("§c§l選択中のスロットをクリア").build());
         clearSlot.clickable(false);
         clearSlot.setAsyncEvent(e -> {
-            current.set(ArrayUtils.indexOf(slots, currentSelecting), null);
+            current.set(Arrays.stream(slots).boxed().collect(Collectors.toList()).indexOf(currentSelecting), null);
             player.sendMessage(Man10ShopV3.prefix + "§c§l" + e.getRawSlot() + "をクリアしました");
             renderMenu();
         });
