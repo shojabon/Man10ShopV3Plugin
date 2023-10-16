@@ -2,6 +2,7 @@ package com.shojabon.man10shopv3.menus;
 
 import ToolMenu.CategoricalSInventoryMenu;
 import com.shojabon.man10shopv3.Man10ShopV3;
+import com.shojabon.man10shopv3.menus.action.AgentActionMenu;
 import com.shojabon.mcutils.Utils.BaseUtils;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
@@ -62,6 +63,18 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
             addItem(shopInfo.getString("category"), item);
         }
         //setItems(items);
+    }
+
+    public void afterRenderMenu() {
+        super.afterRenderMenu();
+        if(player.hasPermission("man10shopv2.admin.agent") && !player.hasPermission("man10shopv2.admin.debug")){
+            SInventoryItem debug = new SInventoryItem(new SItemStack(Material.COMMAND_BLOCK).setDisplayName("§c§lデバッグ").build()).clickable(false);
+            debug.setEvent(e -> {
+                new AgentActionMenu(player, plugin).open(player);
+            });
+            setItem(47, debug);
+            renderInventory();
+        }
     }
 
 }

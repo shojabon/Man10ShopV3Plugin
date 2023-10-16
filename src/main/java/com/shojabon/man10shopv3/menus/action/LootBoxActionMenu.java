@@ -81,7 +81,7 @@ public class LootBoxActionMenu extends SInventory {
                     .clone()
             );
             confirm.clickable(false);
-            confirm.setEvent(e -> {
+            confirm.setAsyncEvent(e -> {
                 if(LootBoxPlayMenu.playerInGame.contains(player.getUniqueId())){
                     player.sendMessage(Man10ShopV3.prefix+ "§c§lガチャは同時には回せません");
                     close(player);
@@ -91,7 +91,7 @@ public class LootBoxActionMenu extends SInventory {
 
                 JSONObject data = new JSONObject();
                 data.put("amount", 1);
-                shop.requestQueueTask(player, "shop.order", data);
+                shop.requestQueueTaskLocallyQueued(player, "shop.order", data);
 
                 orderRequested = true;
             });

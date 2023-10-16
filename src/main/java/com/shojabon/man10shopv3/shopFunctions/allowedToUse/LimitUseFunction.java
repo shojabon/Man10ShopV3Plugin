@@ -46,15 +46,17 @@ public class LimitUseFunction extends ShopFunction {
             //confirmation menu
             NumericInputMenu menu = new NumericInputMenu("残り使用回数を設定してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                Object data = JSONObject.NULL;
-                if(number != 0){
-                    data = number;
-                }
-                if(!setVariable(player, "count", data)){
-                    return;
-                }
-                success(player, "回数を設定しました");
-                new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    Object data = JSONObject.NULL;
+                    if(number != 0){
+                        data = number;
+                    }
+                    if(!setVariable(player, "count", data)){
+                        return;
+                    }
+                    success(player, "回数を設定しました");
+                    new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                });
             });
             menu.setOnCancel(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnClose(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));

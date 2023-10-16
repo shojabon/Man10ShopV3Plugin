@@ -159,6 +159,11 @@ public class Man10Shop {
         return result;
     }
 
+    public void requestQueueTaskLocallyQueued(Player p, String key, Object data){
+        QueueRequestObject request = new QueueRequestObject(p, this.getShopId(), key, data);
+        Man10ShopV3.transactionRequestQueue.add(request);
+    }
+
     public JSONObject getMenuInfo(){
         return shopData.getJSONObject("menuInfo");
     }

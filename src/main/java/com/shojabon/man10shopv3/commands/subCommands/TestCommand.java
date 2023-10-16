@@ -31,12 +31,14 @@ public class TestCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        StringBuilder string = new StringBuilder();
-        for(String a: Arrays.copyOfRange(args, 1, args.length)){
-            string.append(a);
+        Player p = (Player) sender;
+        Man10Shop shop = Man10ShopV3.api.getShop("1552ecc3-0cf5-4ba7-b014-3c0e40f3e859", p);
+        for(int i = 0; i < 1000; i++){
+            JSONObject data = new JSONObject();
+            data.put("amount", 1);
+            shop.requestQueueTaskLocallyQueued(p, "shop.order", data);
+            p.sendMessage("Sent request " + i);
         }
-        Bukkit.broadcastMessage(String.valueOf(string));
-        sender.sendMessage(String.valueOf(string));
         return true;
     }
 }

@@ -62,14 +62,14 @@ public class InOutSelectorMenu extends SInventory{
 
         SInventoryItem in = new SInventoryItem(new SItemStack(Material.HOPPER).setDisplayName(new SStringBuilder().gray().bold().text(inText).build()).build());
         in.clickable(false);
-        in.setEvent(e -> {
+        in.setAsyncEvent(e -> {
             if(onInClicked != null) onInClicked.accept(e);
         });
         setItem(11, in);
 
         SInventoryItem out = new SInventoryItem(new SItemStack(Material.DISPENSER).setDisplayName(new SStringBuilder().gray().bold().text(outText).build()).build());
         out.clickable(false);
-        out.setEvent(e -> {
+        out.setAsyncEvent(e -> {
             if(onOutClicked != null) onOutClicked.accept(e);
         });
         setItem(15, out);
