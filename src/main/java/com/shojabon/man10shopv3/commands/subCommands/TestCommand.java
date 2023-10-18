@@ -33,12 +33,15 @@ public class TestCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player p = (Player) sender;
         Man10Shop shop = Man10ShopV3.api.getShop("1552ecc3-0cf5-4ba7-b014-3c0e40f3e859", p);
-        for(int i = 0; i < 1000; i++){
-            JSONObject data = new JSONObject();
-            data.put("amount", 1);
-            shop.requestQueueTaskLocallyQueued(p, "shop.order", data);
-            p.sendMessage("Sent request " + i);
-        }
+        Thread t = new Thread(()->{
+            for(int ii = 0; ii < 1000; ii++){
+                JSONObject data = new JSONObject();
+                data.put("amount", 1);
+                shop.requestQueueTaskLocallyQueued(p, "shop.order", data);
+                p.sendMessage("Sent request " + ii);
+            }
+        });
+        t.start();
         return true;
     }
 }

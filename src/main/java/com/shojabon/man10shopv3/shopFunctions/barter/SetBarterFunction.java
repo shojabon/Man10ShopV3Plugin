@@ -99,15 +99,16 @@ public class SetBarterFunction extends ShopFunction {
             menu.setOnCloseEvent(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
 
             menu.setOnConfirm(items -> {
-                if(!setVariable(player, "requiredItems", itemStackListToJSONArray(items.subList(0, 12)))){
-                    return;
-                }
-                if(!setVariable(player, "resultItems", itemStackListToJSONArray(items.subList(12, 13)))){
-                    warn(player, "ターゲットアイテム設定中に保存が失敗しました、部分的に保存されている可能性があるのでご確認ください。");
-                    return;
-                }
-                new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
-
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "requiredItems", itemStackListToJSONArray(items.subList(0, 12)))){
+                        return;
+                    }
+                    if(!setVariable(player, "resultItems", itemStackListToJSONArray(items.subList(12, 13)))){
+                        warn(player, "ターゲットアイテム設定中に保存が失敗しました、部分的に保存されている可能性があるのでご確認ください。");
+                        return;
+                    }
+                    new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                });
             });
 
             menu.open(player);

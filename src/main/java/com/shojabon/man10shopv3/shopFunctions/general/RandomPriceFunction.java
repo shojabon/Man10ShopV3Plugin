@@ -86,11 +86,13 @@ public class RandomPriceFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("時間を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                if(!setVariable(player, "time", number)){
-                    return;
-                }
-                success(player, "時間を設定しました");
-                getInnerSettingMenu(player, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "time", number)){
+                        return;
+                    }
+                    success(player, "時間を設定しました");
+                    getInnerSettingMenu(player, plugin).open(player);
+                });
             });
             menu.setOnCancel(ee -> getInnerSettingMenu(player, plugin).open(player));
             menu.setOnClose(ee -> getInnerSettingMenu(player, plugin).open(player));
@@ -116,11 +118,13 @@ public class RandomPriceFunction extends ShopFunction {
         setRefillStartingTime.setEvent(e -> {
             TimeSelectorMenu menu = new TimeSelectorMenu(System.currentTimeMillis()/1000L, "最終値段選択時間を設定してくださ", plugin);
             menu.setOnConfirm(lastRefillTimeLocal -> {
-                if(!setVariable(player, "lastRefillTime", lastRefillTimeLocal)){
-                    return;
-                }
-                success(player, "最新の補充開始時間を現在に設定しました");
-                getInnerSettingMenu(player, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "lastRefillTime", lastRefillTimeLocal)){
+                        return;
+                    }
+                    success(player, "最新の補充開始時間を現在に設定しました");
+                    getInnerSettingMenu(player, plugin).open(player);
+                });
             });
             menu.setOnCloseEvent(ee -> getInnerSettingMenu(player, plugin).open(player));
             menu.open(player);

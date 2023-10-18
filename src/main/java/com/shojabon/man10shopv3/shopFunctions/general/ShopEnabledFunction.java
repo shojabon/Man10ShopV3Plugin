@@ -45,10 +45,12 @@ public class ShopEnabledFunction extends ShopFunction {
             menu.setOnClose(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnCancel(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(bool -> {
-                if(!setVariable(player, "enabled", bool)){
-                    return;
-                }
-                new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "enabled", bool)){
+                        return;
+                    }
+                    new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                });
             });
             menu.open(player);
         });

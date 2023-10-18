@@ -36,10 +36,12 @@ public class DeleteShopFunction extends ShopFunction {
             ConfirmationMenu menu = new ConfirmationMenu("確認", plugin);
             menu.setOnCloseEvent(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(ee -> {
-                if(!setVariable(player, "deleted", true)){
-                    return;
-                }
-                menu.close(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "deleted", true)){
+                        return;
+                    }
+                    menu.close(player);
+                });
             });
             menu.open(player);
         });

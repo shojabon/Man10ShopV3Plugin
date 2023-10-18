@@ -77,11 +77,13 @@ public class WeekDayToggleFunction extends ShopFunction {
             WeekdayShopToggleMenu menu = new WeekdayShopToggleMenu(player, shop, plugin);
 
             menu.setAsyncOnCloseEvent(ee -> {
-                if(!setVariable(player, "dates", menu.states)){
-                    return;
-                }
-                success(player, "曜日設定をしました");
-                new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "dates", menu.states)){
+                        return;
+                    }
+                    success(player, "曜日設定をしました");
+                    new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                });
             });
             menu.open(player);
         });

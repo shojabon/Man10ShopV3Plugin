@@ -81,13 +81,15 @@ public class StorageFunction extends ShopFunction {
 
             final int finalBuyingUnits = buyingUnits;
             menu.setOnConfirm(ee -> {
-                JSONObject payload = new JSONObject();
-                payload.put("amount", finalBuyingUnits);
-                if(!requestQueueTask(player, "buy", payload)){
-                    return;
-                }
-                player.sendMessage(Man10ShopV3.prefix + "§a§lストレージを購入しました");
-                new ShopMainMenu(player, shop, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    JSONObject payload = new JSONObject();
+                    payload.put("amount", finalBuyingUnits);
+                    if(!requestQueueTask(player, "buy", payload)){
+                        return;
+                    }
+                    player.sendMessage(Man10ShopV3.prefix + "§a§lストレージを購入しました");
+                    new ShopMainMenu(player, shop, plugin).open(player);
+                });
             });
             menu.open(player);
 

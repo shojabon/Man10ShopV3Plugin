@@ -47,16 +47,18 @@ public class CoolDownFunction extends ShopFunction {
             menu.setOnClose(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnCancel(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(newValue -> {
-                if(newValue < 0){
-                    warn(player, "クールダウンタイムは正の数でなくてはならない");
-                    return;
-                }
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(newValue < 0){
+                        warn(player, "クールダウンタイムは正の数でなくてはならない");
+                        return;
+                    }
 
-                if(!setVariable(player, "seconds", newValue)){
-                    return;
-                }
-                success(player, "クールダウンを設定しました");
-                new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                    if(!setVariable(player, "seconds", newValue)){
+                        return;
+                    }
+                    success(player, "クールダウンを設定しました");
+                    new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                });
             });
             menu.open(player);
 

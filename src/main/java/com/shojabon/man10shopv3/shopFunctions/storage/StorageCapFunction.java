@@ -36,20 +36,22 @@ public class StorageCapFunction extends ShopFunction {
             menu.setOnCloseEvent(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnCancel(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(newValue -> {
-                if(newValue > shop.storageFunction.getStorageSize() && !shop.isAdmin()){
-                    warn(player, "購入制限は倉庫以上の数にはできません");
-                    return;
-                }
-                if(newValue < 0){
-                    warn(player, "購入制限は正の数でなくてはならない");
-                    return;
-                }
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(newValue > shop.storageFunction.getStorageSize() && !shop.isAdmin()){
+                        warn(player, "購入制限は倉庫以上の数にはできません");
+                        return;
+                    }
+                    if(newValue < 0){
+                        warn(player, "購入制限は正の数でなくてはならない");
+                        return;
+                    }
 
-                if(!setVariable(player, "size", newValue)){
-                    return;
-                }
-                success(player, "上限を設定しました");
-                new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                    if(!setVariable(player, "size", newValue)){
+                        return;
+                    }
+                    success(player, "上限を設定しました");
+                    new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                });
             });
             menu.open(player);
 

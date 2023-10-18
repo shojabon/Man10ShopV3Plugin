@@ -60,11 +60,13 @@ public class IpLimitFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("時間を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                if(!setVariable(player, "time", number)){
-                    return;
-                }
-                success(player , "時間を設定しました");
-                getInnerSettingMenu(player, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "time", number)){
+                        return;
+                    }
+                    success(player , "時間を設定しました");
+                    getInnerSettingMenu(player, plugin).open(player);
+                });
             });
             menu.setOnCancel(eee -> getInnerSettingMenu(player, plugin).open(player));
             menu.setOnClose(eee -> getInnerSettingMenu(player, plugin).open(player));
@@ -78,11 +80,13 @@ public class IpLimitFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("アカウント数を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                if(!setVariable(player, "count", number)){
-                    return;
-                }
-                success(player , "個数を設定しました");
-                getInnerSettingMenu(player, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "count", number)){
+                        return;
+                    }
+                    success(player , "個数を設定しました");
+                    getInnerSettingMenu(player, plugin).open(player);
+                });
             });
             menu.setOnCancel(eee -> getInnerSettingMenu(player, plugin).open(player));
             menu.setOnClose(eee -> getInnerSettingMenu(player, plugin).open(player));

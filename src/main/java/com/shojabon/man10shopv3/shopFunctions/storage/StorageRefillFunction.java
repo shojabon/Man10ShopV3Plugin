@@ -77,11 +77,13 @@ public class StorageRefillFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("時間を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                if(!setVariable(player, "minutes", number)){
-                    return;
-                }
-                success(player, "時間を設定しました");
-                getInnerSettingMenu(player, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "minutes", number)){
+                        return;
+                    }
+                    success(player, "時間を設定しました");
+                    getInnerSettingMenu(player, plugin).open(player);
+                });
             });
             menu.setOnCancel(ee -> getInnerSettingMenu(player, plugin).open(player));
             menu.setOnClose(ee -> getInnerSettingMenu(player, plugin).open(player));
@@ -98,11 +100,13 @@ public class StorageRefillFunction extends ShopFunction {
         setRefillStartingTime.setEvent(e -> {
             TimeSelectorMenu menu = new TimeSelectorMenu(getLastRefillTime(), "最終補充時間を設定してくださ", plugin);
             menu.setOnConfirm(lastRefillTimeLocal -> {
-                if(!setVariable(player, "lastRefillTime", lastRefillTimeLocal)){
-                    return;
-                }
-                success(player, "最新の補充開始時間を現在に設定しました");
-                getInnerSettingMenu(player, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "lastRefillTime", lastRefillTimeLocal)){
+                        return;
+                    }
+                    success(player, "最新の補充開始時間を現在に設定しました");
+                    getInnerSettingMenu(player, plugin).open(player);
+                });
             });
             menu.setOnCloseEvent(ee -> getInnerSettingMenu(player, plugin).open(player));
             menu.open(player);
@@ -113,10 +117,12 @@ public class StorageRefillFunction extends ShopFunction {
                 .addLore("§f補充スケジュールは保持したままアイテムを補充する").build());
         forceRefill.clickable(false);
         forceRefill.setEvent(e -> {
-            if(!setVariable(player, "itemLeft", getAmount())){
-                return;
-            }
-            success(player, "在庫を補充しました");
+            Man10ShopV3.threadPool.submit(() -> {
+                if(!setVariable(player, "itemLeft", getAmount())){
+                    return;
+                }
+                success(player, "在庫を補充しました");
+            });
         });
 
 
@@ -126,11 +132,13 @@ public class StorageRefillFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("個数を入力してください 0はoff", plugin);
             menu.setOnConfirm(number -> {
-                if(!setVariable(player, "amount", number)){
-                    return;
-                }
-                success(player, "個数を設定しました");
-                getInnerSettingMenu(player, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "amount", number)){
+                        return;
+                    }
+                    success(player, "個数を設定しました");
+                    getInnerSettingMenu(player, plugin).open(player);
+                });
             });
             menu.setOnCancel(ee -> getInnerSettingMenu(player, plugin).open(player));
             menu.setOnClose(ee -> getInnerSettingMenu(player, plugin).open(player));

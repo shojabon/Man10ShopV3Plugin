@@ -37,15 +37,18 @@ public class NameFunction extends ShopFunction {
         item.setAsyncEvent(e -> {
             SLongTextInput textInput = new SLongTextInput("§d§lカテゴリ名を入力してください 空白の場合はその他になります", plugin);
             textInput.setOnConfirm(categoryName -> {
-                if(categoryName.length() > 64){
-                    warn(player, "ショップ名は64文字以内でなくてはなりません");
-                    return;
-                }
-                if(categoryName.length() == 0) categoryName = "その他";
-                if(!setVariable(player, "name", categoryName)){
-                    return;
-                }
-                success(player, "名前を変更しました");
+                Man10ShopV3.threadPool.submit(() -> {
+                    String categoryNameFinal = categoryName;
+                    if(categoryNameFinal.length() > 64){
+                        warn(player, "ショップ名は64文字以内でなくてはなりません");
+                        return;
+                    }
+                    if(categoryNameFinal.isEmpty()) categoryNameFinal = "その他";
+                    if(!setVariable(player, "name", categoryNameFinal)){
+                        return;
+                    }
+                    success(player, "名前を変更しました");
+                });
             });
 
             textInput.setOnCancel(ee -> warn(player, "キャンセルしました"));

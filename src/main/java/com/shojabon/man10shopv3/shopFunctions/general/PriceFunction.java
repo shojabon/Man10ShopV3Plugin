@@ -52,10 +52,12 @@ public class PriceFunction extends ShopFunction {
             menu.setOnClose(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnCancel(ee -> new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player));
             menu.setOnConfirm(newValue -> {
-                if(!setVariable(player, "price", newValue)){
-                    return;
-                }
-                new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "price", newValue)){
+                        return;
+                    }
+                    new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
+                });
             });
             menu.open(player);
 

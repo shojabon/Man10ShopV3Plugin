@@ -60,16 +60,18 @@ public class ShopTypeFunction extends ShopFunction {
             SInventoryItem mode = new SInventoryItem(new SItemStack(type.settingItem).setDisplayName("§a§l" + type.displayName).build());
             mode.clickable(false);
             mode.setAsyncEvent(e -> {
-                JSONObject object = shop.setVariable(player, "shopType", type.name());
-                if(!object.getString("status").equals("success")){
-                    warn(player, object.getString("message"));
-                    return;
-                }
-                player.sendMessage(Man10ShopV3.prefix + "§a§lショップタイプが設定されました");
-                player.getServer().getScheduler().runTask(plugin, ()-> {
-                    SInventory.closeInventoryGroup(UUID.fromString(shop.getShopId()), plugin);
+                Man10ShopV3.threadPool.submit(() -> {
+                    JSONObject object = shop.setVariable(player, "shopType", type.name());
+                    if(!object.getString("status").equals("success")){
+                        warn(player, object.getString("message"));
+                        return;
+                    }
+                    player.sendMessage(Man10ShopV3.prefix + "§a§lショップタイプが設定されました");
+                    player.getServer().getScheduler().runTask(plugin, ()-> {
+                        SInventory.closeInventoryGroup(UUID.fromString(shop.getShopId()), plugin);
+                    });
+                    new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
                 });
-                new SettingsMainMenu(player, shop, getDefinition().category(), plugin).open(player);
             });
             menu.addItem(mode);
         }

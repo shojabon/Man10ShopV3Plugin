@@ -80,11 +80,13 @@ public class LootBoxPaymentFunction extends ShopFunction {
 
             NumericInputMenu menu = new NumericInputMenu("金額を設定してください", plugin);
             menu.setOnConfirm(number -> {
-                if(!setVariable(player, "cash", number)){
-                    return;
-                }
-                success(player, "値段を設定しました");
-                getInnerSettingMenu(player, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!setVariable(player, "cash", number)){
+                        return;
+                    }
+                    success(player, "値段を設定しました");
+                    getInnerSettingMenu(player, plugin).open(player);
+                });
             });
             menu.setOnCancel(eee -> getInnerSettingMenu(player, plugin).open(player));
             menu.setOnClose(eee -> getInnerSettingMenu(player, plugin).open(player));
@@ -105,15 +107,17 @@ public class LootBoxPaymentFunction extends ShopFunction {
             SingleItemStackSelectorMenu menu = new SingleItemStackSelectorMenu("支払いアイテム選択", getItem(), plugin);
             menu.allowNullItem(true);
             menu.setOnConfirm(item -> {
-                Object payload = JSONObject.NULL;
-                if(item != null){
-                    payload = Man10ShopV3API.itemStackToJSON(item);
-                }
-                if(!setVariable(player, "item", payload)){
-                    return;
-                }
-                success(player, "支払いアイテムを設定しました");
-                getInnerSettingMenu(player, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    Object payload = JSONObject.NULL;
+                    if(item != null){
+                        payload = Man10ShopV3API.itemStackToJSON(item);
+                    }
+                    if(!setVariable(player, "item", payload)){
+                        return;
+                    }
+                    success(player, "支払いアイテムを設定しました");
+                    getInnerSettingMenu(player, plugin).open(player);
+                });
             });
 
             menu.setOnCloseEvent(eee -> getInnerSettingMenu(player, plugin).open(player));

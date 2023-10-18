@@ -41,16 +41,19 @@ public class CategoryFunction extends ShopFunction {
             //text input
             SLongTextInput textInput = new SLongTextInput("§d§lカテゴリ名を入力してください 空白の場合はその他になります", plugin);
             textInput.setOnConfirm(categoryName -> {
-                if(categoryName.length() > 64){
-                    warn(player, "ショップ名は64文字以内でなくてはなりません");
-                    return;
-                }
-                if(categoryName.length() == 0) categoryName = "その他";
-                if(!setVariable(player, "category", categoryName)){
-                    warn(player, "内部エラーが発生しました");
-                    return;
-                }
-                success(player, "カテゴリを変更しました");
+                Man10ShopV3.threadPool.submit(() -> {
+                    String categoryNameFinal = categoryName;
+                    if(categoryNameFinal.length() > 64){
+                        warn(player, "ショップ名は64文字以内でなくてはなりません");
+                        return;
+                    }
+                    if(categoryNameFinal.isEmpty()) categoryNameFinal = "その他";
+                    if(!setVariable(player, "category", categoryNameFinal)){
+                        warn(player, "内部エラーが発生しました");
+                        return;
+                    }
+                    success(player, "カテゴリを変更しました");
+                });
             });
 
             textInput.setOnCancel(ee -> warn(player, "キャンセルしました"));

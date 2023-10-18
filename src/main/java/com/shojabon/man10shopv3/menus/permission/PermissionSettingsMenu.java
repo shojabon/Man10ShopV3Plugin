@@ -140,11 +140,13 @@ public class PermissionSettingsMenu extends SInventory{
             //confirmation
             ConfirmationMenu menu = new ConfirmationMenu("確認", plugin);
             menu.setOnConfirm(ee -> {
-                if(!shop.permissionFunction.removeModerator(target)){
-                    return;
-                }
-                new PermissionSettingsMainMenu(player, shop, plugin).open(player);
-                player.sendMessage(Man10ShopV3.prefix + "§c§a" + target.name + "を消去しました");
+                Man10ShopV3.threadPool.submit(() -> {
+                    if(!shop.permissionFunction.removeModerator(target)){
+                        return;
+                    }
+                    new PermissionSettingsMainMenu(player, shop, plugin).open(player);
+                    player.sendMessage(Man10ShopV3.prefix + "§c§a" + target.name + "を消去しました");
+                });
             });
 
             menu.setOnCancel(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
@@ -191,17 +193,19 @@ public class PermissionSettingsMenu extends SInventory{
 
             BooleanInputMenu boolMenu = new BooleanInputMenu(target.notificationEnabled, "設定を変更しますか？", plugin);
             boolMenu.setOnConfirm(bool -> {
-                Man10ShopModerator moderator = shop.permissionFunction.getModerator(target.uuid);
-                if(moderator == null){
-                    player.sendMessage(Man10ShopV3.prefix + "§c§l内部エラーが発生しました");
-                    return;
-                }
-                moderator.notificationEnabled = bool;
-                if(!shop.permissionFunction.addModerator(moderator)){
-                    return;
-                }
-                player.sendMessage(Man10ShopV3.prefix + "§a§l通知設定を設定しました");
-                new PermissionSettingsMenu(player, shop, target, plugin).open(player);
+                Man10ShopV3.threadPool.submit(() -> {
+                    Man10ShopModerator moderator = shop.permissionFunction.getModerator(target.uuid);
+                    if(moderator == null){
+                        player.sendMessage(Man10ShopV3.prefix + "§c§l内部エラーが発生しました");
+                        return;
+                    }
+                    moderator.notificationEnabled = bool;
+                    if(!shop.permissionFunction.addModerator(moderator)){
+                        return;
+                    }
+                    player.sendMessage(Man10ShopV3.prefix + "§a§l通知設定を設定しました");
+                    new PermissionSettingsMenu(player, shop, target, plugin).open(player);
+                });
             });
             boolMenu.setOnCancel(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
             boolMenu.setOnClose(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
