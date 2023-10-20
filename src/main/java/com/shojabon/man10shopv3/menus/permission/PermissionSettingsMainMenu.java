@@ -77,7 +77,7 @@ public class PermissionSettingsMainMenu extends LargeSInventoryMenu{
 
                 ConfirmationMenu menu = new ConfirmationMenu("§a" + targetPlayer.getName() + "を管理者にしますか？", plugin);
                 menu.setOnConfirm(ee -> {
-                    if(!shop.permissionFunction.addModerator(new Man10ShopModerator(targetPlayer.getName(), targetPlayer.getUniqueId(), "STORAGE_ACCESS", true))){
+                    if(!shop.permissionFunction.addModerator(new Man10ShopModerator(targetPlayer.getName(), targetPlayer.getUniqueId(), "ALLOWED_TO_USE", true))){
                         return;
                     }
                     player.sendMessage(Man10ShopV3.prefix + "§a§l管理者を追加しました");

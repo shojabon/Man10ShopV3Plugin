@@ -108,7 +108,7 @@ public class PermissionFunction extends ShopFunction {
         return setVariable(null, "users", permissionList);
     }
 
-    public String getPermissionString(String permission){
+    public static String getPermissionString(String permission){
         if(permission == null) return "エラー";
         switch (permission){
             case "OWNER":
@@ -119,6 +119,10 @@ public class PermissionFunction extends ShopFunction {
                 return "会計";
             case "STORAGE_ACCESS":
                 return "倉庫編集権";
+            case "ALLOWED_TO_USE":
+                return "ショップ使用許可";
+            case "BANNED":
+                return "ショップ使用禁止";
         }
         return "エラー";
     }

@@ -3,6 +3,7 @@ package com.shojabon.man10shopv3.menus;
 import ToolMenu.CategoricalSInventoryMenu;
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.menus.action.AgentActionMenu;
+import com.shojabon.man10shopv3.shopFunctions.PermissionFunction;
 import com.shojabon.mcutils.Utils.BaseUtils;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
@@ -49,7 +50,7 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
             icon.setCustomModelData(iconData.getInt("customModelData"));
             icon.setDisplayName(new SStringBuilder().green().bold().text(shopInfo.getString("name")).build());
             icon.addLore("§d§lショップタイプ: " + shopInfo.getString("shopType"));
-            icon.addLore(new SStringBuilder().lightPurple().bold().text("権限: ").yellow().bold().text(shopInfo.getString("permission")).build());
+            icon.addLore(new SStringBuilder().lightPurple().bold().text("権限: ").yellow().bold().text(PermissionFunction.getPermissionString(shopInfo.getString("permission"))).build());
             icon.addLore("");
             icon.addLore(new SStringBuilder().red().bold().text("在庫: ").yellow().bold().text(BaseUtils.priceString(shopInfo.getInt("itemCount"))).text("個").build());
             icon.addLore(new SStringBuilder().red().bold().text("残金: ").yellow().bold().text(BaseUtils.priceString(shopInfo.getInt("money"))).text("円").build());

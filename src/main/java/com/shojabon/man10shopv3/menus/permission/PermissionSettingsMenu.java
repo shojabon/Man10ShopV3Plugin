@@ -24,13 +24,17 @@ public class PermissionSettingsMenu extends SInventory{
     Player player;
     Man10ShopModerator target;
 
-    String[] permissions = new String[]{"OWNER",
+    String[] permissions = new String[]{
+            "OWNER",
             "MODERATOR",
             "ACCOUNTANT",
-            "STORAGE_ACCESS"};
-    int[] slots = new int[]{20, 21, 22, 23};
+            "STORAGE_ACCESS",
+            "ALLOWED_TO_USE",
+            "BANNED"
+    };
+    int[] slots = new int[]{19, 20, 21, 22, 23, 24};
 
-    int deleteUserSlot = 25;
+    int deleteUserSlot = 35;
 
     public PermissionSettingsMenu(Player p, Man10Shop shop, Man10ShopModerator target, Man10ShopV3 plugin){
         super(new SStringBuilder().red().text(target.name).text("の権限設定").build(), 4, plugin);
@@ -119,6 +123,13 @@ public class PermissionSettingsMenu extends SInventory{
         storageAccess.clickable(false);
         setItem(slots[3]-9, storageAccess);
 
+        SInventoryItem allowedToUse = new SInventoryItem(new SItemStack(Material.IRON_BLOCK).setDisplayName(new SStringBuilder().gray().bold().text("利用権限").build()).build());
+        allowedToUse.clickable(false);
+        setItem(slots[4]-9, allowedToUse);
+
+        SInventoryItem banned = new SInventoryItem(new SItemStack(Material.BARRIER).setDisplayName(new SStringBuilder().red().bold().text("ショップ使用禁止").build()).build());
+        banned.clickable(false);
+        setItem(slots[5]-9, banned);
 
 
         //delete item
@@ -162,58 +173,58 @@ public class PermissionSettingsMenu extends SInventory{
 
     }
 
-    public void renderNotification(){
-        SInventoryItem notification = new SInventoryItem(new SItemStack(Material.BELL).setDisplayName(new SStringBuilder().gold().bold().text("通知設定").build()).build());
-        notification.clickable(false);
-        setItem(10, notification);
+//    public void renderNotification(){
+//        SInventoryItem notification = new SInventoryItem(new SItemStack(Material.BELL).setDisplayName(new SStringBuilder().gold().bold().text("通知設定").build()).build());
+//        notification.clickable(false);
+//        setItem(10, notification);
+//
+//        SInventoryItem enabled = new SInventoryItem(new SItemStack(Material.LIME_STAINED_GLASS_PANE).setDisplayName(new SStringBuilder().green().bold().text("有効").build()).build());
+//        enabled.clickable(false);
+//        enabled.setAsyncEvent(renderNotificationEvent());
+//
+//        SInventoryItem disabled = new SInventoryItem(new SItemStack(Material.RED_STAINED_GLASS_PANE).setDisplayName(new SStringBuilder().red().bold().text("無効").build()).build());
+//        disabled.clickable(false);
+//        disabled.setAsyncEvent(renderNotificationEvent());
+//
+//        if(target.notificationEnabled){
+//            setItem(19, enabled);
+//        }else{
+//            setItem(19, disabled);
+//        }
+//
+//    }
 
-        SInventoryItem enabled = new SInventoryItem(new SItemStack(Material.LIME_STAINED_GLASS_PANE).setDisplayName(new SStringBuilder().green().bold().text("有効").build()).build());
-        enabled.clickable(false);
-        enabled.setAsyncEvent(renderNotificationEvent());
-
-        SInventoryItem disabled = new SInventoryItem(new SItemStack(Material.RED_STAINED_GLASS_PANE).setDisplayName(new SStringBuilder().red().bold().text("無効").build()).build());
-        disabled.clickable(false);
-        disabled.setAsyncEvent(renderNotificationEvent());
-
-        if(target.notificationEnabled){
-            setItem(19, enabled);
-        }else{
-            setItem(19, disabled);
-        }
-
-    }
-
-    public Consumer<InventoryClickEvent> renderNotificationEvent(){
-        return e -> {
-            if(!target.uuid.equals(player.getUniqueId())){
-                player.sendMessage(Man10ShopV3.prefix + "§c§lこの設定は本人のみ編集可能です");
-                return;
-            }
-
-
-            BooleanInputMenu boolMenu = new BooleanInputMenu(target.notificationEnabled, "設定を変更しますか？", plugin);
-            boolMenu.setOnConfirm(bool -> {
-                Man10ShopV3.threadPool.submit(() -> {
-                    Man10ShopModerator moderator = shop.permissionFunction.getModerator(target.uuid);
-                    if(moderator == null){
-                        player.sendMessage(Man10ShopV3.prefix + "§c§l内部エラーが発生しました");
-                        return;
-                    }
-                    moderator.notificationEnabled = bool;
-                    if(!shop.permissionFunction.addModerator(moderator)){
-                        return;
-                    }
-                    player.sendMessage(Man10ShopV3.prefix + "§a§l通知設定を設定しました");
-                    new PermissionSettingsMenu(player, shop, target, plugin).open(player);
-                });
-            });
-            boolMenu.setOnCancel(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
-            boolMenu.setOnClose(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
-
-            boolMenu.open(player);
-
-        };
-    }
+//    public Consumer<InventoryClickEvent> renderNotificationEvent(){
+//        return e -> {
+//            if(!target.uuid.equals(player.getUniqueId())){
+//                player.sendMessage(Man10ShopV3.prefix + "§c§lこの設定は本人のみ編集可能です");
+//                return;
+//            }
+//
+//
+//            BooleanInputMenu boolMenu = new BooleanInputMenu(target.notificationEnabled, "設定を変更しますか？", plugin);
+//            boolMenu.setOnConfirm(bool -> {
+//                Man10ShopV3.threadPool.submit(() -> {
+//                    Man10ShopModerator moderator = shop.permissionFunction.getModerator(target.uuid);
+//                    if(moderator == null){
+//                        player.sendMessage(Man10ShopV3.prefix + "§c§l内部エラーが発生しました");
+//                        return;
+//                    }
+//                    moderator.notificationEnabled = bool;
+//                    if(!shop.permissionFunction.addModerator(moderator)){
+//                        return;
+//                    }
+//                    player.sendMessage(Man10ShopV3.prefix + "§a§l通知設定を設定しました");
+//                    new PermissionSettingsMenu(player, shop, target, plugin).open(player);
+//                });
+//            });
+//            boolMenu.setOnCancel(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
+//            boolMenu.setOnClose(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
+//
+//            boolMenu.open(player);
+//
+//        };
+//    }
 
     public void renderMenu(){
         SInventoryItem background = new SInventoryItem(new SItemStack(Material.BLUE_STAINED_GLASS_PANE).setDisplayName(" ").build());
@@ -222,7 +233,7 @@ public class PermissionSettingsMenu extends SInventory{
 
         renderSelector();
         renderIcons();
-        renderNotification();
+//        renderNotification();
 
         setOnCloseEvent(e -> new PermissionSettingsMainMenu(player, shop, plugin).open(player));
     }
