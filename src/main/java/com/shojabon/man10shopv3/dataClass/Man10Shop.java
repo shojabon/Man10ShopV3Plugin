@@ -6,10 +6,7 @@ import com.shojabon.man10shopv3.menus.action.BarterActionMenu;
 import com.shojabon.man10shopv3.menus.action.BuySellActionMenu;
 import com.shojabon.man10shopv3.menus.action.LootBoxActionMenu;
 import com.shojabon.man10shopv3.shopFunctions.*;
-import com.shojabon.man10shopv3.shopFunctions.allowedToUse.DisabledFromFunction;
-import com.shojabon.man10shopv3.shopFunctions.allowedToUse.EnabledFromFunction;
-import com.shojabon.man10shopv3.shopFunctions.allowedToUse.LimitUseFunction;
-import com.shojabon.man10shopv3.shopFunctions.allowedToUse.WeekDayToggleFunction;
+import com.shojabon.man10shopv3.shopFunctions.allowedToUse.*;
 import com.shojabon.man10shopv3.shopFunctions.barter.SetBarterFunction;
 import com.shojabon.man10shopv3.shopFunctions.general.*;
 import com.shojabon.man10shopv3.shopFunctions.lootBox.LootBoxBigWinFunction;
@@ -64,6 +61,8 @@ public class Man10Shop {
     public DisabledFromFunction disabledFromFunction;
     public EnabledFromFunction enabledFromFunction;
     public WeekDayToggleFunction weekDayToggleFunction;
+
+    public MemberShopModeFunction memberShopModeFunction;
 
     // storage
 
