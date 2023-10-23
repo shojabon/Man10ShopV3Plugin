@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 @ShopFunctionDefinition(
         internalFunctionName = "memberShopMode",
         name = "メンバーショップ有効化設定",
-        explanation = {},
+        explanation = {"使用許可以上の権限があるユーザーのみがショップを使用できるようになります"},
         enabledShopType = {},
         iconMaterial = Material.IRON_TRAPDOOR,
         category = "使用可条件設定",

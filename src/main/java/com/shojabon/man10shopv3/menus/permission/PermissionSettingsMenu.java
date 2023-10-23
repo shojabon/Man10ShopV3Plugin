@@ -123,7 +123,7 @@ public class PermissionSettingsMenu extends SInventory{
         storageAccess.clickable(false);
         setItem(slots[3]-9, storageAccess);
 
-        SInventoryItem allowedToUse = new SInventoryItem(new SItemStack(Material.IRON_BLOCK).setDisplayName(new SStringBuilder().gray().bold().text("利用権限").build()).build());
+        SInventoryItem allowedToUse = new SInventoryItem(new SItemStack(Material.IRON_BLOCK).setDisplayName(new SStringBuilder().gray().bold().text("ショップ使用許可").build()).build());
         allowedToUse.clickable(false);
         setItem(slots[4]-9, allowedToUse);
 
