@@ -112,6 +112,12 @@ public class Man10ShopV3API {
         return result;
     }
 
+    public JSONObject withdrawBuyShopMoney(Player p){
+        JSONObject payload = new JSONObject();
+        payload.put("player", getPlayerJSON(p));
+        return httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/withdraw_buy_shop_money", "POST", payload);
+    }
+
     public Man10Shop getShopFromSign(Player p, Location loc){
         JSONObject data = new JSONObject();
         data.put("server", Man10ShopV3.config.getString("serverName"));
@@ -145,6 +151,8 @@ public class Man10ShopV3API {
         itemData.put("customModelData", sItemStack.getCustomModelData());
         return itemData;
     }
+
+
     public static ItemStack JSONToItemStack(JSONObject data){
         SItemStack sItemStack = SItemStack.fromBase64(data.getString("typeBase64"));
         sItemStack.setAmount(data.getInt("amount"));
