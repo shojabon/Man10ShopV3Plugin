@@ -13,6 +13,8 @@ public @interface ShopFunctionDefinition {
     String name() default "無名";
     Material iconMaterial() default Material.DIAMOND;
     boolean isAdminSetting() default true;
+
+    boolean isAgentSetting() default false;
     String[] explanation() default {};
     String category() default "一般設定";
     String[] enabledShopType() default {};

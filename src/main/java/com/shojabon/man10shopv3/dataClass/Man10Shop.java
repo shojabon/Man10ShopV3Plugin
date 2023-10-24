@@ -57,6 +57,8 @@ public class Man10Shop {
     public RandomPriceFunction randomPriceFunction;
     public CategoryFunction categoryFunction;
 
+    public SetMoneyFunction setMoneyFunction;
+
 
     // allowed to use
     public DisabledFromFunction disabledFromFunction;

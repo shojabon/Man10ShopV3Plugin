@@ -47,6 +47,7 @@ public class SettingsMainMenu extends CategoricalSInventoryMenu {
             if(!func.getClass().isAnnotationPresent(ShopFunctionDefinition.class)) continue;
             ShopFunctionDefinition shopFunctionDefinition = func.getClass().getAnnotation(ShopFunctionDefinition.class);
             if(!shop.isAdmin() && shopFunctionDefinition.isAdminSetting())  continue; //if admin function
+            if(!player.hasPermission("man10shopv2.admin.agent") && shopFunctionDefinition.isAgentSetting()) continue;
 
             SInventoryItem item = func.getSettingItem(player, func.getSettingBaseItem()); //get setting item icon
             if(item == null)continue;
