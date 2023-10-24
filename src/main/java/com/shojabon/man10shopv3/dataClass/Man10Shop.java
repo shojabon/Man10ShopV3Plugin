@@ -12,6 +12,7 @@ import com.shojabon.man10shopv3.shopFunctions.general.*;
 import com.shojabon.man10shopv3.shopFunctions.lootBox.LootBoxBigWinFunction;
 import com.shojabon.man10shopv3.shopFunctions.lootBox.LootBoxGroupFunction;
 import com.shojabon.man10shopv3.shopFunctions.lootBox.LootBoxPaymentFunction;
+import com.shojabon.man10shopv3.shopFunctions.storage.PerPlayerStorageRefillFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageCapFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageRefillFunction;
@@ -69,6 +70,8 @@ public class Man10Shop {
     public StorageFunction storageFunction;
     public StorageCapFunction storageCapFunction;
     public StorageRefillFunction storageRefillFunction;
+
+    public PerPlayerStorageRefillFunction perPlayerStorageRefillFunction;
 
     // trade amount
 
