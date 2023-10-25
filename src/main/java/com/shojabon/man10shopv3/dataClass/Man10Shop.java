@@ -56,8 +56,9 @@ public class Man10Shop {
     public IpLimitFunction ipLimitFunction;
     public RandomPriceFunction randomPriceFunction;
     public CategoryFunction categoryFunction;
-
     public SetMoneyFunction setMoneyFunction;
+
+    public SetItemCountFunction setItemCountFunction;
 
 
     // allowed to use
