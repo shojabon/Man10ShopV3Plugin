@@ -59,6 +59,7 @@ public class Man10Shop {
     public SetMoneyFunction setMoneyFunction;
     public SetItemCountFunction setItemCountFunction;
     public MoneyRefillFunction moneyRefillFunction;
+    public ItemRefillFunction itemRefillFunction;
 
 
     // allowed to use
