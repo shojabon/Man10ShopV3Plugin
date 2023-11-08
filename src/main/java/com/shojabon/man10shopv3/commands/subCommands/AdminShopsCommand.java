@@ -30,13 +30,18 @@ public class AdminShopsCommand implements CommandExecutor {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () ->{
             Player player = (Player) sender;
 
-            JSONObject result = Man10ShopV3.api.getPlayerShops(player);
+            String searchQuery = null;
+            if(args.length == 2){
+                searchQuery = args[1];
+            }
+
+            JSONObject result = Man10ShopV3.api.getPlayerShops(player, searchQuery);
             if(!result.getString("status").equals("success")){
                 Man10ShopV3API.warnMessage(player, result.getString("message"));
                 return;
             }
 
-            AdminShopSelectorMenu menu = new AdminShopSelectorMenu(player, "その他", plugin);
+            AdminShopSelectorMenu menu = new AdminShopSelectorMenu(player, "その他", searchQuery, plugin);
 
             menu.setOnClick(shopId -> {
                 Man10Shop shopInfo = Man10ShopV3.api.getShop(shopId, player);

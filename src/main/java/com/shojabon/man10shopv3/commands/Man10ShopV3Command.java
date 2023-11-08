@@ -55,7 +55,26 @@ public class Man10ShopV3Command extends SCommandRouter {
 
         addCommand(
                 new SCommandObject()
+                        .prefix("shops")
+                        .argument("検索キーワード")
+
+                        .permission("man10shopv3.shops")
+                        .explanation("編集可能なショップを開く")
+                        .executor(new ShopsCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
                         .prefix("adminShops")
+                        .permission("man10shopv3.admin.shops")
+                        .explanation("アドミンショップをショップを開く")
+                        .executor(new AdminShopsCommand(plugin))
+        );
+
+        addCommand(
+                new SCommandObject()
+                        .prefix("adminShops")
+                        .argument("検索キーワード")
                         .permission("man10shopv3.admin.shops")
                         .explanation("アドミンショップをショップを開く")
                         .executor(new AdminShopsCommand(plugin))

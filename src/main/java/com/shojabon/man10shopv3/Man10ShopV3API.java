@@ -92,8 +92,13 @@ public class Man10ShopV3API {
     }
 
     public JSONObject getPlayerShops(Player p){
+        return getPlayerShops(p, null);
+    }
+
+    public JSONObject getPlayerShops(Player p, String searchQuery){
         JSONObject payload = new JSONObject();
         payload.put("player", getPlayerJSON(p));
+        if(searchQuery != null) payload.put("searchQuery", searchQuery);
         return httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/list", "POST", payload);
     }
 
@@ -104,10 +109,15 @@ public class Man10ShopV3API {
         payload.put("name", name);
         return httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/create", "POST", payload);
     }
+
     public JSONObject getAdminShops(Player p){
+        return getAdminShops(p, null);
+    }
+    public JSONObject getAdminShops(Player p, String searchQuery){
         Map<String, Object> payload = new HashMap<>();
         payload.put("player", getPlayerJSON(p));
         payload.put("admin", true);
+        if(searchQuery != null) payload.put("searchQuery", searchQuery);
         JSONObject result = httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/list", "POST", new JSONObject(payload));
         return result;
     }

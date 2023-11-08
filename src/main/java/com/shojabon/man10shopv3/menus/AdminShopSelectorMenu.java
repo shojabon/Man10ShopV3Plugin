@@ -2,6 +2,7 @@ package com.shojabon.man10shopv3.menus;
 
 import ToolMenu.CategoricalSInventoryMenu;
 import com.shojabon.man10shopv3.Man10ShopV3;
+import com.shojabon.man10shopv3.commands.subCommands.AdminShopsCommand;
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
@@ -21,12 +22,19 @@ public class AdminShopSelectorMenu extends CategoricalSInventoryMenu {
     Consumer<String> onClick = null;
     JSONObject adminShopRequests;
 
+    String searchQuery = null;
+
     public AdminShopSelectorMenu(Player p, String startingCategory, Man10ShopV3 plugin){
+        this(p, startingCategory, null, plugin);
+    }
+
+    public AdminShopSelectorMenu(Player p, String startingCategory, String searchQuery, Man10ShopV3 plugin){
         super(new SStringBuilder().aqua().bold().text("管理可能ショップ一覧").build(), startingCategory, plugin);
+        this.searchQuery = searchQuery;
         this.player = p;
         this.plugin = plugin;
 
-        adminShopRequests = Man10ShopV3.api.getAdminShops(player);
+        adminShopRequests = Man10ShopV3.api.getAdminShops(player, searchQuery);
     }
 
     public void setOnClick(Consumer<String> event){
@@ -34,7 +42,10 @@ public class AdminShopSelectorMenu extends CategoricalSInventoryMenu {
     }
 
     public void renderMenu(){
-        addInitializedCategory("その他");
+        String defaultCategory = "検索結果: " + searchQuery;
+        if(searchQuery == null) defaultCategory = "その他";
+        addInitializedCategory(defaultCategory);
+
         if(adminShopRequests == null) return;
         JSONArray shops = adminShopRequests.getJSONArray("data");
         for(int i = 0; i < shops.length(); i++){
@@ -51,7 +62,11 @@ public class AdminShopSelectorMenu extends CategoricalSInventoryMenu {
                 if(onClick != null) onClick.accept(shopInfo.getString("shopId"));
             });
 
-            addItem(shopInfo.getString("category"), item);
+            if(searchQuery != null){
+                addItem(defaultCategory, item);
+            }else{
+                addItem(shopInfo.getString("category"), item);
+            }
         }
     }
 

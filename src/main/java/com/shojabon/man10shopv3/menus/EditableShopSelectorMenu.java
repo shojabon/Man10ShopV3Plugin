@@ -21,14 +21,20 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
     Man10ShopV3 plugin;
     Player player;
     Consumer<String> onClick = null;
+    String searchQuery = null;
 
     JSONObject playerShopsRequest;
 
     public EditableShopSelectorMenu(Player p, String startingCategory, Man10ShopV3 plugin){
+        this(p, startingCategory, null, plugin);
+    }
+
+    public EditableShopSelectorMenu(Player p, String startingCategory, String searchQuery, Man10ShopV3 plugin){
         super(new SStringBuilder().aqua().bold().text("管理可能ショップ一覧").build(), startingCategory, plugin);
         this.player = p;
         this.plugin = plugin;
-        this.playerShopsRequest = Man10ShopV3.api.getPlayerShops(player);
+        this.searchQuery = searchQuery;
+        this.playerShopsRequest = Man10ShopV3.api.getPlayerShops(player, searchQuery);
         sort(true);
 
     }
@@ -38,11 +44,15 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
     }
 
     public void renderMenu(){
-        addInitializedCategory("その他");
+        String defaultCategory = "検索結果: " + searchQuery;
+        if(searchQuery == null) defaultCategory = "その他";
+        addInitializedCategory(defaultCategory);
+
         if(playerShopsRequest == null) return;
 
         JSONArray shops = playerShopsRequest.getJSONArray("data");
         for(int i = 0; i < shops.length(); i++){
+
             JSONObject shopInfo = shops.getJSONObject(i);
 
             JSONObject iconData = shopInfo.getJSONObject("icon");
@@ -61,7 +71,11 @@ public class EditableShopSelectorMenu extends CategoricalSInventoryMenu {
                 if(onClick != null) onClick.accept(shopInfo.getString("shopId"));
             });
 
-            addItem(shopInfo.getString("category"), item);
+            if(searchQuery != null){
+                addItem(defaultCategory, item);
+            }else{
+                addItem(shopInfo.getString("category"), item);
+            }
         }
         //setItems(items);
     }
