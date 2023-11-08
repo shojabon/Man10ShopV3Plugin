@@ -38,11 +38,11 @@ public class ShopsCommand implements CommandExecutor {
                 searchQuery = args[1];
             }
 
-            JSONObject result = Man10ShopV3.api.getPlayerShops(player, searchQuery);
-            if(!result.getString("status").equals("success")){
-                Man10ShopV3API.warnMessage(player, result.getString("message"));
-                return;
-            }
+//            JSONObject result = Man10ShopV3.api.getPlayerShops(player, searchQuery);
+//            if(!result.getString("status").equals("success")){
+//                Man10ShopV3API.warnMessage(player, result.getString("message"));
+//                return;
+//            }
 
             EditableShopSelectorMenu menu = new EditableShopSelectorMenu(player, "その他", searchQuery, plugin);
 

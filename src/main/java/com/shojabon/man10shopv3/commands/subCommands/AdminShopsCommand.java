@@ -35,11 +35,11 @@ public class AdminShopsCommand implements CommandExecutor {
                 searchQuery = args[1];
             }
 
-            JSONObject result = Man10ShopV3.api.getPlayerShops(player, searchQuery);
-            if(!result.getString("status").equals("success")){
-                Man10ShopV3API.warnMessage(player, result.getString("message"));
-                return;
-            }
+//            JSONObject result = Man10ShopV3.api.getPlayerShops(player, searchQuery);
+//            if(!result.getString("status").equals("success")){
+//                Man10ShopV3API.warnMessage(player, result.getString("message"));
+//                return;
+//            }
 
             AdminShopSelectorMenu menu = new AdminShopSelectorMenu(player, "その他", searchQuery, plugin);
 
