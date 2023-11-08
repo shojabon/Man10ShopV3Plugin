@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.util.UUID;
 import java.util.concurrent.Future;
 
 public abstract class ShopFunction {
@@ -72,6 +73,17 @@ public abstract class ShopFunction {
         }
         return true;
     }
+
+    public boolean setPlayerVariable(Player p, String key, Object value, UUID dataOfPlayer){
+        JSONObject request = shop.setPlayerVariable(p, getDefinition().internalFunctionName() + "." + key, value, dataOfPlayer);
+        shop.updateData();
+        if(!request.getString("status").equals("success")){
+            warn(p, request.getString("message"));
+            return false;
+        }
+        return true;
+    }
+
 
     public boolean requestQueueTask(Player p, String key, Object value){
         JSONObject request = shop.requestQueueTask(p, getDefinition().internalFunctionName() + "." + key, value);

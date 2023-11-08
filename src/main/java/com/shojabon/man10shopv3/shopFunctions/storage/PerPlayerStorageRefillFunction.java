@@ -112,17 +112,17 @@ public class PerPlayerStorageRefillFunction extends ShopFunction {
         });
 
 
-        SInventoryItem forceRefill = new SInventoryItem(new SItemStack(Material.REDSTONE_BLOCK).setDisplayName(new SStringBuilder().green().text("強制的に在庫を補充する").build())
-                .addLore("§f補充スケジュールは保持したままアイテムを補充する").build());
-        forceRefill.clickable(false);
-        forceRefill.setEvent(e -> {
-            Man10ShopV3.threadPool.submit(() -> {
-                if(!setVariable(player, "itemLeft", getAmount())){
-                    return;
-                }
-                success(player, "在庫を補充しました");
-            });
-        });
+//        SInventoryItem forceRefill = new SInventoryItem(new SItemStack(Material.REDSTONE_BLOCK).setDisplayName(new SStringBuilder().green().text("強制的に在庫を補充する").build())
+//                .addLore("§f補充スケジュールは保持したままアイテムを補充する").build());
+//        forceRefill.clickable(false);
+//        forceRefill.setEvent(e -> {
+//            Man10ShopV3.threadPool.submit(() -> {
+//                if(!setVariable(player, "itemLeft", getAmount())){
+//                    return;
+//                }
+//                success(player, "在庫を補充しました");
+//            });
+//        });
 
 
         SInventoryItem amountSetting = new SInventoryItem(new SItemStack(Material.HOPPER).setDisplayName(new SStringBuilder().green().text("個数設定").build()).build());
@@ -150,7 +150,7 @@ public class PerPlayerStorageRefillFunction extends ShopFunction {
         autoScaledMenu.addItem(timeSetting);
         autoScaledMenu.addItem(amountSetting);
         autoScaledMenu.addItem(setRefillStartingTime);
-        autoScaledMenu.addItem(forceRefill);
+//        autoScaledMenu.addItem(forceRefill);
         
         return autoScaledMenu;
     }

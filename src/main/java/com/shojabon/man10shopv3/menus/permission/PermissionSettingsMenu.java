@@ -2,9 +2,11 @@ package com.shojabon.man10shopv3.menus.permission;
 
 import ToolMenu.BooleanInputMenu;
 import ToolMenu.ConfirmationMenu;
+import ToolMenu.NumericInputMenu;
 import com.shojabon.man10shopv3.Man10ShopV3;
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
 import com.shojabon.man10shopv3.dataClass.Man10ShopModerator;
+import com.shojabon.man10shopv3.menus.settings.SettingsMainMenu;
 import com.shojabon.mcutils.Utils.SInventory.SInventory;
 import com.shojabon.mcutils.Utils.SInventory.SInventoryItem;
 import com.shojabon.mcutils.Utils.SItemStack;
@@ -173,58 +175,42 @@ public class PermissionSettingsMenu extends SInventory{
 
     }
 
-//    public void renderNotification(){
-//        SInventoryItem notification = new SInventoryItem(new SItemStack(Material.BELL).setDisplayName(new SStringBuilder().gold().bold().text("通知設定").build()).build());
-//        notification.clickable(false);
-//        setItem(10, notification);
-//
-//        SInventoryItem enabled = new SInventoryItem(new SItemStack(Material.LIME_STAINED_GLASS_PANE).setDisplayName(new SStringBuilder().green().bold().text("有効").build()).build());
-//        enabled.clickable(false);
-//        enabled.setAsyncEvent(renderNotificationEvent());
-//
-//        SInventoryItem disabled = new SInventoryItem(new SItemStack(Material.RED_STAINED_GLASS_PANE).setDisplayName(new SStringBuilder().red().bold().text("無効").build()).build());
-//        disabled.clickable(false);
-//        disabled.setAsyncEvent(renderNotificationEvent());
-//
-//        if(target.notificationEnabled){
-//            setItem(19, enabled);
-//        }else{
-//            setItem(19, disabled);
-//        }
-//
-//    }
+    public void renderPerPlayerLimitUseSetting(){
+        String currentSetting = "§e§l現在設定: ";
+        int count = shop.perPlayerLimitUseFunction.getCountLeft(target.uuid);
+        if(count < 0){
+            currentSetting += "無効";
+        }else{
+            currentSetting += "残り " + count + "回";
+        }
+        SInventoryItem item = new SInventoryItem(new SItemStack(Material.MELON_SEEDS)
+                .setDisplayName(new SStringBuilder().yellow().bold().text("使用回数制限").build())
+                .addLore(currentSetting)
+                .build());
+        item.setEvent(e -> {
+            //confirmation menu
+            NumericInputMenu menu = new NumericInputMenu("残り使用回数を設定してください 0はoff", plugin);
+            menu.setOnConfirm(number -> {
+                Man10ShopV3.threadPool.submit(() -> {
+                    Object data = JSONObject.NULL;
+                    if(number != 0){
+                        data = number;
+                    }
+                    if(!shop.perPlayerLimitUseFunction.setPlayerVariable(player, "count", data, target.uuid)){
+                        return;
+                    }
+                    shop.perPlayerLimitUseFunction.success(player, "回数を設定しました");
+                    new PermissionSettingsMenu(player, shop, target, plugin).open(player);
+                });
+            });
+            menu.setOnCancel(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
+            menu.setOnClose(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
 
-//    public Consumer<InventoryClickEvent> renderNotificationEvent(){
-//        return e -> {
-//            if(!target.uuid.equals(player.getUniqueId())){
-//                player.sendMessage(Man10ShopV3.prefix + "§c§lこの設定は本人のみ編集可能です");
-//                return;
-//            }
-//
-//
-//            BooleanInputMenu boolMenu = new BooleanInputMenu(target.notificationEnabled, "設定を変更しますか？", plugin);
-//            boolMenu.setOnConfirm(bool -> {
-//                Man10ShopV3.threadPool.submit(() -> {
-//                    Man10ShopModerator moderator = shop.permissionFunction.getModerator(target.uuid);
-//                    if(moderator == null){
-//                        player.sendMessage(Man10ShopV3.prefix + "§c§l内部エラーが発生しました");
-//                        return;
-//                    }
-//                    moderator.notificationEnabled = bool;
-//                    if(!shop.permissionFunction.addModerator(moderator)){
-//                        return;
-//                    }
-//                    player.sendMessage(Man10ShopV3.prefix + "§a§l通知設定を設定しました");
-//                    new PermissionSettingsMenu(player, shop, target, plugin).open(player);
-//                });
-//            });
-//            boolMenu.setOnCancel(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
-//            boolMenu.setOnClose(ee -> new PermissionSettingsMenu(player, shop, target, plugin).open(player));
-//
-//            boolMenu.open(player);
-//
-//        };
-//    }
+            menu.open(player);
+        });
+        item.clickable(false);
+        setItem(17, item);
+    }
 
     public void renderMenu(){
         SInventoryItem background = new SInventoryItem(new SItemStack(Material.BLUE_STAINED_GLASS_PANE).setDisplayName(" ").build());
@@ -233,6 +219,7 @@ public class PermissionSettingsMenu extends SInventory{
 
         renderSelector();
         renderIcons();
+        renderPerPlayerLimitUseSetting();
 //        renderNotification();
 
         setOnCloseEvent(e -> new PermissionSettingsMainMenu(player, shop, plugin).open(player));

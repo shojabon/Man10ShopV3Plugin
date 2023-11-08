@@ -16,10 +16,7 @@ import com.shojabon.man10shopv3.shopFunctions.storage.PerPlayerStorageRefillFunc
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageCapFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageFunction;
 import com.shojabon.man10shopv3.shopFunctions.storage.StorageRefillFunction;
-import com.shojabon.man10shopv3.shopFunctions.tradeAmount.CoolDownFunction;
-import com.shojabon.man10shopv3.shopFunctions.tradeAmount.PerMinuteCoolDownFunction;
-import com.shojabon.man10shopv3.shopFunctions.tradeAmount.SingleTransactionModeFunction;
-import com.shojabon.man10shopv3.shopFunctions.tradeAmount.TotalPerMinuteCoolDownFunction;
+import com.shojabon.man10shopv3.shopFunctions.tradeAmount.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -31,6 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.shojabon.man10shopv3.Man10ShopV3API.getPlayerJSON;
 import static com.shojabon.man10shopv3.Man10ShopV3API.httpRequest;
@@ -81,6 +79,7 @@ public class Man10Shop {
 
     public CoolDownFunction coolDownFunction;
     public LimitUseFunction limitUseFunction;
+    public PerPlayerLimitUseFunction perPlayerLimitUseFunction;
     public PerMinuteCoolDownFunction perMinuteCoolDownFunction;
     public TotalPerMinuteCoolDownFunction totalPerMinuteCoolDownFunction;
     public SingleTransactionModeFunction singleTransactionModeFunction;
@@ -150,6 +149,18 @@ public class Man10Shop {
         }
         payload.put("key", key);
         payload.put("value", value);
+        return httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/variable/set", "POST", new JSONObject(payload));
+    }
+
+    public JSONObject setPlayerVariable(Player p, String key, Object value, UUID dataOfPlayer){
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("shopId", this.getShopId());
+        if(p != null){
+            payload.put("player", getPlayerJSON(p));
+        }
+        payload.put("key", key);
+        payload.put("value", value);
+        payload.put("dataOfPlayer", dataOfPlayer.toString());
         return httpRequest(this.plugin.getConfig().getString("api.endpoint") + "/shop/variable/set", "POST", new JSONObject(payload));
     }
 

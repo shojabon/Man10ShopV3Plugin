@@ -1,4 +1,4 @@
-package com.shojabon.man10shopv3.shopFunctions.allowedToUse;
+package com.shojabon.man10shopv3.shopFunctions.tradeAmount;
 
 import ToolMenu.NumericInputMenu;
 import com.shojabon.man10shopv3.Man10ShopV3;
@@ -17,7 +17,7 @@ import org.json.JSONObject;
         explanation = {},
         enabledShopType = {},
         iconMaterial = Material.MELON_SEEDS,
-        category = "使用可条件設定",
+        category = "取引量制限設定",
         allowedPermission = "MODERATOR",
         isAdminSetting = false
 )
