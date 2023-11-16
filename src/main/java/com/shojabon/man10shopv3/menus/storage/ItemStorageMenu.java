@@ -63,12 +63,17 @@ public class ItemStorageMenu extends SInventory{
         renderInventory();
     }
 
-    public int countItems(){
+    public int countItems(boolean estimate){
         int result = 0;
         for(int i = 0; i < 6*9; i++){
             ItemStack item = activeInventory.getItem(i);
             if(item == null) continue;
-            if(!new SItemStack(item).getItemTypeMD5(true).equals(shop.targetItemFunction.getTargetItem().getItemTypeMD5(true))) continue;
+            if(!new SItemStack(item).getItemTypeMD5(true).equals(shop.targetItemFunction.getTargetItem().getItemTypeMD5(true))) {
+                if(!estimate){
+                    player.getInventory().addItem(item);
+                }
+                continue;
+            }
             result += item.getAmount();
         }
         return result;
@@ -83,6 +88,10 @@ public class ItemStorageMenu extends SInventory{
             if(e.getCurrentItem() == null) return;
             if(e.getClickedInventory() == null) return;
             SItemStack item = new SItemStack(e.getCurrentItem());
+            if(!item.getItemTypeMD5(true).equals(new SItemStack(item.getTypeItem(true)).getItemTypeMD5(true))){
+                e.setCancelled(true);
+                return;
+            }
             if(!item.getItemTypeMD5(true).equals(shop.targetItemFunction.getTargetItem().getItemTypeMD5(true))){
                 e.setCancelled(true);
                 return;
@@ -94,7 +103,7 @@ public class ItemStorageMenu extends SInventory{
             }
             //if item exceeds items storage size
             int selectedItemCount = new SItemStack(e.getCurrentItem()).getAmount();
-            int diff = countItems() - itemCount;
+            int diff = countItems(true) - itemCount;
             int estimatedNewStorageCount = diff + shop.storageFunction.getItemCount();
             if(estimatedNewStorageCount + selectedItemCount > shop.storageFunction.getStorageSize() && e.getClickedInventory().getType() != InventoryType.CHEST){
                 player.sendMessage(Man10ShopV3.prefix + "§c§l倉庫のサイズ上限を越します");
@@ -103,12 +112,8 @@ public class ItemStorageMenu extends SInventory{
             }
         });
 
-        List<String> test = new ArrayList<>();
-
-        ItemStack item = new ItemStack(Material.DIAMOND);
-
         setAsyncOnForcedCloseEvent(e -> {
-            int diff = countItems() - itemCount;
+            int diff = countItems(false) - itemCount;
 
             JSONObject data = new JSONObject();
             data.put("amount", diff);

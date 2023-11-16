@@ -36,4 +36,13 @@ public class TargetItemFunction extends ShopFunction {
     public SInventoryItem getSettingItem(Player player, SInventoryItem item) {
         return super.getSettingItem(player, item);
     }
+
+
+    public ItemStack getTargetTypeItem(){
+        return shop.targetItemFunction.getTargetItem().build();
+    }
+
+    public String getTargetTypeMD5(){
+        return shop.targetItemFunction.getTargetItem().getItemTypeMD5(true);
+    }
 }

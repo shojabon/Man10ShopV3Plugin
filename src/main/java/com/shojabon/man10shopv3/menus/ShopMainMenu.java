@@ -91,9 +91,14 @@ public class ShopMainMenu extends AutoScaledMenu {
 
         icon.addLore("§aショップ口座残高:§e " + BaseUtils.priceString(shop.shopData.getJSONObject("money").getInt("money")) + "円");
         icon.addLore("§7アイテム数:§e " + BaseUtils.priceString(shop.shopData.getJSONObject("storage").getInt("itemCount")));
+        icon.addLore("");
+        icon.addLore("§aクリックしてショップIDを表示");
 
         SInventoryItem shopInfo = new SInventoryItem(icon.build());
         shopInfo.clickable(false);
+        shopInfo.setAsyncEvent(e -> {
+            player.sendMessage(Man10ShopV3.prefix + "§a§lショップID: " + shop.getShopId());
+        });
 
         return shopInfo;
     }
