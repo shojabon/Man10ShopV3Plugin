@@ -7,6 +7,7 @@ import com.shojabon.man10shopv3.menus.AdminShopSelectorMenu;
 import com.shojabon.man10shopv3.menus.EditableShopSelectorMenu;
 import com.shojabon.mcutils.Utils.BaseUtils;
 import com.shojabon.mcutils.Utils.SInventory.SInventory;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,8 +26,10 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SignListeners implements @NotNull Listener {
 
@@ -140,27 +143,36 @@ public class SignListeners implements @NotNull Listener {
         if(!(e.getBlock().getState() instanceof Sign)){
             return;
         }
-//        if(!e.getBlock().getState().hasMetadata("isMan10ShopV3Sign")){
-//            return;
-//        }
-        Man10Shop shop = Man10ShopV3.api.getShopFromSign(null, e.getBlock().getLocation());
-        if(shop == null) {
-            return;
-        }
-        if(!shop.permissionFunction.hasPermission(e.getPlayer().getUniqueId(), "MODERATOR") && !e.getPlayer().hasPermission("man10shopv3.sign.break.bypass")){
-            e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l看板を破壊する権限を持っていません");
+        Sign sign = (Sign) e.getBlock().getState();
+        if(!sign.line(0).contains(Component.text("ショップ"))){
             e.setCancelled(true);
-            return;
         }
-
-//        e.getBlock().getState().removeMetadata("isMan10ShopV3Sign", plugin);
         SInventory.threadPool.execute(()-> {
+            Man10Shop shop = Man10ShopV3.api.getShopFromSign(null, e.getBlock().getLocation());
+            if(shop == null) {
+                breakBlockNaturally(e.getBlock());
+                return;
+            }
+            if(!shop.permissionFunction.hasPermission(e.getPlayer().getUniqueId(), "MODERATOR") && !e.getPlayer().hasPermission("man10shopv3.sign.break.bypass")){
+                e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l看板を破壊する権限を持っていません");
+                return;
+            }
             JSONObject result = shop.deleteSign(null, e.getBlock().getLocation());
             if(!result.getString("status").equals("success")){
                 e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l" + result.getString("message"));
+                return;
             }
+            breakBlockNaturally(e.getBlock());
         });
     }
+
+    private void breakBlockNaturally(Block block){
+        Bukkit.getScheduler().runTask(plugin, ()->{
+            block.breakNaturally(true);
+        });
+    }
+
+    ConcurrentHashMap<UUID, Boolean> requestProcessed = new ConcurrentHashMap<>();
 
     @EventHandler
     public void onSignInteract(PlayerInteractEvent e){
@@ -172,12 +184,23 @@ public class SignListeners implements @NotNull Listener {
             return;
         }
 //        if(!e.getClickedBlock().getState().hasMetadata("isMan10ShopV3Sign")) return;
-
         Man10ShopV3.threadPool.execute(()->{
-            Man10Shop shop = Man10ShopV3.api.getShopFromSign(e.getPlayer(), e.getClickedBlock().getLocation());
-            if(shop == null) return;
-
-            shop.openMenu(e.getPlayer());
+            if(requestProcessed.containsKey(e.getPlayer().getUniqueId())){
+                return;
+            }
+            requestProcessed.put(e.getPlayer().getUniqueId(), true);
+            try{
+                Man10Shop shop = Man10ShopV3.api.getShopFromSign(e.getPlayer(), e.getClickedBlock().getLocation());
+                if(shop == null){
+                    requestProcessed.remove(e.getPlayer().getUniqueId());
+                    return;
+                }else{
+                    shop.openMenu(e.getPlayer());
+                    requestProcessed.remove(e.getPlayer().getUniqueId());
+                }
+            }catch (Exception ex){
+                requestProcessed.remove(e.getPlayer().getUniqueId());
+            }
         });
     }
 

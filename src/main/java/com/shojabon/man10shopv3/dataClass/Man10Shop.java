@@ -177,7 +177,11 @@ public class Man10Shop {
     }
 
     public void requestQueueTaskLocallyQueued(Player p, String key, Object data){
+        if(Man10ShopV3.transactionLock.contains(p.getUniqueId())){
+            return;
+        }
         QueueRequestObject request = new QueueRequestObject(p, this.getShopId(), key, data);
+        Man10ShopV3.transactionLock.put(p.getUniqueId(), true);
         Man10ShopV3.transactionRequestQueue.add(request);
     }
 

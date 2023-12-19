@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,8 +35,9 @@ public final class Man10ShopV3 extends JavaPlugin implements @NotNull Listener {
     public static Man10ShopV3API api = null;
     public static ArrayList<UUID> ved = new ArrayList<>();
     public static Queue<QueueRequestObject> transactionRequestQueue = new ConcurrentLinkedQueue<>();
-
+    public static ConcurrentHashMap<UUID, Boolean> transactionLock = new ConcurrentHashMap<>();
     public static boolean pluginEnabled = true;
+
 
     public void locallyQueuedRequestProcessThread(){
         while (pluginEnabled){
@@ -46,6 +48,7 @@ public final class Man10ShopV3 extends JavaPlugin implements @NotNull Listener {
                 }
                 QueueRequestObject request = transactionRequestQueue.poll();
                 if(request == null) continue;
+                transactionLock.remove(request.player.getUniqueId());
                 if(!request.player.isOnline()) continue;
 
                 Map<String, Object> payload = new HashMap<>();
