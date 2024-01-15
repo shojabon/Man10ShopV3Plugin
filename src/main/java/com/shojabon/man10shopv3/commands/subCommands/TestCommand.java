@@ -32,9 +32,12 @@ public class TestCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player p = (Player) sender;
-        Bukkit.broadcastMessage(new SItemStack(p.getInventory().getItemInMainHand()).getItemTypeMD5(true));
-        Bukkit.broadcastMessage("==========");
-        Bukkit.broadcastMessage(new SItemStack(new SItemStack(p.getInventory().getItemInMainHand()).getTypeItem(true)).getItemTypeMD5(true));
+        Man10Shop shop = Man10ShopV3.api.getShop("cdd68b45-5eaf-4b0c-a1fe-e291d41a274e", p);
+        JSONObject data = new JSONObject();
+        data.put("amount", 1);
+        for(int i = 0; i < 10000; i++){
+            shop.requestQueueTaskLocallyQueued(p, "shop.order", data);
+        }
         return true;
     }
 }

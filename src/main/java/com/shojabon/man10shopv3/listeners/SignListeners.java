@@ -15,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -66,31 +67,33 @@ public class SignListeners implements @NotNull Listener {
             UUID uuid = e.getPlayer().getUniqueId();
 
             menu.setOnClick(shopId -> {
-                Man10Shop shop = Man10ShopV3.api.getShop(shopId, e.getPlayer());
-                if(shop == null){
-                    e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§lショップが存在しません");
-                    return;
-                }
+                Man10ShopV3.threadPool.submit(()->{
+                    Man10Shop shop = Man10ShopV3.api.getShop(shopId, e.getPlayer());
+                    if(shop == null){
+                        e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§lショップが存在しません");
+                        return;
+                    }
 
-                if(Man10ShopV3.config.getInt("sign.price") != 0){
-                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(BaseUtils.priceString(signPrice)+ "円支払いますか？", plugin);
+                    if(Man10ShopV3.config.getInt("sign.price") != 0){
+                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(BaseUtils.priceString(signPrice)+ "円支払いますか？", plugin);
 
-                    //confirm purchase
-                    confirmationMenu.setOnConfirm(ee -> {
-                        if(Man10ShopV3.vault.getBalance(uuid) < signPrice){
-                            e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l現金が不足しています");
-                            confirmationMenu.close(e.getPlayer());
-                        }
-                        Man10ShopV3.vault.withdraw(uuid, signPrice );
-                        buySign(shop, e);
-                    });
+                        //confirm purchase
+                        confirmationMenu.setOnConfirm(ee -> {
+                            if(Man10ShopV3.vault.getBalance(uuid) < signPrice){
+                                e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l現金が不足しています");
+                                confirmationMenu.close(e.getPlayer());
+                            }
+                            Man10ShopV3.vault.withdraw(uuid, signPrice );
+                            buySign(shop, e);
+                        });
 
-                    confirmationMenu.setOnCancel(ee -> confirmationMenu.close(e.getPlayer()));
+                        confirmationMenu.setOnCancel(ee -> confirmationMenu.close(e.getPlayer()));
 
-                    confirmationMenu.open(e.getPlayer());
-                    return;
-                }
-                buySign(shop, e);
+                        confirmationMenu.open(e.getPlayer());
+                        return;
+                    }
+                    buySign(shop, e);
+                });
 
             });
             menu.open(e.getPlayer());
@@ -107,32 +110,32 @@ public class SignListeners implements @NotNull Listener {
             UUID uuid = e.getPlayer().getUniqueId();
 
             menu.setOnClick(shopId -> {
+                Man10ShopV3.threadPool.submit(()->{
+                    Man10Shop shop = Man10ShopV3.api.getShop(shopId, e.getPlayer());
+                    if(shop == null){
+                        e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§lショップが存在しません");
+                        return;
+                    }
+                    if(Man10ShopV3.config.getInt("sign.price") != 0){
+                        ConfirmationMenu confirmationMenu = new ConfirmationMenu(BaseUtils.priceString(signPrice)+ "円支払いますか？", plugin);
 
-                Man10Shop shop = Man10ShopV3.api.getShop(shopId, e.getPlayer());
-                if(shop == null){
-                    e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§lショップが存在しません");
-                    return;
-                }
-                if(Man10ShopV3.config.getInt("sign.price") != 0){
-                    ConfirmationMenu confirmationMenu = new ConfirmationMenu(BaseUtils.priceString(signPrice)+ "円支払いますか？", plugin);
+                        //confirm purchase
+                        confirmationMenu.setOnConfirm(ee -> {
+                            if(Man10ShopV3.vault.getBalance(uuid) < signPrice){
+                                e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l現金が不足しています");
+                                confirmationMenu.close(e.getPlayer());
+                            }
+                            Man10ShopV3.vault.withdraw(uuid, signPrice );
+                            buySign(shop, e);
+                        });
 
-                    //confirm purchase
-                    confirmationMenu.setOnConfirm(ee -> {
-                        if(Man10ShopV3.vault.getBalance(uuid) < signPrice){
-                            e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l現金が不足しています");
-                            confirmationMenu.close(e.getPlayer());
-                        }
-                        Man10ShopV3.vault.withdraw(uuid, signPrice );
-                        buySign(shop, e);
-                    });
+                        confirmationMenu.setOnCancel(ee -> confirmationMenu.close(e.getPlayer()));
 
-                    confirmationMenu.setOnCancel(ee -> confirmationMenu.close(e.getPlayer()));
-
-                    confirmationMenu.open(e.getPlayer());
-                    return;
-                }
-                buySign(shop, e);
-
+                        confirmationMenu.open(e.getPlayer());
+                        return;
+                    }
+                    buySign(shop, e);
+                });
             });
             menu.open(e.getPlayer());
         }
@@ -143,26 +146,25 @@ public class SignListeners implements @NotNull Listener {
         if(!(e.getBlock().getState() instanceof Sign)){
             return;
         }
-        Sign sign = (Sign) e.getBlock().getState();
-        if(!sign.line(0).contains(Component.text("ショップ"))){
-            e.setCancelled(true);
+//        if(!e.getBlock().getState().hasMetadata("isMan10ShopV3Sign")){
+//            return;
+//        }
+        Man10Shop shop = Man10ShopV3.api.getShopFromSign(null, e.getBlock().getLocation());
+        if(shop == null) {
+            return;
         }
+        if(!shop.permissionFunction.hasPermission(e.getPlayer().getUniqueId(), "MODERATOR") && !e.getPlayer().hasPermission("man10shopv3.sign.break.bypass")){
+            e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l看板を破壊する権限を持っていません");
+            e.setCancelled(true);
+            return;
+        }
+
+//        e.getBlock().getState().removeMetadata("isMan10ShopV3Sign", plugin);
         SInventory.threadPool.execute(()-> {
-            Man10Shop shop = Man10ShopV3.api.getShopFromSign(null, e.getBlock().getLocation());
-            if(shop == null) {
-                breakBlockNaturally(e.getBlock());
-                return;
-            }
-            if(!shop.permissionFunction.hasPermission(e.getPlayer().getUniqueId(), "MODERATOR") && !e.getPlayer().hasPermission("man10shopv3.sign.break.bypass")){
-                e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l看板を破壊する権限を持っていません");
-                return;
-            }
             JSONObject result = shop.deleteSign(null, e.getBlock().getLocation());
             if(!result.getString("status").equals("success")){
                 e.getPlayer().sendMessage(Man10ShopV3.prefix + "§c§l" + result.getString("message"));
-                return;
             }
-            breakBlockNaturally(e.getBlock());
         });
     }
 
@@ -199,6 +201,7 @@ public class SignListeners implements @NotNull Listener {
                     requestProcessed.remove(e.getPlayer().getUniqueId());
                 }
             }catch (Exception ex){
+                ex.printStackTrace();
                 requestProcessed.remove(e.getPlayer().getUniqueId());
             }
         });

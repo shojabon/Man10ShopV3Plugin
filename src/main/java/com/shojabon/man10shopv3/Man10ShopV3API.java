@@ -1,6 +1,7 @@
 package com.shojabon.man10shopv3;
 
 import com.shojabon.man10shopv3.dataClass.Man10Shop;
+import com.shojabon.man10socket.Man10Socket;
 import com.shojabon.mcutils.Utils.SItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,48 +31,64 @@ public class Man10ShopV3API {
 
     // global methods
     public static JSONObject httpRequest(String endpoint, String method, JSONObject jsonInput) {
-        try {
-            URL url = new URL(endpoint);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-            // optional default is GET
-            con.setRequestMethod(method);
-            con.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-            con.setRequestProperty("Accept", "application/json; charset=UTF-8");
-            con.setRequestProperty("x-api-key", Man10ShopV3.config.getString("api.key"));
-            con.setDoOutput(true);
-
-            try(OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonInput.toString().getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-            int responseCode = con.getResponseCode();
-            BufferedReader in = null;
-            if(responseCode == 200){
-                in = new BufferedReader(
-                        new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-            }else{
-                in = new BufferedReader(
-                        new InputStreamReader(con.getErrorStream(), StandardCharsets.UTF_8));
-            }
-
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            //print result
-            return new JSONObject(response.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            JSONObject failResponse = new JSONObject();
-            failResponse.put("status", "endpoint_error");
-            failResponse.put("message", "エンドポイントに接続することがで来ませんでした");
-            return failResponse;
+        JSONObject payload = new JSONObject();
+        String pathHeading = Man10ShopV3.config.getString("api.endpoint");
+        payload.put("target", "Man10ShopV3");
+        payload.put("path", endpoint.replace(pathHeading, ""));
+        payload.put("type", "request");
+        payload.put("data", jsonInput);
+        JSONObject a = Man10Socket.send(payload, true);
+        // replace key "message" to "data"
+        if(a.has("message")){
+            a.put("data", a.get("message"));
+            a.remove("message");
         }
+        return a;
+//
+//        try {
+//            URL url = new URL(endpoint);
+//            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//
+//            // optional default is GET
+//            con.setRequestMethod(method);
+//            con.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+//            con.setRequestProperty("Accept", "application/json; charset=UTF-8");
+//            con.setRequestProperty("x-api-key", Man10ShopV3.config.getString("api.key"));
+//            con.setConnectTimeout(5000);
+//            con.setReadTimeout(5000);
+//            con.setDoOutput(true);
+//
+//            try(OutputStream os = con.getOutputStream()) {
+//                byte[] input = jsonInput.toString().getBytes(StandardCharsets.UTF_8);
+//                os.write(input, 0, input.length);
+//            }
+//            int responseCode = con.getResponseCode();
+//            BufferedReader in = null;
+//            if(responseCode == 200){
+//                in = new BufferedReader(
+//                        new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+//            }else{
+//                in = new BufferedReader(
+//                        new InputStreamReader(con.getErrorStream(), StandardCharsets.UTF_8));
+//            }
+//
+//            String inputLine;
+//            StringBuilder response = new StringBuilder();
+//
+//            while ((inputLine = in.readLine()) != null) {
+//                response.append(inputLine);
+//            }
+//            in.close();
+//
+//            //print result
+//            return new JSONObject(response.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            JSONObject failResponse = new JSONObject();
+//            failResponse.put("status", "endpoint_error");
+//            failResponse.put("message", "エンドポイントに接続することがで来ませんでした");
+//            return failResponse;
+//        }
     }
 
     public static void warnMessage(Player p, String message){

@@ -63,21 +63,25 @@ public class ShopMainMenu extends AutoScaledMenu {
             if(shop.isAdmin()){
                 AdminShopSelectorMenu menu = new AdminShopSelectorMenu(player, shop.categoryFunction.getCategory(), plugin);
                 menu.setOnClick(shopId -> {
-                    Man10Shop shopInfo = Man10ShopV3.api.getShop(shopId, player);
-                    if(shopInfo == null){
-                        return;
-                    }
-                    new ShopMainMenu(player, shopInfo, plugin).open(player);
+                    Man10ShopV3.threadPool.submit(() -> {
+                        Man10Shop shopInfo = Man10ShopV3.api.getShop(shopId, player);
+                        if(shopInfo == null){
+                            return;
+                        }
+                        new ShopMainMenu(player, shopInfo, plugin).open(player);
+                    });
                 });
                 menu.open(player);
             }else{
                 EditableShopSelectorMenu menu = new EditableShopSelectorMenu(player, shop.categoryFunction.getCategory(), plugin);
                 menu.setOnClick(shopId -> {
-                    Man10Shop shopInfo = Man10ShopV3.api.getShop(shopId, player);
-                    if(shopInfo == null){
-                        return;
-                    }
-                    new ShopMainMenu(player, shopInfo, plugin).open(player);
+                    Man10ShopV3.threadPool.submit(()->{
+                        Man10Shop shopInfo = Man10ShopV3.api.getShop(shopId, player);
+                        if(shopInfo == null){
+                            return;
+                        }
+                        new ShopMainMenu(player, shopInfo, plugin).open(player);
+                    });
                 });
                 menu.open(player);
             }
